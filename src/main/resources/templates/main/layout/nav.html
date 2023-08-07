@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <script src="/js/jquery.js"></script>
+    <script src="/js/main/nav2.js"></script>
+</head>
+<nav th:fragment="main_navFragment">
+    <!-- 로그인 실패시 alert에 출력하기위함-->
+    <input id="loginFail" th:value="${param.error}" type="hidden" value="">
+    <div class="nav_content">
+        <div class="sidebtn_box">
+            <div class="slidebtn sidebtn">
+                <i class="fas fa-bars"></i>
+            </div>
+            <div class="scrollup sidebtn">
+                <i class="fas fa-chevron-up"></i>
+            </div>
+            <div class="scrolldown sidebtn">
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="sidebtn adminbtn" sec:authorize="hasRole('ROLE_ADMIN')"
+                 th:onclick="location.href='/admin/main'">
+                <i class="fas fa-cog"></i>
+            </div>
+        </div>
+
+
+        <form action="/main/login" class="login_form" method="POST" sec:authorize="isAnonymous()">
+            <div class="login_inputs">
+                <label>
+                    <input name="loginId" placeholder="ID" type="text">
+                </label>
+                <label>
+                    <input name="password" placeholder="PW" type="password">
+                </label>
+            </div>
+            <div class="login_join_btn_box">
+                <input class="loginbtn l_jbtn" type="submit" value="LOGIN" id="loginNav">
+                <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
+                <input class="joinbtn l_jbtn" type="button" value="JOIN US">
+            </div>
+            <div class="findbtn_box">
+                <input class="findbtn" type="button" value="FIND ID">
+                <input class="findbtn" type="button" value="FIND PW">
+            </div>
+        </form>
+        <div class="rightmenu">
+            <input class="delivery_check" type="button" value="배송조회">
+            <input class="rightmenubtn" type="button" value="쿠폰">
+            <input class="rightmenubtn" type="button" value="이벤트">
+            <input class="rightmenubtn" type="button" value="적립금">
+        </div>
+        <div class="cs_center">
+            <div class="cs_center_caption">CS CENTER</div>
+            <div class="cs_center_phone">010-1234-1234</div>
+            <div class="cs_center_desc">
+                월-금 / 09:00 ~ 18:00<br>
+                점심시간 / 12:00 - 13:00<br>
+                토, 일, 공휴일 휴무
+            </div>
+        </div>
+        <div class="bank">
+            <div class="line"></div>
+            계좌 정보<br>
+            우리은행: 0000000000000<br>
+            예금주: OnlyFit
+        </div>
+    </div>
+</nav>
+</html>
