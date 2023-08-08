@@ -52,6 +52,33 @@ $(function () {
 
     //로그아웃 버튼 클릭 시
     $('#logoutBtn').click(function () {
-        $('#logoutForm').submit();
-    })
+        logout();
+    });
+
+// 로그아웃 처리 함수
+    function logout() {
+        fetch('/logout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'same-origin'
+        })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = "/main/index";
+                } else {
+                    return response.json();
+                }
+            })
+            .then(responseData => {
+                if (responseData) {
+                    alert(responseData.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
 })

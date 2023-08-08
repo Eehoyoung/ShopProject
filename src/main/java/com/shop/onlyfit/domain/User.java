@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import reactor.util.annotation.Nullable;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -46,9 +47,10 @@ public class User extends BaseTimeEntity {
 
     private String phoneNumber;
 
+    @Nullable
     private String homePhoneNumber;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Mileage> mileageList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

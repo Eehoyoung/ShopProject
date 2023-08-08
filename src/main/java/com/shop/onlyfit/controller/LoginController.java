@@ -1,7 +1,5 @@
 package com.shop.onlyfit.controller;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.shop.onlyfit.auth.jwt.JwtProperties;
 import com.shop.onlyfit.auth.jwt.JwtTokenUtil;
 import com.shop.onlyfit.domain.User;
@@ -11,6 +9,7 @@ import com.shop.onlyfit.service.AuthService;
 import com.shop.onlyfit.service.MileageServiceImpl;
 import com.shop.onlyfit.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.security.Principal;
 
 @Controller
@@ -52,12 +50,33 @@ public class LoginController {
     }
 
 
-    @GetMapping("/logout")
-    public String logout(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        session.invalidate();
-        return "redirect:/main/index";
+//    @GetMapping("/logout")
+//    public String logout() {
+//        return "redirect:/main/index";
+//
+//    }
 
+    @PostMapping("/logout")
+    @ResponseBody
+    public ResponseEntity<?> logout(HttpServletRequest request) {
+
+        String jwtHeader = null;
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (JwtProperties.HEADER_STRING.equals(cookie.getName())) {
+                    jwtHeader = cookie.getValue();
+                    break;
+                }
+            }
+        }
+
+        if (jwtHeader == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("토큰이 없습니다.");
+        }
+
+
+        return ResponseEntity.ok("로그아웃을 성공했습니다.");
     }
 
     @GetMapping("main/join")

@@ -9,7 +9,7 @@
             <div class="top_list">
                 <a class="top_list_first" href="/main/login" sec:authorize="isAnonymous()">로그인</a>
                 <a class="top_list_first" href="/logout" id="logoutBtn" sec:authorize="isAuthenticated()">로그아웃</a>
-                <form id="logoutForm" method="get" th:action="@{/logout}"></form>
+<!--                <form id="logoutForm" method="get" th:action="@{/logout}"></form>-->
                 <a class="arrow_box_wrapper" href="/main/join" sec:authorize="isAnonymous()">
                     회원가입
                     <div class="arrow_box_wrap">

@@ -13,4 +13,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByLoginId(String kakaoId);
 
+    void deleteByLoginId(String loginId);
+
 }
