@@ -43,7 +43,7 @@ public class SecurityConfig {
                 .antMatchers("/css/**", "/js/**", "/image/**").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/main/order", "/main/profile", "/main/mileage", "/main/address",
-                        "/main/basket", "/main/payment", "/main/product/basketadd_ok").authenticated()
+                        "/main/cart", "/main/payment", "/main/product/basketadd_ok").authenticated()
                 .antMatchers("/main/index", "/main/category/**", "/main/product/**", "/auth/**", "/main/login").permitAll()
                 .and()
                 .exceptionHandling().accessDeniedPage("/main/restrict")

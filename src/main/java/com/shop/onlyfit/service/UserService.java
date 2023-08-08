@@ -29,4 +29,6 @@ public interface UserService {
     void updateProfile(String name, ProfileDto profileDto);
 
     void deleteUserByLoginId(String loginId);
+
+    User findUserByLoginId(String loginId);
 }

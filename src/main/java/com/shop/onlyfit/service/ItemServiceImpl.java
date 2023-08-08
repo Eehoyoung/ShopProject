@@ -1,7 +1,9 @@
 package com.shop.onlyfit.service;
 
+import com.shop.onlyfit.domain.Cart;
 import com.shop.onlyfit.domain.Item;
 import com.shop.onlyfit.dto.WeeklyBestDto;
+import com.shop.onlyfit.dto.item.ItemDto;
 import com.shop.onlyfit.repository.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -76,5 +78,16 @@ public class ItemServiceImpl implements ItemService {
         }
 
         return newArrivalList;
+    }
+
+    @Override
+    public List<ItemDto> getAllItemInCart(List<Cart> cartList) {
+        List<ItemDto> allItemInCart = new ArrayList<>();
+
+        for (Cart cart : cartList) {
+            Long itemId = cart.getItem().getId();
+            allItemInCart.add(itemRepository.findAllItemInCart(itemId));
+        }
+        return allItemInCart;
     }
 }

@@ -198,6 +198,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         userRepository.deleteByLoginId(loginId);
     }
 
+    @Override
+    public User findUserByLoginId(String loginId) {
+        return userRepository.findByLoginId(loginId).orElseThrow(
+                () -> new LoginIdNotFoundException("해당하는 회원이 없습니다.")
+        );
+    }
+
     private String changePhoneNumFormat(String phoneNum) {
         if (phoneNum.length() != 11) {
             return phoneNum;
