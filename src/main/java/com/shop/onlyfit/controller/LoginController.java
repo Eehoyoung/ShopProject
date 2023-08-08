@@ -132,7 +132,11 @@ public class LoginController {
 
             response.addCookie(jwtCookie);
 
-            return "redirect:/main/index";
+            if(authenticatedUser.getVisitCount() >= 2){
+                return "redirect:/main/index";
+            }
+
+            return "redirect:/main/profile";
         } catch (Exception e) {
             return "main/restrict";
         }

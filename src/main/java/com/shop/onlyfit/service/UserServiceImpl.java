@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public Long joinUser(UserInfoDto userInfoDto) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         userInfoDto.setPassword(passwordEncoder.encode(userInfoDto.getPassword()));
-
+        userInfoDto.setLoginType(LoginType.ORIGIN);
         return userRepository.save(userInfoDto.toEntity()).getId();
     }
 
@@ -132,15 +132,23 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         );
 
         String homePhoneNumber = findUser.getHomePhoneNumber();
+        String phoneNumber = findUser.getPhoneNumber();
+        String birthday = findUser.getBirthday();
 
         if(homePhoneNumber == null){
             homePhoneNumber = "000,0000,0000";
         }
+        if (phoneNumber == null){
+            phoneNumber = "000,0000,0000";
+        }
+        if(birthday == null){
+            birthday = "0000,00,00";
+        }
 
         String[] homePhoneNumberArr = homePhoneNumber.split(",");
-        String phoneNumber = findUser.getPhoneNumber();
+
         String[] phoneNumberArr = phoneNumber.split(",");
-        String birthday = findUser.getBirthday();
+
         String[] birthdayArr = birthday.split(",");
 
         if (findUser.getUserAddress() == null) {

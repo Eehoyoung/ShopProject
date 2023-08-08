@@ -1,6 +1,7 @@
 package com.shop.onlyfit.dto.user;
 
 import com.shop.onlyfit.domain.User;
+import com.shop.onlyfit.domain.type.LoginType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,6 +20,7 @@ public class UserInfoDto {
     private String phoneNumber;
     private String email;
     private String birthday;
+    private LoginType loginType;
 
 
     public User toEntity() {
@@ -30,6 +32,7 @@ public class UserInfoDto {
                 .phoneNumber(phoneNumber)
                 .email(email)
                 .birthday(birthday)
+                .loginType(loginType)
                 .build();
     }
 
