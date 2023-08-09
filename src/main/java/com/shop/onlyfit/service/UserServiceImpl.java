@@ -1,13 +1,16 @@
 package com.shop.onlyfit.service;
 
+import com.shop.onlyfit.domain.Market;
 import com.shop.onlyfit.domain.User;
 import com.shop.onlyfit.domain.UserAddress;
 import com.shop.onlyfit.domain.type.LoginType;
 import com.shop.onlyfit.domain.type.UserGrade;
+import com.shop.onlyfit.dto.MarketInfoDto;
 import com.shop.onlyfit.dto.MyPageDto;
 import com.shop.onlyfit.dto.ProfileDto;
 import com.shop.onlyfit.dto.user.UserInfoDto;
 import com.shop.onlyfit.exception.LoginIdNotFoundException;
+import com.shop.onlyfit.repository.MarketRepository;
 import com.shop.onlyfit.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,19 +24,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository userRepository;
-
+    private final MarketRepository marketRepository;
     private final BCryptPasswordEncoder encoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder encoder) {
+    public UserServiceImpl(UserRepository userRepository, MarketRepository marketRepository, BCryptPasswordEncoder encoder) {
         this.userRepository = userRepository;
+        this.marketRepository = marketRepository;
         this.encoder = encoder;
     }
 
@@ -51,6 +54,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public boolean checkId(String loginId) {
         Optional<User> findUser = userRepository.findbyusernameorloginid(null, loginId);
         return findUser.isPresent();
+    }
+
+    @Transactional(readOnly = true)
+    public boolean checkName(String name) {
+        Optional<Market> findMarket = marketRepository.findByName(name);
+        return findMarket.isPresent();
     }
 
     @Override
@@ -205,6 +214,22 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         );
     }
 
+    @Override
+    @Transactional
+    public void joinSeller(String loginId, MarketInfoDto marketInfoDto) {
+        User findUser = userRepository.findByLoginId(loginId).get();
+        marketInfoDto.setUser(findUser);
+        marketRepository.save(marketInfoDto.toEntity());
+    }
+
+    @Override
+    @Transactional
+    public void changeUserGradeToSeller(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다."));
+        user.setUserGrade(UserGrade.SELLER);
+        userRepository.save(user);
+    }
+
     private String changePhoneNumFormat(String phoneNum) {
         if (phoneNum.length() != 11) {
             return phoneNum;
@@ -224,6 +249,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         if ("admin@example.com".equals(userEntity.getLoginId())) {
             authorities.add(new SimpleGrantedAuthority(UserGrade.ADMIN.getValue()));
             userEntity.setUserGrade(UserGrade.ADMIN);
+        } else if (userEntity.getUserGrade() == UserGrade.SELLER) {
+            authorities.add(new SimpleGrantedAuthority(UserGrade.SELLER.getValue()));
+            userEntity.setUserGrade(UserGrade.SELLER);
         } else {
             authorities.add(new SimpleGrantedAuthority(UserGrade.USER.getValue()));
             userEntity.setUserGrade(UserGrade.USER);

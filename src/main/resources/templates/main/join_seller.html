@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <link href="/css/main/header.css" rel="stylesheet" type="text/css">
+    <link href="/css/main/footer.css" rel="stylesheet" type="text/css">
+    <link href="/css/main/nav.css" rel="stylesheet" type="text/css">
+    <link href="/css/main/register_user.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Antonio&display=swap" rel="stylesheet">
+    <link crossorigin="anonymous" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css"
+          integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" rel="stylesheet">
+    <title>register</title>
+    <script src="/js/jquery.js"></script>
+    <script src="/js/main/header.js"></script>
+    <script src="/js/main/nav2.js"></script>
+    <script src="/js/main/join_seller.js"></script>
+</head>
+<body>
+<!--header start-->
+<header th:replace="main/layout/header :: main_headerFragment">
+</header>
+<!--header end-->
+
+<!--section-->
+<section>
+    <div class="section_caption">
+        Seller JOIN
+    </div>
+
+    <div class="section_content">
+        <form method="POST" onsubmit="return joinSellerSendit()" th:action="@{/main/join/seller}">
+            <input id="flag" type="hidden" value="false">
+            <table class="basicdata">
+                <colgroup>
+                    <col width="120px"/>
+                    <col width="auto"/>
+                </colgroup>
+                <tr>
+                    <th><label for="store_name">매장명<span>＊</span></label></th>
+                    <td><input id="store_name" name="name" type="text"></td>
+                    <td><button id="double_check_name" type="button">중복확인 <i class="fas fa-chevron-right"></i></button></td>
+                </tr>
+                <tr>
+                    <th><label for="business_number">사업자 번호</label></th>
+                    <td>
+                        <input id="business_number" maxlength="3" name="businessNumber[]" type="text">
+                        -
+                        <input class="business_number" maxlength="2"  name="businessNumber[]" type="text">
+                        -
+                        <input class="business_number"  maxlength="5" name="businessNumber[]" type="text">
+                    </td>
+                </tr>
+                <tr>
+                    <th><label for="phone_number">매장 전화<span>＊</span></label></th>
+                    <td>
+                        <input id="phone_number" maxlength="4" name="phoneNumber[]" type="text">
+                        -
+                        <input class="phone_number" maxlength="4" name="phoneNumber[]" type="text">
+                        -
+                        <input class="phone_number" maxlength="4" name="phoneNumber[]" type="text">
+                    </td>
+                </tr>
+            </table>
+
+            <div class="bottombtn_box">
+                <input class="registerbtn bottombtn" type="submit" value="가입">
+            </div>
+        </form>
+    </div>
+</section>
+
+<!--nav-->
+<nav th:replace="main/layout/nav :: main_navFragment">
+</nav>
+
+<!--footer-->
+<footer th:replace="main/layout/footer :: main_footerFragment">
+</footer>
+</body>
+</html>

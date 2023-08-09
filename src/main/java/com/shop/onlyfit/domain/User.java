@@ -62,6 +62,9 @@ public class User extends BaseTimeEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Cart> cartList = new ArrayList<>();
 
+    @OneToOne(mappedBy = "seller", cascade = CascadeType.ALL)
+    private Market market;
+
     @Enumerated(EnumType.STRING)
     private LoginType loginType;
 

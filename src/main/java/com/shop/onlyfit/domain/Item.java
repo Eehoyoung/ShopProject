@@ -51,13 +51,16 @@ public class Item {
 
     private boolean rep;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Market market;
+
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     private List<OrderItem> orderItemList = new ArrayList<>();
 
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     private List<Cart> cartList = new ArrayList<>();
 
-    public Item(String firstCategory, String secondCategory, String thirdCategory, String itemName, int price, String itemInfo, String color, String fabric, String model, String size, int stockQuantity, String imgUrl, String saleStatus, Long itemIdx, Boolean rep) {
+    public Item(String firstCategory, String secondCategory, String thirdCategory, String itemName, int price, String itemInfo, String color, String fabric, String model, String size, int stockQuantity, String imgUrl, String saleStatus, Long itemIdx, Boolean rep, Market market) {
         this.firstCategory = firstCategory;
         this.secondCategory = secondCategory;
         this.thirdCategory = thirdCategory;
@@ -73,6 +76,7 @@ public class Item {
         this.saleStatus = saleStatus;
         this.itemIdx = itemIdx;
         this.rep = rep;
+        this.market = market;
     }
 
     public void plusStackQuantity(int plusQuantity) {

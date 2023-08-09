@@ -1,6 +1,7 @@
 package com.shop.onlyfit.service;
 
 import com.shop.onlyfit.domain.User;
+import com.shop.onlyfit.dto.MarketInfoDto;
 import com.shop.onlyfit.dto.MyPageDto;
 import com.shop.onlyfit.dto.ProfileDto;
 import com.shop.onlyfit.dto.user.UserInfoDto;
@@ -31,4 +32,9 @@ public interface UserService {
     void deleteUserByLoginId(String loginId);
 
     User findUserByLoginId(String loginId);
+
+    void joinSeller(String loginId, MarketInfoDto marketInfoDto);
+
+    void changeUserGradeToSeller(Long id);
+
 }

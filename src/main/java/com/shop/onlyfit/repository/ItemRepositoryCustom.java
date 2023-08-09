@@ -12,7 +12,7 @@ public interface ItemRepositoryCustom {
 
     Page<ItemDto> searchAllItem(Pageable pageable);
 
-    Page<ItemDto> searchAllItemByCondition(SearchItem searchItem, Pageable pageable);
+    Page<ItemDto> searchAllItemByCondition(String loginId,SearchItem searchItem, Pageable pageable);
 
     Page<ItemDto> findAllItem(Pageable pageable, String firstCategory, String secondCategory);
 
@@ -24,4 +24,5 @@ public interface ItemRepositoryCustom {
 
     List<WeeklyBestDto> findNewArrivalItem(String firstCategory, String secondCategory, boolean rep);
 
+    Page<ItemDto> searchAllItemByloginId(String userId, Pageable pageable);
 }

@@ -8,7 +8,9 @@ import com.shop.onlyfit.domain.QOrderItem;
 import com.shop.onlyfit.domain.QUser;
 import com.shop.onlyfit.domain.SearchOrder;
 import com.shop.onlyfit.dto.MainPageOrderDto;
+import com.shop.onlyfit.dto.OrderDto;
 import com.shop.onlyfit.dto.QMainPageOrderDto;
+import com.shop.onlyfit.dto.QOrderDto;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -25,6 +27,33 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom{
 
     public OrderRepositoryImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
+    }
+
+    @Override
+    public Page<OrderDto> searchAllOrder(Pageable pageable) {
+        QueryResults<OrderDto> results = queryFactory
+                .select(new QOrderDto(
+                        QOrder.order.id,
+                        QOrderItem.orderItem.id,
+                        QUser.user.name,
+                        QOrderItem.orderItem.item.itemName,
+                        QOrder.order.orderedAt,
+                        QOrder.order.payment,
+                        QOrderItem.orderItem.orderPrice,
+                        QOrderItem.orderItem.orderStatus
+                ))
+                .from(QOrder.order)
+                .leftJoin(QOrderItem.orderItem).on(QOrderItem.orderItem.eq(QOrder.order.orderItemList.any()))
+                .leftJoin(QUser.user).on(QUser.user.eq(QOrder.order.user))
+                .orderBy(QOrderItem.orderItem.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+
+        List<OrderDto> content = results.getResults();
+        long total = results.getTotal();
+
+        return new PageImpl<>(content, pageable, total);
     }
 
     @Override

@@ -4,12 +4,12 @@ import com.shop.onlyfit.auth.jwt.JwtProperties;
 import com.shop.onlyfit.auth.jwt.JwtTokenUtil;
 import com.shop.onlyfit.domain.User;
 import com.shop.onlyfit.dto.Login;
+import com.shop.onlyfit.dto.MarketInfoDto;
 import com.shop.onlyfit.dto.user.UserInfoDto;
 import com.shop.onlyfit.service.AuthService;
 import com.shop.onlyfit.service.MileageServiceImpl;
 import com.shop.onlyfit.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -107,6 +107,22 @@ public class LoginController {
         return "redirect:/main/login";
     }
 
+    @GetMapping("main/join/seller")
+    public String joinSeller(@AuthenticationPrincipal UserDetails userDetails){
+        if(userDetails == null){
+            return "redirect:/main/login";
+        }
+        return "main/join_seller";
+    }
+
+    @PostMapping("main/join/seller")
+    public String joinSeller(@AuthenticationPrincipal UserDetails userDetails, MarketInfoDto marketInfoDto){
+        String userId = userDetails.getUsername();
+        userService.joinSeller(userId, marketInfoDto);
+        userService.changeUserGradeToSeller(marketInfoDto.getUser().getId());
+        return "redirect:/main/index";
+    }
+
     @GetMapping("/defaultUrl")
     public String defaultUrl(HttpServletRequest req) {
         req.getHeader("Referer");
@@ -125,6 +141,16 @@ public class LoginController {
             return "사용할 수 없는 아이디입니다.";
         } else {
             return "사용할 수 있는 아이디입니다.";
+        }
+    }
+
+    @ResponseBody
+    @PostMapping("/main/join/seller/doublecheck")
+    public String MarketNameDoubleCheckPage(@RequestParam(value = "name") String name) {
+        if (userService.checkName(name)) {
+            return "사용할 수 없는 매장명 입니다.";
+        } else {
+            return "사용할 수 있는 매장명 입니다.";
         }
     }
 

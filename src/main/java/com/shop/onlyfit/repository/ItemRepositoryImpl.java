@@ -57,7 +57,7 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
     }
 
     @Override
-    public Page<ItemDto> searchAllItemByCondition(SearchItem search, Pageable pageable) {
+    public Page<ItemDto> searchAllItemByCondition(String loginId ,SearchItem search, Pageable pageable) {
 
         if (search.getCmode().equals("whole")) {
             QueryResults results = queryFactory
@@ -73,7 +73,7 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
                             QItem.item.itemIdx
                     ))
                     .from(QItem.item)
-                    .where(QItem.item.rep.eq(true), saleStatusEq(search.getSalestatus()), itemNameEq(search.getItem_name()))
+                    .where(QItem.item.market.seller.loginId.eq(loginId),QItem.item.rep.eq(true), saleStatusEq(search.getSalestatus()), itemNameEq(search.getItem_name()))
                     .orderBy(QItem.item.id.desc())
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
@@ -97,7 +97,7 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
                             QItem.item.itemIdx
                     ))
                     .from(QItem.item)
-                    .where(QItem.item.rep.eq(true), saleStatusEq(search.getSalestatus()), cmodeEq(search.getCmode()), itemNameEq(search.getItem_name()))
+                    .where(QItem.item.market.seller.loginId.eq(loginId),QItem.item.rep.eq(true), saleStatusEq(search.getSalestatus()), cmodeEq(search.getCmode()), itemNameEq(search.getItem_name()))
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
                     .fetchResults();
@@ -202,6 +202,61 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
 
         return content;
     }
+
+    @Override
+    public Page<ItemDto> searchAllItemByloginId(String loginId, Pageable pageable) {
+        QueryResults<ItemDto> results = queryFactory
+                .select(new QItemDto(
+                        QItem.item.id,
+                        QItem.item.itemName,
+                        QItem.item.firstCategory,
+                        QItem.item.price,
+                        QItem.item.saleStatus,
+                        QItem.item.imgUrl,
+                        QItem.item.color,
+                        QItem.item.rep,
+                        QItem.item.itemIdx
+                ))
+                .from(QItem.item)
+                .where(QItem.item.market.seller.loginId.eq(loginId))
+                .orderBy(QItem.item.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+        List<ItemDto> content = results.getResults();
+        long total = results.getTotal();
+
+        return new PageImpl<>(content, pageable, total);
+    }
+    /*
+    @Override
+    public Page<ItemDto> findAllItem(Pageable pageable, String firstCategory, String secondCategory) {
+        QueryResults results = queryFactory
+                .selectDistinct(new QItemDto(
+                        QItem.item.itemIdx,
+                        QItem.item.itemName,
+                        QItem.item.imgUrl,
+                        QItem.item.price,
+                        QItem.item.firstCategory,
+                        QItem.item.secondCategory,
+                        QItem.item.saleStatus,
+                        QItem.item.rep
+                ))
+                .from(QItem.item)
+                .where(QItem.item.rep.eq(true),
+                        QItem.item.firstCategory.eq(firstCategory),
+                        QItem.item.secondCategory.eq(secondCategory)
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+
+        List<ItemDto> content = results.getResults();
+        long total = results.getTotal();
+
+        return new PageImpl<>(content, pageable, total);
+    }
+     */
 
     private BooleanExpression saleStatusEq(String saleStatusCondition) {
         if (StringUtils.isEmpty(saleStatusCondition)) {
