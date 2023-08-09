@@ -7,12 +7,16 @@ import com.shop.onlyfit.dto.ProfileDto;
 import com.shop.onlyfit.service.OrderServiceImpl;
 import com.shop.onlyfit.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
 
@@ -30,6 +34,7 @@ public class UserController {
 
     @GetMapping("main/mypage")
     public String getMyPage(Principal principal, Model model) {
+
         String loginId = principal.getName();
 
         MyPageDto myPageDto = userService.showMySimpleInfo(loginId);
@@ -61,7 +66,7 @@ public class UserController {
 
     @ResponseBody
     @DeleteMapping("/main/withdrawal")
-    public String withdrawalMember(HttpServletRequest request, Principal principal, @RequestParam(value = "user_pw") String password) {
+    public String withdrawalMember(HttpServletRequest request,HttpServletResponse response, Principal principal, @RequestParam(value = "user_pw") String password) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String loginId = principal.getName();
         User findUser = userService.findByLoginId(loginId);
@@ -70,12 +75,13 @@ public class UserController {
 
         if (result) {
             userService.deleteUserByLoginId(loginId);
-//            HttpSession session = request.getSession();
-//            session.invalidate();
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication != null) {
+                new SecurityContextLogoutHandler().logout(request, response, authentication);
+            }
             return "정상적으로 회원탈퇴되었습니다.";
         } else {
             return "비밀번호가 올바르지 않습니다";
         }
     }
-
 }

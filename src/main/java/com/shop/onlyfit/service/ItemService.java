@@ -4,7 +4,9 @@ import com.shop.onlyfit.domain.Cart;
 import com.shop.onlyfit.domain.Item;
 import com.shop.onlyfit.dto.WeeklyBestDto;
 import com.shop.onlyfit.dto.item.ItemDto;
+import com.shop.onlyfit.dto.item.ItemPageDto;
 
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface ItemService {
@@ -28,4 +30,6 @@ public interface ItemService {
     List<WeeklyBestDto> NewArrivalItem();
 
     List<ItemDto> getAllItemInCart(List<Cart> cartList);
+
+    ItemPageDto getItemPagingDtoByCategory(Pageable pageable, String firstCategory, String secondCategory);
 }

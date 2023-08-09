@@ -16,6 +16,15 @@
     <script src="/js/jquery.js"></script>
     <script src="/js/main/nav2.js"></script>
     <script src="/js/main/header.js"></script>
+    <script>
+        function onItemClick(event) {
+            const target = event.currentTarget; // 클릭된 요소 선택
+            const url = target.getAttribute('data-url'); // data-url 속성 값 가져오기
+            if (url) {
+                location.href = url; // URL로 이동
+            }
+        }
+    </script>
 </head>
 <body>
 <!--header start-->
@@ -30,11 +39,12 @@
     </div>
     <!--member_type-->
     <div class="member_type">
-        <div class="member_type_img"><img src="/image/etc/member.JPG" alt="사진"></div>
+        <div class="member_type_img"><img src="/image/etc/user.JPG" alt="사진"></div>
         <div class="member_type_desc">
-            <div>저희 쇼핑몰을 이용해 주셔서 감사합니다. <b th:text="${user.name}">홍길동</b> 님은 <b sec:authorize="hasRole('ROLE_ADMIN')">[관리자]</b><b sec:authorize="hasRole('ROLE_MEMBER')">[일반회원]</b> 이십니다</div>
+            <div>저희 쇼핑몰을 이용해 주셔서 감사합니다. <b th:text="${user.name}">홍길동</b> 님은 <b sec:authorize="hasRole('ROLE_ADMIN')">[관리자]</b><b sec:authorize="hasRole('ROLE_USER')">[일반회원]</b> 이십니다</div>
             <div class="member_milage">
-                가용적립금&nbsp;&nbsp;&nbsp;<b>></b>&nbsp;&nbsp;&nbsp;<b th:text="${#numbers.formatInteger(user.mileage, 0, 'COMMA')} + '원'">2,000원</b>&nbsp;&nbsp;&nbsp;<button onclick="location.href='#'" th:onclick="'location.href=\''+ @{/main/mileage} + '\''">조회</button>
+                가용적립금&nbsp;&nbsp;&nbsp;<b>></b>&nbsp;&nbsp;&nbsp;<b th:text="${#numbers.formatInteger(user.mileage, 0, 'COMMA')} + '원'">2,000원</b>&nbsp;&nbsp;&nbsp;
+                <button data-url="/main/mileage" onclick="onItemClick(event)">조회</button>
             </div>
         </div>
     </div>
@@ -71,7 +81,7 @@
     </div>
     <!-- myshop_main-->
     <div class="myshop_main">
-        <div class="myshop_main_item" onclick="location.href=''" th:onclick="'location.href=\''+ @{/main/order} + '\''">
+            <div class="myshop_main_item" data-url="order" onclick="onItemClick(event)">
             <div class="item_caption">
                 ORDER
             </div>
@@ -82,7 +92,7 @@
                 </div>
             </div>
         </div>
-        <div class="myshop_main_item" onclick="location.href=''" th:onclick="'location.href=\''+ @{/main/profile} + '\''">
+            <div class="myshop_main_item" data-url="profile" onclick="onItemClick(event)">
             <div class="item_caption">
                 PROFILE
             </div>
@@ -93,8 +103,8 @@
                 </div>
             </div>
         </div>
-        <div class="myshop_main_item" onclick="location.href=''" th:onclick="'location.href=\''+ @{/main/mileage} + '\''">
-            <div class="item_caption">
+        <div class="myshop_main_item" data-url="mileage" onclick="onItemClick(event)">
+        <div class="item_caption">
                 MILEAGE
             </div>
             <div class="item_content">
@@ -104,7 +114,7 @@
                 </div>
             </div>
         </div>
-        <div class="myshop_main_item" onclick="location.href=''" th:onclick="'location.href=\''+ @{/main/address} + '\''">
+            <div class="myshop_main_item" data-url="address" onclick="onItemClick(event)">
             <div class="item_caption">
                 ADDRESS
             </div>

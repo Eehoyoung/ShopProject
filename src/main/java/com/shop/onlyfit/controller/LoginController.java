@@ -16,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,6 +50,15 @@ public class LoginController {
         return "/main/login";
     }
 
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            new SecurityContextLogoutHandler().logout(request, response, authentication);
+        }
+        return "redirect:/main/index";
+    }
+
 
 //    @GetMapping("/logout")
 //    public String logout() {
@@ -56,28 +66,28 @@ public class LoginController {
 //
 //    }
 
-    @PostMapping("/logout")
-    @ResponseBody
-    public ResponseEntity<?> logout(HttpServletRequest request) {
-
-        String jwtHeader = null;
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (JwtProperties.HEADER_STRING.equals(cookie.getName())) {
-                    jwtHeader = cookie.getValue();
-                    break;
-                }
-            }
-        }
-
-        if (jwtHeader == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("토큰이 없습니다.");
-        }
-
-
-        return ResponseEntity.ok("로그아웃을 성공했습니다.");
-    }
+//    @PostMapping("/logout")
+//    @ResponseBody
+//    public ResponseEntity<?> logout(HttpServletRequest request) {
+//
+//        String jwtHeader = null;
+//        Cookie[] cookies = request.getCookies();
+//        if (cookies != null) {
+//            for (Cookie cookie : cookies) {
+//                if (JwtProperties.HEADER_STRING.equals(cookie.getName())) {
+//                    jwtHeader = cookie.getValue();
+//                    break;
+//                }
+//            }
+//        }
+//
+//        if (jwtHeader == null) {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("토큰이 없습니다.");
+//        }
+//
+//
+//        return ResponseEntity.ok("로그아웃을 성공했습니다.");
+//    }
 
     @GetMapping("main/join")
     public String join(@AuthenticationPrincipal UserDetails userDetails, HttpServletResponse response) {

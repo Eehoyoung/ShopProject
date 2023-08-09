@@ -9,7 +9,7 @@
             <div class="top_list">
                 <a class="top_list_first" href="/main/login" sec:authorize="isAnonymous()">로그인</a>
                 <a class="top_list_first" href="/logout" id="logoutBtn" sec:authorize="isAuthenticated()">로그아웃</a>
-<!--                <form id="logoutForm" method="get" th:action="@{/logout}"></form>-->
+                <form id="logoutForm" method="get" th:action="@{/logout}"></form>
                 <a class="arrow_box_wrapper" href="/main/join" sec:authorize="isAnonymous()">
                     회원가입
                     <div class="arrow_box_wrap">
@@ -24,7 +24,7 @@
                 <a href="/main/mypage">마이페이지</a>
             </div>
             <div class="logo_between">
-                <a href="/main/index"><img alt="로고사진" src="/image/etc/logo.png"></a>
+                <a href="/main/index" ><img alt="로고사진" src="/image/etc/logo.png"></a>
             </div>
             <div class="top_board">
                 <a href="/chat" methods="get">채팅문의</a>
@@ -50,7 +50,7 @@
         </div>
     </div>
     <div class="top_logoArea">
-        <a href="/js/main/index"><img alt="로고사진" src="/image/etc/logo.png"></a>
+        <a href="/main/index"><img alt="로고사진" src="/image/etc/logo.png"></a>
     </div>
     <div class="top_categoryArea">
         <div class="top_category">
@@ -82,62 +82,62 @@
                         <div class="submenu">
                             <div class="submenu_caption">OUTER</div>
                             <ul>
-                                <li><a href="/js/main/category/outer/jacket">자켓/점퍼</a></li>
-                                <li><a href="/js/main/category/outer/cardigan">가디건</a></li>
-                                <li><a href="/js/main/category/outer/coat">코트</a></li>
-                                <li><a href="/js/main/category/outer/vest">조끼</a></li>
-                                <li><a href="/js/main/category/outer/suit">슈트</a></li>
+                                <li><a href="/main/category/outer/jacket">자켓/점퍼</a></li>
+                                <li><a href="/main/category/outer/cardigan">가디건</a></li>
+                                <li><a href="/main/category/outer/coat">코트</a></li>
+                                <li><a href="/main/category/outer/vest">조끼</a></li>
+                                <li><a href="/main/category/outer/suit">슈트</a></li>
                             </ul>
                         </div>
                         <div class="submenu">
                             <div class="submenu_caption">TOP</div>
                             <ul>
-                                <li><a href="/js/main/category/top/longsleeve">긴팔</a></li>
-                                <li><a href="/js/main/category/top/shortsleeve">반팔</a></li>
-                                <li><a href="/js/main/category/top/knit">니트</a></li>
-                                <li><a href="/js/main/category/top/sleeveless">나시</a></li>
-                                <li><a href="/js/main/category/top/threequartersleeve">7부</a></li>
+                                <li><a href="/main/category/top/longsleeve">긴팔</a></li>
+                                <li><a href="/main/category/top/shortsleeve">반팔</a></li>
+                                <li><a href="/main/category/top/knit">니트</a></li>
+                                <li><a href="/main/category/top/sleeveless">나시</a></li>
+                                <li><a href="/main/category/top/threequartersleeve">7부</a></li>
                             </ul>
                         </div>
                         <div class="submenu">
                             <div class="submenu_caption">SHIRTS</div>
                             <ul>
-                                <li><a href="/js/main/category/shirts/basic">베이직</a></li>
-                                <li><a href="/js/main/category/shirts/checkpattern">체크/패턴</a></li>
-                                <li><a href="/js/main/category/shirts/stripe">스트라이프</a></li>
+                                <li><a href="/main/category/shirts/basic">베이직</a></li>
+                                <li><a href="/main/category/shirts/checkpattern">체크/패턴</a></li>
+                                <li><a href="/main/category/shirts/stripe">스트라이프</a></li>
                             </ul>
                         </div>
                         <div class="submenu">
                             <div class="submenu_caption">BOTTOM</div>
                             <ul>
-                                <li><a href="/js/main/category/bottom/cotton">면바지</a></li>
-                                <li><a href="/js/main/category/bottom/denim">데님</a></li>
-                                <li><a href="/js/main/category/bottom/slacks">슬랙스</a></li>
-                                <li><a href="/js/main/category/bottom/shorts">반바지</a></li>
+                                <li><a href="/main/category/bottom/cotton">면바지</a></li>
+                                <li><a href="/main/category/bottom/denim">데님</a></li>
+                                <li><a href="/main/category/bottom/slacks">슬랙스</a></li>
+                                <li><a href="/main/category/bottom/shorts">반바지</a></li>
                             </ul>
                         </div>
                         <div class="submenu">
                             <div class="submenu_caption">ACC</div>
                             <ul>
-                                <li><a href="/js/main/category/acc/cap">CAP</a></li>
-                                <li><a href="/js/main/category/acc/socks">SOCKS</a></li>
-                                <li><a href="/js/main/category/acc/scarf">SCARF & MUFFLER</a></li>
-                                <li><a href="/js/main/category/acc/tie">TIE & HANDKERCHIEF</a></li>
-                                <li><a href="/js/main/category/acc/jewelry">JEWELLERY</a></li>
-                                <li><a href="/js/main/category/acc/bag">BAG</a></li>
-                                <li><a href="/js/main/category/acc/belt">BELT</a></li>
+                                <li><a href="/main/category/acc/cap">CAP</a></li>
+                                <li><a href="/main/category/acc/socks">SOCKS</a></li>
+                                <li><a href="/main/category/acc/scarf">SCARF & MUFFLER</a></li>
+                                <li><a href="/main/category/acc/tie">TIE & HANDKERCHIEF</a></li>
+                                <li><a href="/main/category/acc/jewelry">JEWELLERY</a></li>
+                                <li><a href="/main/category/acc/bag">BAG</a></li>
+                                <li><a href="/main/category/acc/belt">BELT</a></li>
                             </ul>
                         </div>
                         <div class="submenu">
                             <div class="submenu_caption">SHOES</div>
                             <ul>
-                                <li><a href="/js/main/category/shoes/shoes">SHOES</a></li>
+                                <li><a href="/main/category/shoes/shoes">SHOES</a></li>
                             </ul>
                         </div>
                         <div class="submenu">
                             <div class="submenu_caption">SALE</div>
                             <ul>
-                                <li><a href="/js/main/category/sale/sale">SALE</a></li>
+                                <li><a href="/main/category/sale/sale">SALE</a></li>
                             </ul>
                         </div>
 
@@ -175,99 +175,99 @@
                 <span><a href="#">NEW 7% DC</a></span>
                 <span><a href="#">BEST 30</a></span>
                 <span class="menu_cell_category_drop">
-                        <a href="/js/main/category/outer/jacket">OUTER</a>
+                        <a href="/main/category/outer/jacket">OUTER</a>
                         <div class="menu_cell_category_dropdown">
                             <div class="in_category">
                                 <div class="in_category_caption">IN CATEGORY</div>
                                 <ul>
-                                    <li><a href="/js/main/category/outer/jacket">자켓/점퍼</a></li>
-                                    <li><a href="/js/main/category/outer/cardigan">가디건</a></li>
-                                    <li><a href="/js/main/category/outer/coat">코트</a></li>
-                                    <li><a href="/js/main/category/outer/vest">조끼</a></li>
-                                    <li><a href="/js/main/category/outer/suit">수트</a></li>
+                                    <li><a href="/main/category/outer/jacket">자켓/점퍼</a></li>
+                                    <li><a href="/main/category/outer/cardigan">가디건</a></li>
+                                    <li><a href="/main/category/outer/coat">코트</a></li>
+                                    <li><a href="/main/category/outer/vest">조끼</a></li>
+                                    <li><a href="/main/category/outer/suit">수트</a></li>
                                 </ul>
                             </div>
                             <div class="category_img_box">
-                                <a href="/js/main/product/15">
+                                <a href="/main/product/15">
                                     <img alt="카테고리 대표 사진" src="/image/etc/main_category/img.png">
                                 </a>
                             </div>
                         </div>
                     </span>
                 <span class="menu_cell_category_drop">
-                        <a href="/js/main/category/top/longsleeve">TOP</a>
+                        <a href="/main/category/top/longsleeve">TOP</a>
                         <div class="menu_cell_category_dropdown">
                             <div class="in_category">
                                 <div class="in_category_caption">IN CATEGORY</div>
                                 <ul>
-                                    <li><a href="/js/main/category/top/longsleeve">긴팔</a></li>
-                                    <li><a href="/js/main/category/top/shortsleeve">반팔</a></li>
-                                    <li><a href="/js/main/category/top/knit">니트</a></li>
-                                    <li><a href="/js/main/category/top/sleeveless">나시</a></li>
-                                    <li><a href="/js/main/category/top/threequartersleeve">7부</a></li>
+                                    <li><a href="/main/category/top/longsleeve">긴팔</a></li>
+                                    <li><a href="/main/category/top/shortsleeve">반팔</a></li>
+                                    <li><a href="/main/category/top/knit">니트</a></li>
+                                    <li><a href="/main/category/top/sleeveless">나시</a></li>
+                                    <li><a href="/main/category/top/threequartersleeve">7부</a></li>
                                 </ul>
                             </div>
                             <div class="category_img_box">
-                                <a href="/js/main/product/71">
+                                <a href="/main/product/71">
                                     <img alt="카테고리 대표 사진" src="/image/etc/main_category/">
                                 </a>
                             </div>
                         </div>
                     </span>
                 <span class="menu_cell_category_drop">
-                        <a href="/js/main/category/shirts/basic">SHIRTS</a>
+                        <a href="/main/category/shirts/basic">SHIRTS</a>
                         <div class="menu_cell_category_dropdown">
                             <div class="in_category">
                                 <div class="in_category_caption">IN CATEGORY</div>
                                 <ul>
-                                    <li><a href="/js/main/category/shirts/basic">베이직</a></li>
-                                    <li><a href="/js/main/category/shirts/checkpattern">체크/패턴</a></li>
-                                    <li><a href="/js/main/category/shirts/stripe">스트라이프</a></li>
+                                    <li><a href="/main/category/shirts/basic">베이직</a></li>
+                                    <li><a href="/main/category/shirts/checkpattern">체크/패턴</a></li>
+                                    <li><a href="/main/category/shirts/stripe">스트라이프</a></li>
                                 </ul>
                             </div>
                             <div class="category_img_box">
-                                <a href="/js/main/product/65">
+                                <a href="/main/product/65">
                                     <img alt="카테고리 대표 사진" src="/image/etc/main_category/">
                                 </a>
                             </div>
                         </div>
                     </span>
                 <span class="menu_cell_category_drop">
-                        <a href="/js/main/category/bottom/cotton">BOTTOM</a>
+                        <a href="/main/category/bottom/cotton">BOTTOM</a>
                         <div class="menu_cell_category_dropdown">
                             <div class="in_category">
                                 <div class="in_category_caption">IN CATEGORY</div>
                                 <ul>
-                                    <li><a href="/js/main/category/bottom/cotton">면바지</a></li>
-                                    <li><a href="/js/main/category/bottom/denim">데님</a></li>
-                                    <li><a href="/js/main/category/bottom/slacks">슬랙스</a></li>
-                                    <li><a href="/js/main/category/bottom/shorts">반바지</a></li>
+                                    <li><a href="/main/category/bottom/cotton">면바지</a></li>
+                                    <li><a href="/main/category/bottom/denim">데님</a></li>
+                                    <li><a href="/main/category/bottom/slacks">슬랙스</a></li>
+                                    <li><a href="/main/category/bottom/shorts">반바지</a></li>
                                 </ul>
                             </div>
                             <div class="category_img_box">
-                                <a href="/js/main/product/95">
+                                <a href="/main/product/95">
                                     <img alt="카테고리 대표 사진" src="/image/etc/main_category/">
                                 </a>
                             </div>
                         </div>
                     </span>
                 <span class="menu_cell_category_drop">
-                        <a href="/js/main/category/acc/cap">ACC</a>
+                        <a href="/main/category/acc/cap">ACC</a>
                         <div class="menu_cell_category_dropdown">
                             <div class="in_category">
                                 <div class="in_category_caption">IN CATEGORY</div>
                                 <ul>
-                                    <li><a href="/js/main/category/acc/cap">CAP</a></li>
-                                    <li><a href="/js/main/category/acc/socks">SOCKS</a></li>
-                                    <li><a href="/js/main/category/acc/scarf">SCARF & MUFFLER</a></li>
-                                    <li><a href="/js/main/category/acc/tie">TIE & HANDKERCHIEF</a></li>
-                                    <li><a href="/js/main/category/acc/jewelry">JEWELLERY</a></li>
-                                    <li><a href="/js/main/category/acc/bag">BAG</a></li>
-                                    <li><a href="/js/main/category/acc/belt">BELT</a></li>
+                                    <li><a href="/main/category/acc/cap">CAP</a></li>
+                                    <li><a href="/main/category/acc/socks">SOCKS</a></li>
+                                    <li><a href="/main/category/acc/scarf">SCARF & MUFFLER</a></li>
+                                    <li><a href="/main/category/acc/tie">TIE & HANDKERCHIEF</a></li>
+                                    <li><a href="/main/category/acc/jewelry">JEWELLERY</a></li>
+                                    <li><a href="/main/category/acc/bag">BAG</a></li>
+                                    <li><a href="/main/category/acc/belt">BELT</a></li>
                                 </ul>
                             </div>
                             <div class="category_img_box">
-                                <a href="/js/main/product/15">
+                                <a href="/main/product/15">
                                     <img alt="카테고리 대표 사진" src="/image/etc/main_category/">
                                 </a>
                             </div>
@@ -275,16 +275,16 @@
                     </span>
 
                 <span class="menu_cell_category_drop">
-                    <a href="/js/main/category/shoes/shoes">SHOES</a>
+                    <a href="/main/category/shoes/shoes">SHOES</a>
                     <div class="menu_cell_category_dropdown">
                         <div class="in_category">
                             <div class="in_category_caption">IN CATEGORY</div>
                             <ul>
-                                <li><a href="/js/main/category/shoes/shoes">SHOES</a></li>
+                                <li><a href="/main/category/shoes/shoes">SHOES</a></li>
                             </ul>
                         </div>
                         <div class="category_img_box">
-                            <a href="/js/main/product/15">
+                            <a href="/main/product/15">
                                 <img alt="카테고리 대표 사진" src="/image/etc/main_category/">
                             </a>
                         </div>
@@ -292,16 +292,16 @@
                 </span>
 
                 <span class="menu_cell_category_drop">
-                    <a href="/js/main/category/sale/sale">SALE</a>
+                    <a href="/main/category/sale/sale">SALE</a>
                     <div class="menu_cell_category_dropdown">
                         <div class="in_category">
                             <div class="in_category_caption">IN CATEGORY</div>
                             <ul>
-                                <li><a href="/js/main/category/sale/sale">SALE</a></li>
+                                <li><a href="/main/category/sale/sale">SALE</a></li>
                             </ul>
                         </div>
                         <div class="category_img_box">
-                            <a href="/js/main/product/15">
+                            <a href="/main/product/15">
                                 <img alt="카테고리 대표 사진" src="/image/etc/main_category/">
                             </a>
                         </div>

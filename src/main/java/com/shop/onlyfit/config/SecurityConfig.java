@@ -48,11 +48,9 @@ public class SecurityConfig {
                 .and()
                 .exceptionHandling().accessDeniedPage("/main/restrict")
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint) // JWT 인증 에러 핸들링
-
                 // JWT 필터 추가
                 .and()
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-
 
         return http.build();
     }

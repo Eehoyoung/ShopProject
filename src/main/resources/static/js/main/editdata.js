@@ -85,7 +85,7 @@ $(function(){
                 }
             }).done(function(word){
                 alert(word); //정상적으로 회원탈퇴 되었습니다. or 비밀번호가 올바르지 않습니다.
-                if(word.charAt(0) == "정"){
+                if(word.charAt(0) === "정"){
                     location.href='/main/index';
                 }
             }).fail(function (error){

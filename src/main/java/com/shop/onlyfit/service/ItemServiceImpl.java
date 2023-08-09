@@ -4,10 +4,13 @@ import com.shop.onlyfit.domain.Cart;
 import com.shop.onlyfit.domain.Item;
 import com.shop.onlyfit.dto.WeeklyBestDto;
 import com.shop.onlyfit.dto.item.ItemDto;
+import com.shop.onlyfit.dto.item.ItemPageDto;
 import com.shop.onlyfit.repository.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import org.springframework.data.domain.Pageable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,5 +92,20 @@ public class ItemServiceImpl implements ItemService {
             allItemInCart.add(itemRepository.findAllItemInCart(itemId));
         }
         return allItemInCart;
+    }
+
+    @Override
+    public ItemPageDto getItemPagingDtoByCategory(Pageable pageable, String firstCategory, String secondCategory) {
+        ItemPageDto itemPageDto = new ItemPageDto();
+
+        Page<ItemDto> itemBoards = itemRepository.findAllItem(pageable, firstCategory, secondCategory);
+        int homeStartPage = 1;
+        int homeEndPage = 2;
+
+        itemPageDto.setItemPage(itemBoards);
+        itemPageDto.setHomeStartPage(homeStartPage);
+        itemPageDto.setHomeEndPage(homeEndPage);
+
+        return itemPageDto;
     }
 }
