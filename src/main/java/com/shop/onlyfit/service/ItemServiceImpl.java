@@ -2,10 +2,14 @@ package com.shop.onlyfit.service;
 
 import com.shop.onlyfit.domain.Cart;
 import com.shop.onlyfit.domain.Item;
+import com.shop.onlyfit.domain.User;
 import com.shop.onlyfit.dto.WeeklyBestDto;
+import com.shop.onlyfit.dto.item.ItemDetailDto;
 import com.shop.onlyfit.dto.item.ItemDto;
 import com.shop.onlyfit.dto.item.ItemPageDto;
+import com.shop.onlyfit.repository.CartRepository;
 import com.shop.onlyfit.repository.ItemRepository;
+import com.shop.onlyfit.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -18,10 +22,14 @@ import java.util.List;
 public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
+    private final UserRepository userRepository;
+    private final CartRepository cartRepository;
 
     @Autowired
-    public ItemServiceImpl(ItemRepository itemRepository) {
+    public ItemServiceImpl(ItemRepository itemRepository, UserRepository userRepository, CartRepository cartRepository) {
         this.itemRepository = itemRepository;
+        this.userRepository = userRepository;
+        this.cartRepository = cartRepository;
     }
 
     @Override
@@ -107,5 +115,67 @@ public class ItemServiceImpl implements ItemService {
         itemPageDto.setHomeEndPage(homeEndPage);
 
         return itemPageDto;
+    }
+
+    @Override
+    public ItemDetailDto getItemDetailDto(Long itemIdx) {
+
+        List<Item> itemListByItemIdx = itemRepository.findAllByItemIdx(itemIdx);
+
+        List<Item> findItemByitemIdxAndRep = itemRepository.findAllByItemIdxAndRep(itemIdx, true);
+        String imgMainUrl = findItemByitemIdxAndRep.get(0).getImgUrl();
+        List<String> getColorList = new ArrayList<>();
+        for (Item item : findItemByitemIdxAndRep) {
+            getColorList.add(item.getColor());
+        }
+
+        Item topItemByItemIdxAndRep = itemRepository.findTopByItemIdxAndRep(itemIdx, true);
+        String itemName = topItemByItemIdxAndRep.getItemName();
+        int price = topItemByItemIdxAndRep.getPrice();
+        String itemInfo = topItemByItemIdxAndRep.getItemInfo();
+        String itemFabric = topItemByItemIdxAndRep.getFavric();
+        String itemModel = topItemByItemIdxAndRep.getModel();
+        double mileage = topItemByItemIdxAndRep.getPrice() * 0.01;
+
+        List<Long> idList = new ArrayList<>();
+        for (Item listByItemIdx : itemListByItemIdx) {
+            idList.add(listByItemIdx.getId());
+        }
+
+        List<String> imgUrlList = new ArrayList<>();
+        List<Item> itemByItemIdxAndColor = itemRepository.findAllByItemIdxAndColor(itemIdx, topItemByItemIdxAndRep.getColor());
+
+        for (Item item : itemByItemIdxAndColor) {
+            imgUrlList.add(item.getImgUrl());
+        }
+
+        ItemDetailDto itemDetailDto = new ItemDetailDto();
+        itemDetailDto.setImgMainUrl(imgMainUrl);
+        itemDetailDto.setColorList(getColorList);
+        itemDetailDto.setItemName(itemName);
+        itemDetailDto.setPrice(price);
+        itemDetailDto.setItemInfo(itemInfo);
+        itemDetailDto.setFabric(itemFabric);
+        itemDetailDto.setModel(itemModel);
+        itemDetailDto.setItemIdx(itemIdx);
+        itemDetailDto.setItemId(idList);
+        itemDetailDto.setMileage(mileage);
+        itemDetailDto.setImgUrlList(imgUrlList);
+
+        return itemDetailDto;
+    }
+
+    @Override
+    public void moveItemToBasket(String loginId, Long itemIdx, String itemColor, int quantity) {
+
+        Cart cart = new Cart();
+        User findUser = userRepository.findByLoginId(loginId).get();
+        Item findItem = itemRepository.findByItemIdxAndColorAndRep(itemIdx, itemColor, true);
+
+        cart.setUser(findUser);
+        cart.setCartCount(quantity);
+        cart.setItem(findItem);
+
+        cartRepository.save(cart);
     }
 }

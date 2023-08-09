@@ -3,6 +3,7 @@ package com.shop.onlyfit.service;
 import com.shop.onlyfit.domain.Cart;
 import com.shop.onlyfit.domain.Item;
 import com.shop.onlyfit.dto.WeeklyBestDto;
+import com.shop.onlyfit.dto.item.ItemDetailDto;
 import com.shop.onlyfit.dto.item.ItemDto;
 import com.shop.onlyfit.dto.item.ItemPageDto;
 
@@ -32,4 +33,8 @@ public interface ItemService {
     List<ItemDto> getAllItemInCart(List<Cart> cartList);
 
     ItemPageDto getItemPagingDtoByCategory(Pageable pageable, String firstCategory, String secondCategory);
+
+    ItemDetailDto getItemDetailDto(Long itemIdx);
+
+    void moveItemToBasket(String name, Long itemIdx, String color, int quantity);
 }

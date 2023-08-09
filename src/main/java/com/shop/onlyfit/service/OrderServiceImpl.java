@@ -2,21 +2,30 @@ package com.shop.onlyfit.service;
 
 import com.shop.onlyfit.domain.Order;
 import com.shop.onlyfit.domain.OrderItem;
+import com.shop.onlyfit.domain.SearchOrder;
 import com.shop.onlyfit.domain.User;
 import com.shop.onlyfit.domain.type.OrderStatus;
+import com.shop.onlyfit.dto.MainPageOrderDto;
 import com.shop.onlyfit.dto.MyPageOrderStatusDto;
+import com.shop.onlyfit.dto.OrderMainPageDto;
 import com.shop.onlyfit.exception.LoginIdNotFoundException;
+import com.shop.onlyfit.repository.OrderRepository;
 import com.shop.onlyfit.repository.UserRepository;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
 public class OrderServiceImpl implements OrderService{
     private final UserRepository userRepository;
+    private final OrderRepository orderRepository;
 
     @Autowired
-    public OrderServiceImpl(UserRepository userRepository) {
+    public OrderServiceImpl(UserRepository userRepository, OrderRepository orderRepository) {
         this.userRepository = userRepository;
+        this.orderRepository = orderRepository;
     }
 
     @Override
@@ -48,5 +57,26 @@ public class OrderServiceImpl implements OrderService{
         }
 
         return new MyPageOrderStatusDto(payWaitingNum, preShipNum, inShipNum, completeShip, orderCancelNum, orderChangeNum, orderRefundNum);
+    }
+
+    @Override
+    public OrderMainPageDto getOrderPagingDto(SearchOrder searchOrder, Pageable pageable, String loginId) {
+        OrderMainPageDto orderPageDto = new OrderMainPageDto();
+
+        Page<MainPageOrderDto> mainPageOrderBoards;
+
+        if (StringUtils.isEmpty(searchOrder.getFirstdate()) && StringUtils.isEmpty(searchOrder.getLastdate())) {
+            mainPageOrderBoards = orderRepository.mainPageSearchAllOrder(pageable, loginId);
+        } else {
+            mainPageOrderBoards = orderRepository.mainPageSearchAllOrderByCondition(searchOrder, pageable, loginId);
+        }
+        int homeStartPage = Math.max(1, mainPageOrderBoards.getPageable().getPageNumber() - 4);
+        int homeEndPage = Math.min(mainPageOrderBoards.getTotalPages(), mainPageOrderBoards.getPageable().getPageNumber() + 4);
+
+        orderPageDto.setMainPageOrderBoards(mainPageOrderBoards);
+        orderPageDto.setHomeStartPage(homeStartPage);
+        orderPageDto.setHomeEndPage(homeEndPage);
+
+        return orderPageDto;
     }
 }
