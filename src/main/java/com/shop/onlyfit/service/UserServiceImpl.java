@@ -219,6 +219,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public void joinSeller(String loginId, MarketInfoDto marketInfoDto) {
         User findUser = userRepository.findByLoginId(loginId).get();
         marketInfoDto.setUser(findUser);
+        marketInfoDto.setVisitCount(0);
         marketRepository.save(marketInfoDto.toEntity());
     }
 

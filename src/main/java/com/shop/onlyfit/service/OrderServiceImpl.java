@@ -72,7 +72,7 @@ public class OrderServiceImpl implements OrderService{
         }
         int homeStartPage = Math.max(1, mainPageOrderBoards.getPageable().getPageNumber() - 4);
         int homeEndPage = Math.min(mainPageOrderBoards.getTotalPages(), mainPageOrderBoards.getPageable().getPageNumber() + 4);
-
+        System.out.println("여기 또 왜?  " + mainPageOrderBoards);
         orderPageDto.setMainPageOrderBoards(mainPageOrderBoards);
         orderPageDto.setHomeStartPage(homeStartPage);
         orderPageDto.setHomeEndPage(homeEndPage);

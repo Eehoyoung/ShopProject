@@ -32,14 +32,16 @@ public class MainController {
     private final MileageServiceImpl mileageService;
     private final OrderServiceImpl orderService;
     private final OrderItemServiceImpl orderItemService;
+    private final MarketServiceImpl marketService;
 
     @Autowired
-    public MainController(ItemServiceImpl itemService, UserServiceImpl userService, MileageServiceImpl mileageService, OrderServiceImpl orderService, OrderItemServiceImpl orderItemService) {
+    public MainController(ItemServiceImpl itemService, UserServiceImpl userService, MileageServiceImpl mileageService, OrderServiceImpl orderService, OrderItemServiceImpl orderItemService, MarketServiceImpl marketService) {
         this.itemService = itemService;
         this.userService = userService;
         this.mileageService = mileageService;
         this.orderService = orderService;
         this.orderItemService = orderItemService;
+        this.marketService = marketService;
     }
 
     public User getAuthenticatedUser(HttpServletRequest request) {

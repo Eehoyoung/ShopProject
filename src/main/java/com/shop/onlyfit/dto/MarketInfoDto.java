@@ -13,7 +13,7 @@ import lombok.ToString;
 @NoArgsConstructor
 public class MarketInfoDto {
 
-    private Long id;
+    private Long marketId;
 
     private String name;
 
@@ -23,13 +23,16 @@ public class MarketInfoDto {
 
     private User user;
 
+    private int visitCount;
+
     public Market toEntity() {
         return Market.builder()
-                .id(id)
+                .marketId(marketId)
                 .name(name)
                 .businessNumber(businessNumber)
                 .storeNumber(storeNumber)
                 .seller(user)
+                .visitCount(visitCount)
                 .build();
     }
 }

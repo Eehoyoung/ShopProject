@@ -1,31 +1,36 @@
 package com.shop.onlyfit.service;
 
-import com.shop.onlyfit.domain.Item;
-import com.shop.onlyfit.domain.SearchItem;
-import com.shop.onlyfit.domain.User;
+import com.shop.onlyfit.domain.*;
+import com.shop.onlyfit.domain.type.OrderStatus;
 import com.shop.onlyfit.dto.OrderDto;
+import com.shop.onlyfit.dto.OrderPageDto;
 import com.shop.onlyfit.dto.item.ItemDto;
 import com.shop.onlyfit.dto.item.ItemPageDto;
-import com.shop.onlyfit.repository.ItemRepository;
-import com.shop.onlyfit.repository.OrderRepository;
-import com.shop.onlyfit.repository.UserRepository;
+import com.shop.onlyfit.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 public class MarketServiceImpl implements MarketService {
 
     private final UserRepository userRepository;
+    private final OrderItemRepository orderItemRepository;
     private final ItemRepository itemRepository;
     private final OrderRepository orderRepository;
+    private final MarketRepository marketRepository;
 
     @Autowired
-    public MarketServiceImpl(UserRepository userRepository, ItemRepository itemRepository, OrderRepository orderRepository) {
+    public MarketServiceImpl(UserRepository userRepository, OrderItemRepository orderItemRepository, ItemRepository itemRepository, OrderRepository orderRepository, MarketRepository marketRepository) {
         this.userRepository = userRepository;
+        this.orderItemRepository = orderItemRepository;
         this.itemRepository = itemRepository;
         this.orderRepository = orderRepository;
+        this.marketRepository = marketRepository;
     }
 
     @Override
@@ -88,5 +93,83 @@ public class MarketServiceImpl implements MarketService {
         itemPageDto.setHomeEndPage(homeEndPage);
 
         return itemPageDto;
+    }
+
+    @Override
+    public String findMarketNameByMarketId(Long marketId) {
+        return marketRepository.findMarketNameByMarketId(marketId);
+    }
+
+    @Override
+    @Transactional
+    public void updateMarketVisitCount(Long marketId) {
+        Market market = marketRepository.findById(marketId).get();
+        int visitCount = marketRepository.findVisitCountByMarketId(marketId);
+        market.setVisitCount(++visitCount);
+        marketRepository.save(market);
+    }
+
+    @Override
+    public Long findMarketId(String userId) {
+        return marketRepository.findMarketIdByLoginId(userId);
+    }
+
+    @Override
+    public Page<ItemDto> findAllItemByMarketId(Long marketId, Pageable pageable) {
+        return itemRepository.searchAllItemByMarketId(marketId,pageable);
+    }
+
+    @Override
+    public Page<OrderDto> findAllOrderByMarketId(Long marketId, Pageable pageable) {
+        return orderRepository.searchAllOrderByMarketId(marketId,pageable);
+    }
+
+    @Override
+    public int getVisitCountByMarketId(Long marketId) {
+        return userRepository.visitCountResultByMarketId(marketId);
+    }
+
+    @Override
+    public OrderPageDto findAllOrderByPaging(Long marketId, Pageable pageable) {
+
+        OrderPageDto orderPageDto = new OrderPageDto();
+
+        Page<OrderDto> orderBoards = orderRepository.searchAllOrderByMarketId(marketId,pageable);
+        int homeStartPage = Math.max(1, orderBoards.getPageable().getPageNumber() - 4);
+        int homeEndPage = Math.min(orderBoards.getTotalPages(), orderBoards.getPageable().getPageNumber() + 4);
+
+        orderPageDto.setOrderBoards(orderBoards);
+        orderPageDto.setHomeStartPage(homeStartPage);
+        orderPageDto.setHomeEndPage(homeEndPage);
+
+        return orderPageDto;
+    }
+
+    @Override
+    public OrderPageDto findAllOrderByConditionByPaging(Long marketId, SearchOrder searchOrder, Pageable pageable) {
+        OrderPageDto orderPageDto = new OrderPageDto();
+
+        Page<OrderDto> orderBoards = orderRepository.searchAllOrderByConditionAndMarketId(marketId,searchOrder, pageable);
+        int startPage = Math.max(1, orderBoards.getPageable().getPageNumber() - 4);
+        int endPage = Math.min(orderBoards.getTotalPages(), orderBoards.getPageable().getPageNumber() + 4);
+
+        orderPageDto.setOrderBoards(orderBoards);
+        orderPageDto.setHomeStartPage(startPage);
+        orderPageDto.setHomeEndPage(endPage);
+
+        return orderPageDto;
+    }
+
+    @Override
+    @Transactional
+    public Long changeOrderStatus(Long id, OrderStatus status) {
+        Optional<OrderItem> findOrderItem = orderItemRepository.findById(id);
+        OrderItem checkedOrderItem = new OrderItem();
+        if (findOrderItem.isPresent()) {
+            checkedOrderItem = findOrderItem.get();
+        }
+        checkedOrderItem.setOrderStatus(status);
+
+        return checkedOrderItem.getId();
     }
 }

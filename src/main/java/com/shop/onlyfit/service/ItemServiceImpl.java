@@ -118,6 +118,21 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    public ItemPageDto getItemPagingDtoByCategoryAndMarket(Pageable pageable, Long marketId) {
+        ItemPageDto itemPageDto = new ItemPageDto();
+
+        Page<ItemDto> itemBoards = itemRepository.findAllItemByMarketId(pageable, marketId);
+        int homeStartPage = 1;
+        int homeEndPage = 2;
+
+        itemPageDto.setItemPage(itemBoards);
+        itemPageDto.setHomeStartPage(homeStartPage);
+        itemPageDto.setHomeEndPage(homeEndPage);
+
+        return itemPageDto;
+    }
+
+    @Override
     public ItemDetailDto getItemDetailDto(Long itemIdx) {
 
         List<Item> itemListByItemIdx = itemRepository.findAllByItemIdx(itemIdx);
@@ -128,7 +143,7 @@ public class ItemServiceImpl implements ItemService {
         for (Item item : findItemByitemIdxAndRep) {
             getColorList.add(item.getColor());
         }
-
+        Long marketId = itemRepository.findMarketIdByItemIdx(itemIdx);
         Item topItemByItemIdxAndRep = itemRepository.findTopByItemIdxAndRep(itemIdx, true);
         String itemName = topItemByItemIdxAndRep.getItemName();
         int price = topItemByItemIdxAndRep.getPrice();
@@ -161,6 +176,7 @@ public class ItemServiceImpl implements ItemService {
         itemDetailDto.setItemId(idList);
         itemDetailDto.setMileage(mileage);
         itemDetailDto.setImgUrlList(imgUrlList);
+        itemDetailDto.setMarketId(marketId);
 
         return itemDetailDto;
     }
@@ -171,7 +187,6 @@ public class ItemServiceImpl implements ItemService {
         Cart cart = new Cart();
         User findUser = userRepository.findByLoginId(loginId).get();
         Item findItem = itemRepository.findByItemIdxAndColorAndRep(itemIdx, itemColor, true);
-
         cart.setUser(findUser);
         cart.setCartCount(quantity);
         cart.setItem(findItem);

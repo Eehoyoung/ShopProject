@@ -20,4 +20,5 @@ public class ItemDetailDto {
     private String model;
     private List<Long> itemId;
     private List<String> imgUrlList;
+    private Long marketId;
 }

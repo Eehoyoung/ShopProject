@@ -21,4 +21,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("select sum(u.visitCount) from User u")
     int visitCountResult();
+
+    @Query("SELECT m.visitCount FROM Market m WHERE m.marketId = :marketId")
+    int visitCountResultByMarketId(@Param("marketId") Long marketId);
 }

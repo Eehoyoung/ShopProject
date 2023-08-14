@@ -42,6 +42,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/css/**", "/js/**", "/image/**").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/market/**").hasRole("SELLER")
                 .antMatchers("/main/order", "/main/profile", "/main/mileage", "/main/address",
                         "/main/cart", "/main/payment", "/main/product/basketadd_ok").authenticated()
                 .antMatchers("/main/index", "/main/category/**", "/main/product/**", "/auth/**", "/main/login").permitAll()

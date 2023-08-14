@@ -3,6 +3,7 @@ package com.shop.onlyfit.repository;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.shop.onlyfit.domain.Item;
 import com.shop.onlyfit.domain.QCart;
@@ -138,6 +139,33 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
     }
 
     @Override
+    public Page<ItemDto> findAllItemByMarketId(Pageable pageable, Long marketId) {
+        QueryResults<ItemDto> results = queryFactory
+                .select(new QItemDto(
+                        QItem.item.id,
+                        QItem.item.itemName,
+                        QItem.item.firstCategory,
+                        QItem.item.price,
+                        QItem.item.saleStatus,
+                        QItem.item.imgUrl,
+                        QItem.item.color,
+                        QItem.item.rep,
+                        QItem.item.itemIdx
+                ))
+                .from(QItem.item)
+                .where(QItem.item.rep.eq(true), QItem.item.market.marketId.eq(marketId))
+                .orderBy(QItem.item.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+
+        List<ItemDto> content = results.getResults();
+        long total = results.getTotal();
+
+        return new PageImpl<>(content, pageable, total);
+    }
+
+    @Override
     public ItemDto findAllItemInCart(Long itemId) {
         ItemDto results = queryFactory
                 .select(new QItemDto(
@@ -228,35 +256,32 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
 
         return new PageImpl<>(content, pageable, total);
     }
-    /*
+
     @Override
-    public Page<ItemDto> findAllItem(Pageable pageable, String firstCategory, String secondCategory) {
-        QueryResults results = queryFactory
-                .selectDistinct(new QItemDto(
-                        QItem.item.itemIdx,
+    public Page<ItemDto> searchAllItemByMarketId(Long marketId, Pageable pageable) {
+        QueryResults<ItemDto> results = queryFactory
+                .select(new QItemDto(
+                        QItem.item.id,
                         QItem.item.itemName,
-                        QItem.item.imgUrl,
-                        QItem.item.price,
                         QItem.item.firstCategory,
-                        QItem.item.secondCategory,
+                        QItem.item.price,
                         QItem.item.saleStatus,
-                        QItem.item.rep
+                        QItem.item.imgUrl,
+                        QItem.item.color,
+                        QItem.item.rep,
+                        QItem.item.itemIdx
                 ))
                 .from(QItem.item)
-                .where(QItem.item.rep.eq(true),
-                        QItem.item.firstCategory.eq(firstCategory),
-                        QItem.item.secondCategory.eq(secondCategory)
-                )
+                .where(QItem.item.market.marketId.eq(marketId))
+                .orderBy(QItem.item.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetchResults();
-
         List<ItemDto> content = results.getResults();
         long total = results.getTotal();
 
         return new PageImpl<>(content, pageable, total);
     }
-     */
 
     private BooleanExpression saleStatusEq(String saleStatusCondition) {
         if (StringUtils.isEmpty(saleStatusCondition)) {

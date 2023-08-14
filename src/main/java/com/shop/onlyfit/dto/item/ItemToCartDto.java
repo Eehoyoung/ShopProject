@@ -7,8 +7,8 @@ import lombok.Setter;
 @Setter
 public class ItemToCartDto {
     private Long id;
-    private String itemColor;
-    private String itemIdx;
+    private String item_color;
+    private String item_idx;
     private String where;
     private String quantity;
 }

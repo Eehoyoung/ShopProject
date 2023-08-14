@@ -34,6 +34,8 @@ public interface ItemService {
 
     ItemPageDto getItemPagingDtoByCategory(Pageable pageable, String firstCategory, String secondCategory);
 
+    ItemPageDto getItemPagingDtoByCategoryAndMarket(Pageable pageable, Long marketId);
+
     ItemDetailDto getItemDetailDto(Long itemIdx);
 
     void moveItemToBasket(String name, Long itemIdx, String color, int quantity);

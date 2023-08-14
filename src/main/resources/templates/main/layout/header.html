@@ -18,10 +18,12 @@
                         </div>
                     </div>
                 </a>
-                <a href="/main/profile" sec:autorize="isAuthenticated()">정보수정</a>
-                <a href="/main/cart">장바구니</a>
-                <a href="/main/order">주문조회</a>
-                <a href="/main/mypage">마이페이지</a>
+                <a href="/main/join/seller">Join Market</a>
+                <a id="homeButton"  href="#" th:href="@{/}" sec:autorize="hasRole('ROLE_SELLER')" sec:authorize="isAuthenticated()">My Market</a>
+                <a href="/main/profile" sec:autorize="isAuthenticated()" >정보수정</a>
+                <a href="/main/cart" sec:authorize="isAuthenticated()" >장바구니</a>
+                <a href="/main/order" sec:authorize="isAuthenticated()" >주문조회</a>
+                <a href="/main/mypage" sec:authorize="isAuthenticated()" >마이페이지</a>
             </div>
             <div class="logo_between">
                 <a href="/main/index" ><img alt="로고사진" src="/image/etc/logo.png"></a>

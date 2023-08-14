@@ -14,4 +14,7 @@ public interface OrderRepositoryCustom {
 
     Page<MainPageOrderDto> mainPageSearchAllOrderByCondition(SearchOrder searchOrder, Pageable pageable, String loginId);
 
+    Page<OrderDto> searchAllOrderByMarketId(Long marketId, Pageable pageable);
+
+    Page<OrderDto> searchAllOrderByConditionAndMarketId(Long marketId, SearchOrder searchOrder, Pageable pageable);
 }

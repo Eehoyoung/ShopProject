@@ -18,9 +18,10 @@ public class OrderDto {
     private String payment;
     private int orderPrice;
     private OrderStatus orderStatus;
+    private Long marketId;
 
     @QueryProjection
-    public OrderDto(Long id, Long orderItemId, String name, String itemName, LocalDate orderedAt, String payment, int orderPrice, OrderStatus orderStatus) {
+    public OrderDto(Long id, Long orderItemId, String name, String itemName, LocalDate orderedAt, String payment, int orderPrice, OrderStatus orderStatus, Long marketId) {
         this.id = id;
         this.orderItemId = orderItemId;
         this.name = name;
@@ -29,6 +30,6 @@ public class OrderDto {
         this.payment = payment;
         this.orderPrice = orderPrice;
         this.orderStatus = orderStatus;
-
+        this.marketId = marketId;
     }
 }

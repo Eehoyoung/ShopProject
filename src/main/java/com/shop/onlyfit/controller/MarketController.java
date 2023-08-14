@@ -1,14 +1,16 @@
 package com.shop.onlyfit.controller;
 
-import com.shop.onlyfit.domain.Item;
-import com.shop.onlyfit.domain.SearchItem;
-import com.shop.onlyfit.domain.User;
+import com.shop.onlyfit.domain.*;
+import com.shop.onlyfit.domain.type.OrderStatus;
 import com.shop.onlyfit.domain.type.UserGrade;
 import com.shop.onlyfit.dto.OrderDto;
+import com.shop.onlyfit.dto.OrderPageDto;
 import com.shop.onlyfit.dto.item.ItemDto;
 import com.shop.onlyfit.dto.item.ItemPageDto;
+import com.shop.onlyfit.service.ItemServiceImpl;
 import com.shop.onlyfit.service.MarketServiceImpl;
 import com.shop.onlyfit.service.UserServiceImpl;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +21,13 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.Principal;
 import java.util.List;
 import java.util.Locale;
 
@@ -37,24 +38,46 @@ public class MarketController {
 
     private final MarketServiceImpl marketService;
     private final UserServiceImpl userService;
+    private final ItemServiceImpl itemService;
 
     @Autowired
-    public MarketController(MarketServiceImpl marketService, UserServiceImpl userService) {
+    public MarketController(MarketServiceImpl marketService, UserServiceImpl userService, ItemServiceImpl itemService) {
         this.marketService = marketService;
         this.userService = userService;
+        this.itemService = itemService;
     }
 
-    @GetMapping("/market/main")
-    public String getMemberMainPage(Model model, @PageableDefault(size = 4) Pageable pageable) {
-        Page<User> memberBoards = marketService.findAllMemberByOrderByCreatedAt(pageable);
-        Page<ItemDto> itemBoards = marketService.findAllItem(pageable);
-        Page<OrderDto> orderBoards = marketService.findAllOrder(pageable);
-        int allVisitCount = marketService.getVisitCount();
+    @GetMapping("/getMarketId")
+    @ResponseBody
+    public Long getMarketId(Principal principal) {
+        String userName = principal.getName(); // 현재 로그인된 사용자 이름을 얻습니다.
+        return marketService.findMarketId(userName);
+    }
 
-        model.addAttribute("memberList", memberBoards);
+    @GetMapping("/main/category/{marketId}")
+    public String getCategoryPageMarket(@PathVariable Long marketId, @PageableDefault(size = 12) Pageable pageable, Model model) {
+        ItemPageDto itemPagingDto = itemService.getItemPagingDtoByCategoryAndMarket(pageable, marketId);
+        String marketName = marketService.findMarketNameByMarketId(marketId);
+        marketService.updateMarketVisitCount(marketId);
+        model.addAttribute("startPage", itemPagingDto.getHomeStartPage());
+        model.addAttribute("endPage", itemPagingDto.getHomeEndPage());
+        model.addAttribute("itemList", itemPagingDto.getItemPage());
+        model.addAttribute("marketName", marketName);
+        model.addAttribute("marketId", marketId);
+
+        return "market/market_category";
+    }
+
+
+    @GetMapping("/market/main/{marketId}")
+    public String getMemberMainPage(@PathVariable Long marketId, Model model, @PageableDefault(size = 4) Pageable pageable) {
+        Page<ItemDto> itemBoards = marketService.findAllItemByMarketId(marketId,pageable);
+        Page<OrderDto> orderBoards = marketService.findAllOrderByMarketId(marketId,pageable);
+        int allVisitCount = marketService.getVisitCountByMarketId(marketId);
         model.addAttribute("itemList", itemBoards);
         model.addAttribute("orderList", orderBoards);
         model.addAttribute("numVisitors", allVisitCount);
+        model.addAttribute("marketId", marketId); // marketId를 모델에 추가합니다.
 
         return "market/market_main";
     }
@@ -143,6 +166,48 @@ public class MarketController {
         model.addAttribute("firstCategory", searchItem.getCmode());
         model.addAttribute("itemName", searchItem.getItem_name());
 
-        return "market/admin_item_list";
+        return "market/market_item_list";
+    }
+
+    @GetMapping("/market/orderList")
+    public String getOrderPage(@AuthenticationPrincipal UserDetails userDetails, Model model,
+                               @PageableDefault(size = 4) Pageable pageable, SearchOrder searchOrder) {
+
+        String userId = userDetails.getUsername();
+        Long marketId = marketService.findMarketId(userId);
+
+        OrderPageDto orderPageDto = new OrderPageDto();
+
+        if (StringUtils.isEmpty(searchOrder.getFirstdate()) && StringUtils.isEmpty(searchOrder.getLastdate()) && StringUtils.isEmpty(searchOrder.getSinput())) {
+            orderPageDto = marketService.findAllOrderByPaging(marketId,pageable);
+        } else {
+            orderPageDto = marketService.findAllOrderByConditionByPaging(marketId, searchOrder, pageable);
+        }
+
+        Page<OrderDto> orderBoards = orderPageDto.getOrderBoards();
+        int homeStartPage = orderPageDto.getHomeStartPage();
+        int homeEndPage = orderPageDto.getHomeEndPage();
+
+        model.addAttribute("orderList", orderBoards);
+        model.addAttribute("startPage", homeStartPage);
+        model.addAttribute("endPage", homeEndPage);
+
+        model.addAttribute("firstDate", searchOrder.getFirstdate());
+        model.addAttribute("lastDate", searchOrder.getLastdate());
+        model.addAttribute("oMode", searchOrder.getOmode());
+        model.addAttribute("sMode", "buyer");
+        model.addAttribute("sInput", searchOrder.getSinput());
+        model.addAttribute("oModeStatus", searchOrder.getOmode());
+
+        return "market/market_order";
+
+    }
+
+    @ResponseBody
+    @PatchMapping("/market/orderList1/{id}")
+    public String orderStatusChangePage(@PathVariable Long id, @RequestParam OrderStatus status) {
+        marketService.changeOrderStatus(id, status);
+
+        return "주문 상품 상태 변경완료";
     }
 }
