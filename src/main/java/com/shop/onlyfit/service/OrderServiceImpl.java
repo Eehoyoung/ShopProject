@@ -1,14 +1,12 @@
 package com.shop.onlyfit.service;
 
-import com.shop.onlyfit.domain.Order;
-import com.shop.onlyfit.domain.OrderItem;
-import com.shop.onlyfit.domain.SearchOrder;
-import com.shop.onlyfit.domain.User;
+import com.shop.onlyfit.domain.*;
+import com.shop.onlyfit.domain.type.DeliveryStatus;
 import com.shop.onlyfit.domain.type.OrderStatus;
-import com.shop.onlyfit.dto.MainPageOrderDto;
-import com.shop.onlyfit.dto.MyPageOrderStatusDto;
-import com.shop.onlyfit.dto.OrderMainPageDto;
+import com.shop.onlyfit.dto.*;
 import com.shop.onlyfit.exception.LoginIdNotFoundException;
+import com.shop.onlyfit.repository.ItemRepository;
+import com.shop.onlyfit.repository.MileageRepository;
 import com.shop.onlyfit.repository.OrderRepository;
 import com.shop.onlyfit.repository.UserRepository;
 import org.apache.commons.lang3.StringUtils;
@@ -16,16 +14,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
-public class OrderServiceImpl implements OrderService{
+public class OrderServiceImpl implements OrderService {
+
+    private final ItemRepository itemRepository;
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
+    private final MileageRepository mileageRepository;
 
     @Autowired
-    public OrderServiceImpl(UserRepository userRepository, OrderRepository orderRepository) {
+    public OrderServiceImpl(ItemRepository itemRepository, UserRepository userRepository, OrderRepository orderRepository, MileageRepository mileageRepository) {
+        this.itemRepository = itemRepository;
         this.userRepository = userRepository;
         this.orderRepository = orderRepository;
+        this.mileageRepository = mileageRepository;
     }
 
     @Override
@@ -72,11 +80,59 @@ public class OrderServiceImpl implements OrderService{
         }
         int homeStartPage = Math.max(1, mainPageOrderBoards.getPageable().getPageNumber() - 4);
         int homeEndPage = Math.min(mainPageOrderBoards.getTotalPages(), mainPageOrderBoards.getPageable().getPageNumber() + 4);
-        System.out.println("여기 또 왜?  " + mainPageOrderBoards);
         orderPageDto.setMainPageOrderBoards(mainPageOrderBoards);
         orderPageDto.setHomeStartPage(homeStartPage);
         orderPageDto.setHomeEndPage(homeEndPage);
 
         return orderPageDto;
     }
+
+    @Transactional
+    @Override
+    public void doOrder(Long userId, List<Long> itemList, List<Integer> itemCountList,
+                        PaymentAddressDto paymentAddressDto, PaymentPriceDto paymentPriceDto, String payType) {
+        Optional<User> findUser = userRepository.findById(userId);
+
+        User checkedFindUser = new User();
+        if (findUser.isPresent()) {
+            checkedFindUser = findUser.get();
+        }
+
+        Delivery delivery = new Delivery();
+
+        UserAddress userAddress = new UserAddress();
+        userAddress.setCity(paymentAddressDto.getCity());
+        userAddress.setStreet(paymentAddressDto.getStreet());
+        userAddress.setZipcode(paymentAddressDto.getZipcode());
+        delivery.setUserAddress(userAddress);
+        delivery.setDeliveryStatus(DeliveryStatus.READY);
+
+        List<OrderItem> checkedTestOrderItem = new ArrayList<>();
+
+        for (int i = 0; i < itemList.size(); i++) {
+
+            Item checkedItem = itemRepository.findById(itemList.get(i)).orElseThrow(
+                    () -> new RuntimeException("해당 상품이 없습니다.")
+            );
+
+            OrderItem testOrderItem = OrderItem.createOrderItem(checkedItem, checkedItem.getPrice(), itemCountList.get(i));
+            if(payType.equals("card")){
+                testOrderItem.setOrderStatus(OrderStatus.PAYCOMPLETE);
+            }else {
+                testOrderItem.setOrderStatus(OrderStatus.PAYWAITING);
+            }
+            checkedTestOrderItem.add(testOrderItem);
+        }
+
+        Order order = Order.createOrder(checkedFindUser, delivery, checkedTestOrderItem, payType);
+        order.setUsedMileagePrice(paymentPriceDto.getUsed_mileage());
+
+        Mileage mileage = new Mileage();
+        mileage.setMileageContent("구매 적립금");
+        mileage.setMileagePrice(paymentPriceDto.getTobepaid_price() / 100);
+        mileage.setUser(checkedFindUser);
+
+        mileageRepository.save(mileage);
+        orderRepository.save(order);
+    }// 주문 생성
 }

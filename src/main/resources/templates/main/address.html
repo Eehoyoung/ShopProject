@@ -1,19 +1,20 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"  lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-    <link rel="stylesheet" type="text/css" href="/css/main/header.css">
-    <link rel="stylesheet" type="text/css" href="/css/main/footer.css">
-    <link rel="stylesheet" type="text/css" href="/css/main/nav.css">
-    <link rel="stylesheet" type="text/css" href="/css/main/address.css">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="/css/main/header.css" rel="stylesheet" type="text/css">
+    <link href="/css/main/footer.css" rel="stylesheet" type="text/css">
+    <link href="/css/main/nav.css" rel="stylesheet" type="text/css">
+    <link href="/css/main/address.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.gstatic.com" rel="preconnect">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Antonio&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" crossorigin="anonymous">
+    <link crossorigin="anonymous" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css"
+          integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" rel="stylesheet">
     <title>address</title>
     <script src="/js/jquery.js"></script>
     <script src="/js/main/header.js"></script>
@@ -49,7 +50,7 @@
                     </colgroup>
                     <thead>
                     <tr>
-                        <td><input type="checkbox" class="check_all"></td>
+                        <td><input class="check_all" type="checkbox"></td>
                         <td>배송지명</td>
                         <td>수령인</td>
                         <td>일반전화</td>
@@ -60,26 +61,32 @@
                     </thead>
                     <tbody>
                     <tr th:each="address : ${addressList}">
-                        <td><input type="checkbox" class="check"></td>
+                        <td><input class="check" type="checkbox"></td>
                         <td th:text="${address.placeName}">우리집</td>
                         <td th:text="${address.recipient}">이호영</td>
                         <td th:text="${#strings.replace(address.addressHomePhoneNumber, ',', '-')}">02-7777-7777</td>
                         <td th:text="${#strings.replace(address.addressPhoneNumber, ',', '-')}">010-7777-7777</td>
-                        <td th:text="${address.zipcode} + ' ' + ${address.city}+ ' ' + ${address.street}">(1234)경기도 사랑시 고백구 행복동</td>
-                        <td>
-                            <button class="editaddrbtn" onclick="location.href=''" th:onclick="'location.href=\''+ @{/main/address/change/{addressIdx}(addressIdx=${address.id})} + '\''"><span>수정</span><i class="fas fa-chevron-right"></i></button>
+                        <td th:text="${address.zipcode} + ' ' + ${address.city}+ ' ' + ${address.street}">(1234)경기도 사랑시
+                            고백구 행복동
                         </td>
-                        <input type="hidden" class="address_key" value="1" th:value="${address.id}"> <!-- 배송지 index-->
+                        <td>
+                            <button class="editaddrbtn" onclick="location.href=''"
+                                    th:onclick="'location.href=\''+ @{/main/address/change/{addressIdx}(addressIdx=${address.id})} + '\''">
+                                <span>수정</span><i class="fas fa-chevron-right"></i></button>
+                        </td>
+                        <input class="address_key" th:value="${address.id}" type="hidden" value="1"> <!-- 배송지 index-->
                     </tr>
                     </tbody>
                 </table>
                 <!--검색결과가 있는 경우 없는 영역-->
-                <div th:if="${#lists.isEmpty(addressList)}" class="nosearch">
+                <div class="nosearch" th:if="${#lists.isEmpty(addressList)}">
                     등록된 배송지가 없습니다.
                 </div>
                 <div class="bottombtn_box">
                     <button class="deletebtn bottombtn">선택 주소록 삭제</button>
-                    <button class="registerbtn bottombtn" onclick="location.href=''" th:onclick="'location.href=\'' + @{/main/address/register} + '\''">배송지 등록</button>
+                    <button class="registerbtn bottombtn" onclick="location.href=''"
+                            th:onclick="'location.href=\'' + @{/main/address/register} + '\''">배송지 등록
+                    </button>
                 </div>
 
 
@@ -95,7 +102,6 @@
 <!--footer-->
 <footer th:replace="main/layout/footer :: main_footerFragment">
 </footer>
-
 
 
 </body>

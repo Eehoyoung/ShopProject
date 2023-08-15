@@ -108,15 +108,15 @@ public class LoginController {
     }
 
     @GetMapping("main/join/seller")
-    public String joinSeller(@AuthenticationPrincipal UserDetails userDetails){
-        if(userDetails == null){
+    public String joinSeller(@AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails == null) {
             return "redirect:/main/login";
         }
         return "main/join_seller";
     }
 
     @PostMapping("main/join/seller")
-    public String joinSeller(@AuthenticationPrincipal UserDetails userDetails, MarketInfoDto marketInfoDto){
+    public String joinSeller(@AuthenticationPrincipal UserDetails userDetails, MarketInfoDto marketInfoDto) {
         String userId = userDetails.getUsername();
         userService.joinSeller(userId, marketInfoDto);
         userService.changeUserGradeToSeller(marketInfoDto.getUser().getId());
@@ -168,7 +168,7 @@ public class LoginController {
 
             response.addCookie(jwtCookie);
 
-            if(authenticatedUser.getVisitCount() >= 2){
+            if (authenticatedUser.getVisitCount() >= 2) {
                 return "redirect:/main/index";
             }
 

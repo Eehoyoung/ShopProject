@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <link href="/css/main/header.css" rel="stylesheet" type="text/css">
+    <link href="/css/main/footer.css" rel="stylesheet" type="text/css">
+    <link href="/css/main/nav.css" rel="stylesheet" type="text/css">
+    <link href="/css/main/payment.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Antonio&display=swap" rel="stylesheet">
+    <link crossorigin="anonymous" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css"
+          integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" rel="stylesheet">
+    <title>payment</title>
+    <script src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js" type="text/javascript"></script>
+    <script src="/js/jquery.js"></script>
+    <script src="/js/main/header.js"></script>
+    <script src="/js/main/nav2.js"></script>
+    <script src="/js/main/payment.js"></script>
+    <script src="/js/main/sendit.js"></script>
+</head>
+<body>
+<!--header start-->
+<header th:replace="main/layout/header :: main_headerFragment">
+</header>
+<!--header end-->
+
+<!--section-->
+<section>
+    <div class="section_caption">
+        ORDER
+    </div>
+    <div class="section_content">
+        <form action="#" id="payment-form" method="post" onsubmit="return paysendit()" th:action="@{/main/payment_ok}">
+
+            <div class="benefit_info">
+                <div class="benefit_info_caption">
+                    혜택정보
+                </div>
+                <div class="benefit_info_desc">
+                    <div class="benefit_info_desc_item"><b th:text="${user.name}">홍길동</b> 님은 <b
+                            sec:authorize="hasRole('ROLE_ADMIN')">[관리자]</b><b sec:authorize="hasRole('ROLE_USER')">[일반회원]</b>
+                        이십니다
+                    </div>
+                    <div class="benefit_info_mileage benefit_info_desc_item">
+                        가용적립금: <b th:text="${#numbers.formatInteger(user.mileage, 0, 'COMMA')}">2,000</b>원
+                        <input class="canuse" th:value="${user.mileage}" type="hidden" value="2000"><!--서버로부터 넘어온 데이터-->
+                    </div>
+                </div>
+            </div>
+
+            <div class="about_order">
+                <i class="fas fa-exclamation"></i> 상품의 옵션 및 수량 변경은 상품상세 또는 장바구니에서 가능합니다.
+            </div>
+
+            <div class="orderlist">
+                <div class="orderlist_caption">국내배송상품 주문내역</div>
+                <div class="orderlist_content">
+                    <table> <!-- 타임리프로 값 넣어주기-->
+                        <colgroup>
+                            <col class="width27">
+                            <col class="width92">
+                            <col class="widthauto">
+                            <col class="width98">
+                            <col class="width75">
+                            <col class="width98">
+                            <col class="width98">
+                            <col class="width85">
+                            <col class="width98">
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <td><input class="check_all" type="checkbox"></td>
+                            <td>이미지</td>
+                            <td>상품정보</td>
+                            <td>판매가</td>
+                            <td>수량</td>
+                            <td>적립금</td>
+                            <td>배송구분</td>
+                            <td>배송비</td>
+                            <td>합계</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="item:${orderList}">
+                            <td><input class="check" type="checkbox"></td>
+                            <td><img src="img/basket/basket1.JPG" th:src="@{${item.imgUrl}}"></td>
+                            <td>
+                                <div th:text="${item.itemName}">메카닉 패딩 야상점퍼</div>
+                                <div th:text="'[옵션:'+${item.color}+']'">[옵션: 그레이]</div>
+                            </td>
+                            <td><b th:text="'₩'+${#numbers.formatInteger(item.price, 0, 'COMMA')}">₩39,000</b></td>
+                            <td th:text="${item.cartConunt}">
+                                7
+                            </td>
+                            <td><span class="order_mileage">390</span>원</td> <!--js 계산. 한 아이템에 대한 총 예상 적립 마일리지-->
+                            <td>기본배송</td>
+                            <td>배송비</td>
+                            <td>
+                                ₩<span class="order_price"></span> <!--js 계산. 한 아이템에 대한 총 가격-->
+                            </td>
+                            <input class="item_idx" th:value="${item.itemIdx}" type="hidden" value="1">
+                            <input class="item_color" th:value="${item.color}" type="hidden" value="네이비">
+                            <input class="item_quantity" th:value="${item.cartConunt}" type="hidden" value="7">
+                            <input class="item_price  " th:value="${item.price}" type="hidden" value="39000">
+                        </tr>
+
+                        </tbody>
+                    </table>
+                    <div class="bottombtn_box">
+                        선택상품을 &nbsp;
+                        <button class="deletebtn bottombtn" type="button"><i class="fas fa-times"></i> &nbsp;삭제하기
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div id="orderform">
+                <!-- 전송 데이터 모음-->
+                <input name="total_price" type='hidden'>
+                <input name="tobepaid_price" type='hidden'>
+                <input name="orderiteminfo" type='hidden'> <!-- value에 상품idx, color, quantity가 Json형식으로 들어감-->
+                <!-- 전송 데이터 모음-->
+
+                <div class="delivery_info_caption">
+                    <div class="delivery_info_caption_left">배송 정보</div>
+                    <div class="delivery_info_caption_right"><span>＊</span> 필수입력사항</div>
+                </div>
+                <table class="delivery_info_table">
+                    <colgroup>
+                        <col width="120px"/>
+                        <col width="auto"/>
+                    </colgroup>
+                    <tr>
+                        <th>배송지 선택</th>
+                        <td>
+                            <div class="address_choice"> <!-- 타임리프 값 넣어주기-->
+                                <div><input checked id="0" name="address_id" type="radio" value="new_addr"> <label
+                                        for="0">새로운 배송지</label></div>
+                                <div th:each="address, i:${addressList}"><input id="2" name="address_id"
+                                                                                th:id="${i.count}" th:value="${address.id}"
+                                                                                type="radio"
+                                                                                value="home">
+                                    <label for="2" th:for="${i.count}" th:text="${address.placeName}">우리집</label>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="address_recipient">받으시는 분<span>＊</span></label></th>
+                        <td><input id="address_recipient" name="address_recipient" type="text"></td>
+                    </tr>
+                    <tr>
+                        <!-- vertical align을 맞추기위해 th와 td를 같은 class로 지정-->
+                        <th class="adjust_height"><label for="sample6_postcode">주소<span>＊</span></label></th>
+                        <td class="adjust_height">
+                            <input id="sample6_postcode" name="zipcode" placeholder="우편번호" type="text">
+                            <button id="postbtn" onclick="sample6_execDaumPostcode()" type="button"><span>우편번호</span><i
+                                    class="fas fa-chevron-right"></i></button>
+                            <br>
+                            <input class="address_margin" id="sample6_address" name="city" placeholder="주소" type="text">
+                            기본주소<br>
+                            <input class="address_margin" id="sample6_detailAddress" name="street" placeholder="상세주소"
+                                   type="text"> 나머지주소
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="address_home_number">일반전화<span>＊</span></label></th>
+                        <td>
+                            <select class="address_home_number" id="address_home_number"
+                                    name="addressHomePhoneNumber[]">
+                                <option value="02">02</option>
+                                <option value="031">031</option>
+                                <option value="032">032</option>
+                                <option value="033">033</option>
+                                <option value="041">041</option>
+                                <option value="042">042</option>
+                                <option value="043">043</option>
+                                <option value="044">044</option>
+                                <option value="051">051</option>
+                                <option value="052">052</option>
+                                <option value="053">053</option>
+                                <option value="054">054</option>
+                                <option value="055">055</option>
+                            </select>
+                            -
+                            <input class="address_home_number" name="addressHomePhoneNumber[]" type="text">
+                            -
+                            <input class="address_home_number" name="addressHomePhoneNumber[]" type="text">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="address_phone_number">휴대전화<span>＊</span></label></th>
+                        <td>
+                            <select class="address_phone_number" id="address_phone_number" name="addressPhoneNumber[]">
+                                <option value="010">010</option>
+                            </select>
+                            -
+                            <input class="address_phone_number" name="addressPhoneNumber[]" type="text">
+                            -
+                            <input class="address_phone_number" name="addressPhoneNumber[]" type="text">
+                        </td>
+                    </tr>
+                </table>
+
+                <div class="payment_caption">
+                    결제 예정 금액
+                </div>
+                <table class="payment_table">
+                    <tr>
+                        <th>총 주문 금액</th>
+                        <th>총 할인 금액</th>
+                        <th>결제 예정 금액</th>
+                    </tr>
+                    <tr>
+                        <td>₩<span id="total"></span></td>
+                        <td>- ₩<span id="discounted">0</span></td>
+                        <td>= ₩<span class="tobepaid_price" id="tobepaid"></span></td>
+                    </tr>
+                </table>
+                <table class="mileage_table">
+                    <colgroup>
+                        <col width="120px"/>
+                        <col width="auto"/>
+                    </colgroup>
+                    <th>적립금</th>
+                    <td>
+                        <input name="used_mileage" type="text" value="0"> 원 (총 사용가능 적립금 : <span
+                            th:text="${#numbers.formatInteger(user.mileage, 0, 'COMMA')}">2,000</span>원)
+                        <!-- 티임리프로 데이터 넣어주기-->
+                        <br>
+                        <br>
+                        - 적립금은 2,000 이상 부터 사용 가능합니다.<br>
+                        - 최대 사용금액은 제한이 없습니다.<br>
+                        - 적립금으로만 결제할 경우, 결제금액이 0으로 보여지는 것은 정상이며 [결제하기] 버튼을 누르면 주문이 완료됩니다.
+                        <br>
+                        <br>
+                    </td>
+                </table>
+                <div class="payment_submit">
+                    <input onclick="requestPay(); return false;" type="submit" value="카드 결제">
+                    <input type="submit" value="무통장 결제">
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+<!--nav-->
+<nav th:replace="main/layout/nav :: main_navFragment">
+</nav>
+
+<!--footer-->
+<footer th:replace="main/layout/footer :: main_footerFragment">
+</footer>
+
+<!--우편번호 api-->
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+    function sample6_execDaumPostcode() {
+        new daum.Postcode({
+            oncomplete: function (data) {
+                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+                // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                var addr = ''; // 주소 변수
+                var extraAddr = ''; // 참고항목 변수
+
+                //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                    addr = data.roadAddress;
+                } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                    addr = data.jibunAddress;
+                }
+
+                // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+                if (data.userSelectedType === 'R') {
+                    // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                    // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                    if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+                        extraAddr += data.bname;
+                    }
+                    // 건물명이 있고, 공동주택일 경우 추가한다.
+                    if (data.buildingName !== '' && data.apartment === 'Y') {
+                        extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                    }
+                    // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                    if (extraAddr !== '') {
+                        extraAddr = ' (' + extraAddr + ')';
+                    }
+                    // 조합된 참고항목을 해당 필드에 넣는다.
+                    document.getElementById("sample6_detailAddress").value = extraAddr;
+
+                } else {
+                    document.getElementById("sample6_detailAddress").value = '';
+                }
+
+                // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                document.getElementById('sample6_postcode').value = data.zonecode;
+                document.getElementById("sample6_address").value = addr;
+                // 커서를 상세주소 필드로 이동한다.
+                document.getElementById("sample6_detailAddress").focus();
+            }
+        }).open();
+    }
+</script>
+</body>
+</html>

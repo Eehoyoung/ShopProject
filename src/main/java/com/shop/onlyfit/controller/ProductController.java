@@ -32,12 +32,12 @@ public class ProductController {
     }
 
     @PostMapping("/main/product/basketadd_ok")
-    public String addItemInBasketPage(Principal principal, ItemToCartDto itemToCartDto) {
+    public String addItemInCartPage(Principal principal, ItemToCartDto itemToCartDto) {
         int quantity = Integer.parseInt(itemToCartDto.getQuantity());
         Long itemIdx = Long.parseLong(itemToCartDto.getItem_idx());
         String color = itemToCartDto.getItem_color();
 
-        itemService.moveItemToBasket(principal.getName(), itemIdx, color, quantity);
+        itemService.moveItemToCart(principal.getName(), itemIdx, color, quantity);
 
         return "redirect:/main/cart";
     }

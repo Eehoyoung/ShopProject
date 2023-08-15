@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.security.Principal;
 
 @Controller
@@ -66,7 +65,7 @@ public class UserController {
 
     @ResponseBody
     @DeleteMapping("/main/withdrawal")
-    public String withdrawalMember(HttpServletRequest request,HttpServletResponse response, Principal principal, @RequestParam(value = "user_pw") String password) {
+    public String withdrawalMember(HttpServletRequest request, HttpServletResponse response, Principal principal, @RequestParam(value = "user_pw") String password) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String loginId = principal.getName();
         User findUser = userService.findByLoginId(loginId);

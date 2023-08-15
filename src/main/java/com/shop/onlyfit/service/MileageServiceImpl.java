@@ -44,7 +44,7 @@ public class MileageServiceImpl implements MileageService {
 
         int totalMileage = 0;
 
-        for(int i=0; i<user.getMileageList().size(); i++){
+        for (int i = 0; i < user.getMileageList().size(); i++) {
             totalMileage += user.getMileageList().get(i).getMileagePrice();
         }
         return totalMileage;
@@ -56,7 +56,7 @@ public class MileageServiceImpl implements MileageService {
 
         int totalUsedMileage = 0;
 
-        for(int i=0; i<user.getOrderList().size(); i++){
+        for (int i = 0; i < user.getOrderList().size(); i++) {
             totalUsedMileage += user.getOrderList().get(i).getUsedMileagePrice();
         }
         return totalUsedMileage;

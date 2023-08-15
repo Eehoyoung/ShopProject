@@ -1,17 +1,18 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="/css/main/header.css">
-    <link rel="stylesheet" type="text/css" href="/css/main/product.css">
-    <link rel="stylesheet" type="text/css" href="/css/main/footer.css">
-    <link rel="stylesheet" type="text/css" href="/css/main/nav.css">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="/css/main/header.css" rel="stylesheet" type="text/css">
+    <link href="/css/main/product.css" rel="stylesheet" type="text/css">
+    <link href="/css/main/footer.css" rel="stylesheet" type="text/css">
+    <link href="/css/main/nav.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.gstatic.com" rel="preconnect">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Antonio&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" crossorigin="anonymous">
+    <link crossorigin="anonymous" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css"
+          integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" rel="stylesheet">
     <title>product</title>
     <script src="/js/jquery.js"></script>
     <script src="/js/main/header.js"></script>
@@ -28,7 +29,7 @@
 <section>
     <div class="product_container">
         <div class="product_imgbox">
-            <img src="img/product/product1.JPG" th:src="@{${item.imgMainUrl}}" alt="상품 메인 사진">
+            <img alt="상품 메인 사진" th:src="@{${item.imgMainUrl}}">
         </div>
         <div class="product_detail">
             <div class="product_caption" th:text="${item.itemName}">
@@ -76,19 +77,21 @@
                 <div class="form-group">
                     <label>COLOR</label>
                     <span>
-                            <select name="item_color" class="select_color" form="buyform"> <!-- 넘어갈 데이터 -->
+                            <select class="select_color" form="buyform" name="item_color"> <!-- 넘어갈 데이터 -->
                                 <option value="00">-[필수] 옵션을 선택해 주세요-</option>
-                                <option value="베이지" th:each="color:${item.colorList}" th:text="${color}" th:value="${color}">베이지</option>
+                                <option th:each="color:${item.colorList}" th:text="${color}" th:value="${color}"
+                                        value="베이지">베이지</option>
                             </select>
                         </span>
                 </div>
             </div>
-            <form action="" method="POST" id="buyform" onsubmit="return sendorder()"> <!-- 상품명, 색상, 수량 데이터 전송 -->
-                <input type="hidden" class="price" value="35000" th:value="${item.price}"> <!-- 상품 1개의 가격이다(jquery에서 가격을 뽑기위해 선언)-->
-                <input type="hidden" name="item_idx" value="1" th:value="${item.itemIdx}"> <!-- 넘어갈 데이터 -->
-                <input type="hidden" name="itemlist">
-                <input type="hidden" name="where" value="product"> <!-- 현재 넘어가는 정보는 product 페이지에서 넘어간다 -->
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+            <form action="" id="buyform" method="POST" onsubmit="return sendorder()"> <!-- 상품명, 색상, 수량 데이터 전송 -->
+                <input class="price" th:value="${item.price}" type="hidden" value="35000">
+                <!-- 상품 1개의 가격이다(jquery에서 가격을 뽑기위해 선언)-->
+                <input name="item_idx" th:value="${item.itemIdx}" type="hidden" value="1"> <!-- 넘어갈 데이터 -->
+                <input name="itemlist" type="hidden">
+                <input name="where" type="hidden" value="product"> <!-- 현재 넘어가는 정보는 product 페이지에서 넘어간다 -->
+                <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
                 <table> <!-- table을 thead와 tbody로 나눠주지 않으면 jquery 정상작동 X-->
                     <colgroup>
                         <col width="60%"/>
@@ -113,15 +116,17 @@
                     (최소주문수량 1개 이상)
                 </div>
                 <div class="formbtn_box">
-                    <input type="submit" class="buynowbtn formbtn" formaction="#바로구매" th:formaction="@{/main/payment}" value="바로 구매">
-                    <input type="submit" class="gobasketbtn formbtn" formaction="#장바구니" th:formaction="@{/main/product/basketadd_ok}" value="장바구니">
+                    <input class="buynowbtn formbtn" formaction="#바로구매" th:formaction="@{/main/payment}" type="submit"
+                           value="바로 구매">
+                    <input class="gobasketbtn formbtn" formaction="#장바구니" th:formaction="@{/main/product/basketadd_ok}"
+                           type="submit" value="장바구니">
                 </div>
             </form>
 
             <div class="sns_talk">
                 <button class="naver_talk">궁금할땐 <b>네이버톡톡</b> 하세요!</button>
                 <button class="kakao_talk"><b>카카오톡</b> 상담 @ 아이디</button>
-                <a th:href="@{/main/category/{marketId}(marketId=${item.marketId})}" class="seller-link"><b>판매자</b></a>
+                <a class="seller-link" th:href="@{/main/category/{marketId}(marketId=${item.marketId})}"><b>판매자</b></a>
 
 
             </div>
@@ -132,8 +137,8 @@
         상품상세정보
     </div>
     <div class="product_imageArea">
-        <img src="/image/etc/OnlyFit-특별한혜택.jpg" alt="특별한 혜택">
-        <img src="./img/items/로하 린넨 블레이져 자켓(5color)0.jpg" th:each="imgpath:${item.imgUrlList}" th:src="@{${imgpath}}" alt="상품 사진">
+        <img alt="특별한 혜택" src="/image/etc/OnlyFit-특별한혜택.jpg">
+        <img alt="상품 사진" th:each="imgpath:${item.imgUrlList}" th:src="@{${item.imgMainUrl}}">
     </div>
 
 

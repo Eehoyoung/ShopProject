@@ -21,6 +21,7 @@ section {
     border: 1px solid var(--border-color-basic);
     padding: 10px 0;
 }
+
 .benefit_info .benefit_info_caption {
     width: 105px;
     border-right: 1px solid var(--border-color-basic);
@@ -36,7 +37,7 @@ section {
 
 .benefit_info .benefit_info_desc .benefit_info_desc_item {
     width: 100%;
-    padding-bottom:8px;
+    padding-bottom: 8px;
 }
 
 .benefit_info .benefit_info_desc .benefit_info_mileage {
@@ -46,12 +47,12 @@ section {
 }
 
 
-
 /*order_caption*/
 .order_caption {
     border-bottom: 1px solid black;
     margin-top: 40px;
 }
+
 .order_caption_desc {
     background-color: #555555;
     color: white;
@@ -67,15 +68,15 @@ section {
     margin-top: 40px;
 }
 
-.orderlist .orderlist_caption{
+.orderlist .orderlist_caption {
     font-size: 12px;
 }
 
-.orderlist .orderlist_content{
+.orderlist .orderlist_content {
     margin-top: 10px;
 }
 
-table{
+table {
     width: 100%;
     font-size: 12px;
     color: var(--font-color-gray2);
@@ -96,7 +97,6 @@ td, th {
 }
 
 
-
 input[type=number] {
     width: 50px;
     height: 25px;
@@ -105,6 +105,7 @@ input[type=number] {
     padding-left: 5px;
     font-size: 12px;
 }
+
 .numberupdatebtn {
     margin-top: 5px;
     width: 50px;
@@ -166,7 +167,7 @@ input[type=number] {
     font-size: 12px;
     background-color: #999999;
     padding: 7px 30px;
-    color:white;
+    color: white;
     border: 1px solid var(--border-color-basic)
 }
 
@@ -177,12 +178,12 @@ input[type=number] {
     border-bottom: 1px solid black;
 }
 
-.calculate_table th{
+.calculate_table th {
     font-weight: normal;
     padding: 20px 0;
 }
 
-.calculate_table td{
+.calculate_table td {
     border-bottom: none;
     padding: 20px 0;
     font-size: 20px;
@@ -196,6 +197,7 @@ input[type=number] {
     display: flex;
     justify-content: center;
 }
+
 .bottombtn_box2 .buyallbtn {
     background-color: #333333;
 }

@@ -49,11 +49,11 @@ public class CartController {
     @ResponseBody
     @PatchMapping("/main/cart/changequantity/{cartId}/{itemQuantity}")
     public String changeQuantityInCartPage(@PathVariable Long cartId, @PathVariable int itemQuantity) {
-        try{
+        try {
             cartService.changeCartItemQuantity(cartId, itemQuantity);
         } catch (MaxQuantityExceededException e) {
             return e.getMessage(); // "최대 수량을 초과하였습니다." 메시지를 반환합니다.
-        } catch (Exception e){
+        } catch (Exception e) {
             return "에러 발생: " + e.getMessage();
         }
 

@@ -59,7 +59,7 @@ public class MainController {
         }
         Long userId = null;
 
-        if(userId == null ){
+        if (userId == null) {
             return null;
         }
 

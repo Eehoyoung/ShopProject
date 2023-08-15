@@ -15,12 +15,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class deliveryAddressServiceImpl implements deliveryAddressService{
+public class DeliveryAddressServiceImpl implements DeliveryAddressService {
 
     private final UserRepository userRepository;
     private final DeliveryAddressRepository deliveryAddressRepository;
 
-    public deliveryAddressServiceImpl(UserRepository userRepository, DeliveryAddressRepository deliveryAddressRepository) {
+    public DeliveryAddressServiceImpl(UserRepository userRepository, DeliveryAddressRepository deliveryAddressRepository) {
         this.userRepository = userRepository;
         this.deliveryAddressRepository = deliveryAddressRepository;
     }

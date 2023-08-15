@@ -1,17 +1,19 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"  xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="/css/main/header.css">
-    <link rel="stylesheet" type="text/css" href="/css/main/footer.css">
-    <link rel="stylesheet" type="text/css" href="/css/main/nav.css">
-    <link rel="stylesheet" type="text/css" href="/css/main/mypage.css">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="/css/main/header.css" rel="stylesheet" type="text/css">
+    <link href="/css/main/footer.css" rel="stylesheet" type="text/css">
+    <link href="/css/main/nav.css" rel="stylesheet" type="text/css">
+    <link href="/css/main/mypage.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.gstatic.com" rel="preconnect">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Antonio&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" crossorigin="anonymous">
+    <link crossorigin="anonymous" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css"
+          integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" rel="stylesheet">
     <title>mypage</title>
     <script src="/js/jquery.js"></script>
     <script src="/js/main/nav2.js"></script>
@@ -39,11 +41,14 @@
     </div>
     <!--member_type-->
     <div class="member_type">
-        <div class="member_type_img"><img src="/image/etc/user.JPG" alt="사진"></div>
+        <div class="member_type_img"><img alt="사진" src="/image/etc/user.JPG"></div>
         <div class="member_type_desc">
-            <div>저희 쇼핑몰을 이용해 주셔서 감사합니다. <b th:text="${user.name}">홍길동</b> 님은 <b sec:authorize="hasRole('ROLE_ADMIN')">[관리자]</b><b sec:authorize="hasRole('ROLE_USER')">[일반회원]</b> 이십니다</div>
+            <div>저희 쇼핑몰을 이용해 주셔서 감사합니다. <b th:text="${user.name}">홍길동</b> 님은 <b sec:authorize="hasRole('ROLE_ADMIN')">[관리자]</b><b
+                    sec:authorize="hasRole('ROLE_USER')">[일반회원]</b> 이십니다
+            </div>
             <div class="member_milage">
-                가용적립금&nbsp;&nbsp;&nbsp;<b>></b>&nbsp;&nbsp;&nbsp;<b th:text="${#numbers.formatInteger(user.mileage, 0, 'COMMA')} + '원'">2,000원</b>&nbsp;&nbsp;&nbsp;
+                가용적립금&nbsp;&nbsp;&nbsp;<b>></b>&nbsp;&nbsp;&nbsp;<b
+                    th:text="${#numbers.formatInteger(user.mileage, 0, 'COMMA')} + '원'">2,000원</b>&nbsp;&nbsp;&nbsp;
                 <button data-url="/main/mileage" onclick="onItemClick(event)">조회</button>
             </div>
         </div>
@@ -55,25 +60,39 @@
         <div class="myshop_orderstate_container">
             <div class="myshop_orderstate_item">
                 <div class="item_caption">입금전</div>
-                <div class="item_content"><a th:href="@{/main/order(omode='PAYWAITING',firstdate='2023-06-01',lastdate=${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')})}" href="" th:text="${orderStatus.payWaitingNum}">0</a></div>
+                <div class="item_content"><a
+                        href=""
+                        th:href="@{/main/order(omode='PAYWAITING',firstdate='2023-06-01',lastdate=${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')})}" th:text="${orderStatus.payWaitingNum}">0</a></div>
             </div>
             <div class="myshop_orderstate_item">
                 <div class="item_caption">배송준비중</div>
-                <div class="item_content"><a th:href="@{/main/order(omode='PRESHIP',firstdate='2023-06-01',lastdate=${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')})}" href="" th:text="${orderStatus.preShipNum}">0</a></div>
+                <div class="item_content"><a
+                        href=""
+                        th:href="@{/main/order(omode='PRESHIP',firstdate='2023-06-01',lastdate=${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')})}" th:text="${orderStatus.preShipNum}">0</a></div>
             </div>
             <div class="myshop_orderstate_item">
                 <div class="item_caption">배송중</div>
-                <div class="item_content"><a th:href="@{/main/order(omode='INSHIP',firstdate='2023-06-01',lastdate=${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')})}">0</a></div>
+                <div class="item_content"><a
+                        th:href="@{/main/order(omode='INSHIP',firstdate='2023-06-01',lastdate=${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')})}">0</a>
+                </div>
             </div>
             <div class="myshop_orderstate_item">
                 <div class="item_caption">배송완료</div>
-                <div class="item_content"><a th:href="@{/main/order(omode='COMPLETESHIP',firstdate='2023-06-01',lastdate=${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')})}">0</a></div>
+                <div class="item_content"><a
+                        th:href="@{/main/order(omode='COMPLETESHIP',firstdate='2023-06-01',lastdate=${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')})}">0</a>
+                </div>
             </div>
             <div class="myshop_orderstate_item last_item">
                 <ul>
-                    <li>· 취소 &nbsp;:&nbsp;&nbsp; <span><a th:href="@{/main/order(omode='ORDERCANCEL',firstdate='2023-06-01',lastdate=${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')})}" href="#" th:text="${orderStatus.orderCancelNum}">0</a></span></li>
-                    <li>· 교환 &nbsp;:&nbsp;&nbsp; <span><a th:href="@{/main/order(omode='ORDERCHANGE',firstdate='2023-06-01',lastdate=${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')})}">0</a></span></li>
-                    <li>· 반품 &nbsp;:&nbsp;&nbsp; <span><a th:href="@{/main/order(omode='ORDERREFUND',firstdate='2023-06-01',lastdate=${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')})}" href="#" th:text="${orderStatus.orderRefundNum}">0</a></span></li>
+                    <li>· 취소 &nbsp;:&nbsp;&nbsp; <span><a
+                            href="#"
+                            th:href="@{/main/order(omode='ORDERCANCEL',firstdate='2023-06-01',lastdate=${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')})}" th:text="${orderStatus.orderCancelNum}">0</a></span></li>
+                    <li>· 교환 &nbsp;:&nbsp;&nbsp; <span><a
+                            th:href="@{/main/order(omode='ORDERCHANGE',firstdate='2023-06-01',lastdate=${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')})}">0</a></span>
+                    </li>
+                    <li>· 반품 &nbsp;:&nbsp;&nbsp; <span><a
+                            href="#"
+                            th:href="@{/main/order(omode='ORDERREFUND',firstdate='2023-06-01',lastdate=${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')})}" th:text="${orderStatus.orderRefundNum}">0</a></span></li>
                 </ul>
             </div>
 
@@ -81,45 +100,45 @@
     </div>
     <!-- myshop_main-->
     <div class="myshop_main">
-            <div class="myshop_main_item" data-url="order" onclick="onItemClick(event)">
+        <div class="myshop_main_item" data-url="order" onclick="onItemClick(event)">
             <div class="item_caption">
                 ORDER
             </div>
             <div class="item_content">
-                <img src="/image/etc/myshop_order.JPG" alt="주문 사진">
+                <img alt="주문 사진" src="/image/etc/myshop_order.JPG">
                 <div class="item_content_desc">
                     고객님께서 주문하신<br>주문내역을 확인하실 수 있습니다.
                 </div>
             </div>
         </div>
-            <div class="myshop_main_item" data-url="profile" onclick="onItemClick(event)">
+        <div class="myshop_main_item" data-url="profile" onclick="onItemClick(event)">
             <div class="item_caption">
                 PROFILE
             </div>
             <div class="item_content">
-                <img src="/image/etc/myshop_profile.JPG" alt="자물쇠 사진">
+                <img alt="자물쇠 사진" src="/image/etc/myshop_profile.JPG">
                 <div class="item_content_desc">
                     회원이신 고객님의<br>개인정보를 관리하는 공간입니다.
                 </div>
             </div>
         </div>
         <div class="myshop_main_item" data-url="mileage" onclick="onItemClick(event)">
-        <div class="item_caption">
+            <div class="item_caption">
                 MILEAGE
             </div>
             <div class="item_content">
-                <img src="/image/etc/myshop_milage.JPG" alt="적립금 사진">
+                <img alt="적립금 사진" src="/image/etc/myshop_milage.JPG">
                 <div class="item_content_desc">
                     적립금은 상품 구매시<br>사용하실 수 있습니다.
                 </div>
             </div>
         </div>
-            <div class="myshop_main_item" data-url="address" onclick="onItemClick(event)">
+        <div class="myshop_main_item" data-url="address" onclick="onItemClick(event)">
             <div class="item_caption">
                 ADDRESS
             </div>
             <div class="item_content">
-                <img src="/image/etc/myshop_address.JPG" alt="주소 사진">
+                <img alt="주소 사진" src="/image/etc/myshop_address.JPG">
                 <div class="item_content_desc">
                     자주 사용하는 배송지를 등록하고<br>관리하실 수 있습니다.
                 </div>

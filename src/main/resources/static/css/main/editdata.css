@@ -19,16 +19,16 @@ section {
     font-size: 12px;
 }
 
-.member_type .member_type_img{
+.member_type .member_type_img {
     padding: 0 15px;
     border-right: 1px solid var(--border-color-basic);
 }
 
-.member_type img{
+.member_type img {
     display: block;
 }
 
-.member_type .member_type_desc{
+.member_type .member_type_desc {
     padding: 25px 25px;
 }
 
@@ -38,7 +38,7 @@ section {
 }
 
 /*table*/
-table{
+table {
     width: 100%;
     border-collapse: collapse;
     font-size: 12px;
@@ -111,6 +111,7 @@ td .phone_number {
 #birth_year {
     width: 70px;
 }
+
 #birth_month, #birth_date {
     width: 45px;
 }
@@ -146,9 +147,9 @@ td .phone_number {
 
 /*input, select, placeholder*/
 
-input[type="text"],input[type="password"], select {
+input[type="text"], input[type="password"], select {
     height: 25px;
-    border:1px solid var(--border-color-basic2);
+    border: 1px solid var(--border-color-basic2);
     font-size: 12px;
     padding: 3px;
 }

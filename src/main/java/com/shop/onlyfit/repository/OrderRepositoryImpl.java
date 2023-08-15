@@ -8,7 +8,6 @@ import com.shop.onlyfit.dto.MainPageOrderDto;
 import com.shop.onlyfit.dto.OrderDto;
 import com.shop.onlyfit.dto.QMainPageOrderDto;
 import com.shop.onlyfit.dto.QOrderDto;
-import com.shop.onlyfit.dto.item.QItemDto;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -19,7 +18,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-public class OrderRepositoryImpl implements OrderRepositoryCustom{
+public class OrderRepositoryImpl implements OrderRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 

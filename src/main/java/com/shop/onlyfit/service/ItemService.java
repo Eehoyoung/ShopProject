@@ -5,9 +5,10 @@ import com.shop.onlyfit.domain.Item;
 import com.shop.onlyfit.dto.WeeklyBestDto;
 import com.shop.onlyfit.dto.item.ItemDetailDto;
 import com.shop.onlyfit.dto.item.ItemDto;
+import com.shop.onlyfit.dto.item.ItemListToOrderDto;
 import com.shop.onlyfit.dto.item.ItemPageDto;
-
 import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 
 public interface ItemService {
@@ -38,5 +39,9 @@ public interface ItemService {
 
     ItemDetailDto getItemDetailDto(Long itemIdx);
 
-    void moveItemToBasket(String name, Long itemIdx, String color, int quantity);
+    void moveItemToCart(String name, Long itemIdx, String color, int quantity);
+
+    List<ItemDto> itemToPayment(String itemList);
+
+    ItemListToOrderDto itemToOrder(String orderItemInfo);
 }

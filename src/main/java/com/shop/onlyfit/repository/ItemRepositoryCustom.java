@@ -1,6 +1,5 @@
 package com.shop.onlyfit.repository;
 
-import com.querydsl.jpa.impl.JPAQuery;
 import com.shop.onlyfit.domain.SearchItem;
 import com.shop.onlyfit.dto.WeeklyBestDto;
 import com.shop.onlyfit.dto.item.ItemDto;
@@ -13,7 +12,7 @@ public interface ItemRepositoryCustom {
 
     Page<ItemDto> searchAllItem(Pageable pageable);
 
-    Page<ItemDto> searchAllItemByCondition(String loginId,SearchItem searchItem, Pageable pageable);
+    Page<ItemDto> searchAllItemByCondition(String loginId, SearchItem searchItem, Pageable pageable);
 
     Page<ItemDto> findAllItem(Pageable pageable, String firstCategory, String secondCategory);
 
@@ -31,7 +30,6 @@ public interface ItemRepositoryCustom {
 
     Page<ItemDto> searchAllItemByMarketId(Long marketId, Pageable pageable);
 
-
-
+    Long getLatestItemIdx();
 
 }

@@ -43,7 +43,7 @@ public class Order extends BaseTimeEntity {
     private int usedMileagePrice;
 
     // 생성 메소드
-    public static Order createOrder(User user, Delivery delivery, List<OrderItem> orderItems) {
+    public static Order createOrder(User user, Delivery delivery, List<OrderItem> orderItems, String payType) {
         Order order = new Order();
         order.setUser(user);
         order.setDelivery(delivery);
@@ -52,9 +52,12 @@ public class Order extends BaseTimeEntity {
             order.addOrderItem(orderItem);
         }
         order.setOrderedAt(LocalDate.now());
-        order.setPayment("카드결제");
+        if(payType.equals("card")){
+            order.setPayment("카드결제");
+        }else {
+            order.setPayment("무통장결제");
+        }
         order.setTotalPrice(order.getCalTotalPrice());
-
         return order;
     }
 

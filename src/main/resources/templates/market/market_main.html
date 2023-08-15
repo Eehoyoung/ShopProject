@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>admin_main</title>
-    <script src="https://kit.fontawesome.com/e6f78261b2.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="/css/market/market_nav.css">
-    <link rel="stylesheet" href="/css/market/market_main.css">
+    <script crossorigin="anonymous" src="https://kit.fontawesome.com/e6f78261b2.js"></script>
+    <link href="/css/market/market_nav.css" rel="stylesheet">
+    <link href="/css/market/market_main.css" rel="stylesheet">
     <script src="/js/jquery.js"></script>
 </head>
 <body>
@@ -39,8 +39,8 @@
                 </thead>
                 <tbody>
                 <tr th:each="order : ${orderList}">
-                    <td th:text = "${order.name}">이호영</td>
-                    <td th:text = "${order.itemName}">홀릭 카고 조거팬츠</td>
+                    <td th:text="${order.name}">이호영</td>
+                    <td th:text="${order.itemName}">홀릭 카고 조거팬츠</td>
                     <td th:text="${#numbers.formatInteger(order.orderPrice, 0, 'COMMA')} + '원'">15,000원</td>
                     <td th:if="${order.orderStatus.toString().equals('PAYWAITING')}">입금대기</td>
                     <td th:if="${order.orderStatus.toString().equals('PRESHIP')}">배송준비중</td>
@@ -73,12 +73,12 @@
                 <tbody>
                 <tr th:each="item : ${itemList}">
                     <td class="goods-img">
-                        <img src="/image/basket1.JPG" th:src="@{${item.imgUrl}}" alt="상품사진">
+                        <img alt="상품사진" src="/image/basket1.JPG" th:src="@{${item.imgUrl}}">
                     </td>
-                    <td th:text = "${item.itemName} +'<'+ ${item.color}+'>'">
+                    <td th:text="${item.itemName} +'<'+ ${item.color}+'>'">
                         소프트반팔셔츠
                     </td>
-                    <td th:text = "${item.firstCategory}">
+                    <td th:text="${item.firstCategory}">
                         BOTTOM
                     </td>
                     <td th:text="${#numbers.formatInteger(item.price, 0, 'COMMA')} + '원'">15,000원</td>

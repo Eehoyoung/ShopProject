@@ -20,5 +20,4 @@ public interface MarketRepository extends JpaRepository<Market, Long> {
     Long findMarketIdByLoginId(@Param("userId") String userId);
 
 
-
 }

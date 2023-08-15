@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+<html lang="en"
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -45,16 +45,18 @@
                 <tr>
                     <th><label for="store_name">매장명<span>＊</span></label></th>
                     <td><input id="store_name" name="name" type="text"></td>
-                    <td><button id="double_check_name" type="button">중복확인 <i class="fas fa-chevron-right"></i></button></td>
+                    <td>
+                        <button id="double_check_name" type="button">중복확인 <i class="fas fa-chevron-right"></i></button>
+                    </td>
                 </tr>
                 <tr>
                     <th><label for="business_number">사업자 번호</label></th>
                     <td>
                         <input id="business_number" maxlength="3" name="businessNumber[]" type="text">
                         -
-                        <input class="business_number" maxlength="2"  name="businessNumber[]" type="text">
+                        <input class="business_number" maxlength="2" name="businessNumber[]" type="text">
                         -
-                        <input class="business_number"  maxlength="5" name="businessNumber[]" type="text">
+                        <input class="business_number" maxlength="5" name="businessNumber[]" type="text">
                     </td>
                 </tr>
                 <tr>

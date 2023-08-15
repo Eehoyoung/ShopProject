@@ -111,7 +111,7 @@ public class AuthService {
                 .sign(Algorithm.HMAC512(JwtProperties.SECRET));
     }
 
-    public String logoutToken(User user){
+    public String logoutToken(User user) {
         return JWT.create()
                 .withSubject(user.getEmail())
                 .withExpiresAt(new Date(System.currentTimeMillis() + 120))

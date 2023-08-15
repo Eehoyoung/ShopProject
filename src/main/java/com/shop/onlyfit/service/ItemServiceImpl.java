@@ -1,20 +1,24 @@
 package com.shop.onlyfit.service;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.shop.onlyfit.domain.Cart;
 import com.shop.onlyfit.domain.Item;
 import com.shop.onlyfit.domain.User;
 import com.shop.onlyfit.dto.WeeklyBestDto;
 import com.shop.onlyfit.dto.item.ItemDetailDto;
 import com.shop.onlyfit.dto.item.ItemDto;
+import com.shop.onlyfit.dto.item.ItemListToOrderDto;
 import com.shop.onlyfit.dto.item.ItemPageDto;
 import com.shop.onlyfit.repository.CartRepository;
 import com.shop.onlyfit.repository.ItemRepository;
 import com.shop.onlyfit.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import org.springframework.data.domain.Pageable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,20 +39,27 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<Item> MainCarouselItemList() {
         List<Item> mainCarouselList = new ArrayList<>();
-
-        Item firstItem = itemRepository.findByItemIdxAndColorAndRep(94L, "블루", true);
-        Item secondItem = itemRepository.findByItemIdxAndColorAndRep(95L, "블랙", true);
-        Item thirdItem = itemRepository.findByItemIdxAndColorAndRep(96L, "네이비", true);
-        Item fourthItem = itemRepository.findByItemIdxAndColorAndRep(97L, "블랙 M size", true);
-        Item fifthItem = itemRepository.findByItemIdxAndColorAndRep(98L, "아이보리", true);
-
-        mainCarouselList.add(firstItem);
-        mainCarouselList.add(secondItem);
-        mainCarouselList.add(thirdItem);
-        mainCarouselList.add(fourthItem);
-        mainCarouselList.add(fifthItem);
-
+        Long idx = itemRepository.getLatestItemIdx();
+        for (int i = 0; i < 5; i++) {
+            String color = itemRepository.findItemColorByItemIdx(idx);
+            Item item = itemRepository.findByItemIdxAndColorAndRep(--idx, color, true);
+            mainCarouselList.add(item);
+        }
         return mainCarouselList;
+//        Long idx = itemRepository.findItemIdx();
+//        Item firstItem = itemRepository.findByItemIdxAndColorAndRep(idx, "블루", true);
+//        Item secondItem = itemRepository.findByItemIdxAndColorAndRep(idx-1, "블랙", true);
+//        Item thirdItem = itemRepository.findByItemIdxAndColorAndRep(idx-2, "네이비", true);
+//        Item fourthItem = itemRepository.findByItemIdxAndColorAndRep(idx-3, "블랙 M size", true);
+//        Item fifthItem = itemRepository.findByItemIdxAndColorAndRep(idx-4, "아이보리", true);
+//
+//        mainCarouselList.add(firstItem);
+//        mainCarouselList.add(secondItem);
+//        mainCarouselList.add(thirdItem);
+//        mainCarouselList.add(fourthItem);
+//        mainCarouselList.add(fifthItem);
+//
+//        return mainCarouselList;
     }
 
     @Override
@@ -58,27 +69,27 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<WeeklyBestDto> SleeveTopWeeklyBestItem() {
-        return itemRepository.findWeeklyBestItem("top", "jacket", true);
+        return itemRepository.findWeeklyBestItem("top", "longsleeve", true);
     }
 
     @Override
     public List<WeeklyBestDto> ShirtsWeeklyBestItem() {
-        return itemRepository.findWeeklyBestItem("shirts", "jacket", true);
+        return itemRepository.findWeeklyBestItem("shirts", "basic", true);
     }
 
     @Override
     public List<WeeklyBestDto> BottomWeeklyBestItem() {
-        return itemRepository.findWeeklyBestItem("bottom", "jacket", true);
+        return itemRepository.findWeeklyBestItem("bottom", "cotton", true);
     }
 
     @Override
     public List<WeeklyBestDto> ShoesWeeklyBestItem() {
-        return itemRepository.findWeeklyBestItem("shoes", "jacket", true);
+        return itemRepository.findWeeklyBestItem("shoes", "shoes", true);
     }
 
     @Override
     public List<WeeklyBestDto> TopKnitWeeklyBestItem() {
-        return itemRepository.findWeeklyBestItem("top", "jacket", true);
+        return itemRepository.findWeeklyBestItem("top", "knit", true);
     }
 
     @Override
@@ -182,7 +193,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public void moveItemToBasket(String loginId, Long itemIdx, String itemColor, int quantity) {
+    public void moveItemToCart(String loginId, Long itemIdx, String itemColor, int quantity) {
 
         Cart cart = new Cart();
         User findUser = userRepository.findByLoginId(loginId).get();
@@ -192,5 +203,64 @@ public class ItemServiceImpl implements ItemService {
         cart.setItem(findItem);
 
         cartRepository.save(cart);
+    }
+
+    @Override
+    public List<ItemDto> itemToPayment(String itemList) {
+        List<ItemDto> itemDtoList = new ArrayList<>();
+        ItemDto itemDto = new ItemDto();
+
+        JsonArray jsonArray = new Gson().fromJson(itemList, JsonArray.class);
+        JsonObject object = (JsonObject) jsonArray.get(0);
+
+        String id = object.get("idx").getAsString();
+        String color = object.get("color").getAsString();
+        String quantity = object.get("quantity").getAsString();
+
+        Long itemIdx = Long.parseLong(id);
+        int orderCount = Integer.parseInt(quantity);
+
+        Item byItemIdxAndColorAndRep = itemRepository.findByItemIdxAndColorAndRep(itemIdx, color, true);
+        itemDto.setItemIdx(byItemIdxAndColorAndRep.getItemIdx());
+        itemDto.setItemName(byItemIdxAndColorAndRep.getItemName());
+        itemDto.setColor(byItemIdxAndColorAndRep.getColor());
+        itemDto.setCartConunt(orderCount);
+        itemDto.setId(byItemIdxAndColorAndRep.getId());
+        itemDto.setPrice(byItemIdxAndColorAndRep.getPrice());
+        itemDto.setImgUrl(byItemIdxAndColorAndRep.getImgUrl());
+
+        itemDtoList.add(itemDto);
+
+        return itemDtoList;
+    }
+
+    @Override
+    public ItemListToOrderDto itemToOrder(String orderItemInfo) {
+        ItemListToOrderDto itemListToOrderDto = new ItemListToOrderDto();
+
+        JsonArray jsonArray = new Gson().fromJson(orderItemInfo, JsonArray.class);
+
+        List<Long> itemList = new ArrayList<>();
+        List<Integer> itemCountList = new ArrayList<>();
+
+        for (int i = 0; i < jsonArray.size(); i++) {
+            JsonObject object = (JsonObject) jsonArray.get(i);
+            String item_idx = object.get("item_idx").getAsString();
+            String item_color = object.get("item_color").getAsString();
+            String item_quantity = object.get("item_quantity").getAsString();
+
+            Long itemIdx = Long.parseLong(item_idx);
+            int itemOrderCount = Integer.parseInt(item_quantity);
+
+            Item findItem = itemRepository.findByItemIdxAndColorAndRep(itemIdx, item_color, true);
+
+            itemList.add(findItem.getId());
+            itemCountList.add(itemOrderCount);
+        }
+
+        itemListToOrderDto.setItemList(itemList);
+        itemListToOrderDto.setItemCountList(itemCountList);
+
+        return itemListToOrderDto;
     }
 }

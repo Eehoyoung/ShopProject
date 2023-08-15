@@ -16,7 +16,7 @@ section {
 }
 
 /*table*/
-table{
+table {
     width: 100%;
     border-collapse: collapse;
     font-size: 12px;
@@ -105,7 +105,7 @@ td .address_phone_number {
 
 input[type="text"], select {
     height: 25px;
-    border:1px solid var(--border-color-basic2);
+    border: 1px solid var(--border-color-basic2);
     font-size: 12px;
     padding: 3px;
 }

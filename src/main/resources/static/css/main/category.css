@@ -5,12 +5,14 @@ section {
     flex-direction: column;
     align-items: center;
 }
+
 /*category_caption*/
 .category_caption {
     font-weight: bold;
     font-size: 20px;
     margin-top: 40px;
 }
+
 /*category_list*/
 .category_list {
     margin-top: 30px;
@@ -21,11 +23,11 @@ section {
     text-align: center;
 }
 
-.category_list a{
+.category_list a {
     margin: 0 20px;
 }
 
-.category_list a:hover{
+.category_list a:hover {
     color: #c4605e;
 }
 
@@ -38,32 +40,32 @@ section {
 /*product_container*/
 .product_container {
     margin-top: 80px;
-    width:1260px;
+    width: 1260px;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
 }
 
-.product_container .product_item{
+.product_container .product_item {
     font-size: 13px;
     color: var(--font-color-gray);
     margin-bottom: 50px;
 }
 
-.product_container .product_item .product_item_img{
+.product_container .product_item .product_item_img {
     position: relative;
 }
 
-.product_container .product_item .product_item_img img{
+.product_container .product_item .product_item_img img {
     width: 300px;
     height: 300px;
 }
 
-.product_container .product_item .product_item_img:hover .product_item_hover{
+.product_container .product_item .product_item_img:hover .product_item_hover {
     visibility: visible;
 }
 
-.product_container .product_item .product_item_hover{
+.product_container .product_item .product_item_hover {
     display: flex;
     background-color: white;
     border: 1px solid var(--border-color-basic);
@@ -73,11 +75,12 @@ section {
     transform: translate(-50%, 0);
     visibility: hidden;
 }
-.product_container .product_item .product_item_hover .hoveritem{
+
+.product_container .product_item .product_item_hover .hoveritem {
     padding: 5px 18px;
 }
 
-.product_container .product_item .product_item_name{
+.product_container .product_item .product_item_name {
     margin-top: 15px;
 }
 
@@ -86,7 +89,7 @@ section {
     border: 1px solid var(--border-color-basic);
 }
 
-.product_container .product_item .product_item_price{
+.product_container .product_item .product_item_price {
     margin-top: 5px;
     color: black;
 }

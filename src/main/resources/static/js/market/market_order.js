@@ -1,5 +1,5 @@
-$(function(){ //ajax 수정필요
-    $('.changestatusbtn').click(function(){
+$(function () { //ajax 수정필요
+    $('.changestatusbtn').click(function () {
         const order_status = $(this).closest('tr').find('.omode').val();
         const id = $(this).closest('tr').find('input[type=hidden]').val();
 
@@ -9,15 +9,14 @@ $(function(){ //ajax 수정필요
         $.ajax({
             type: 'PATCH',
             url: '/market/orderList1/' + id,
-            data: {status : order_status},
-            beforeSend : function(xhr)
-            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+            data: {status: order_status},
+            beforeSend: function (xhr) {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
                 xhr.setRequestHeader(header, token);
             }
-        }).done(function(word){
+        }).done(function (word) {
             alert(word);
             window.location.href = '/market/orderList';
-        }).fail(function (error){
+        }).fail(function (error) {
             alert(JSON.stringify(error));
         })
     })

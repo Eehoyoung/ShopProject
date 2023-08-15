@@ -4,8 +4,8 @@
 <head>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-    <script src="/js/jquery.js"></script>
-    <script src="/js/main/nav2.js"></script>
+    <!--    <script src="/js/jquery.js"></script>-->
+    <!--    <script src="/js/main/nav2.js"></script>-->
 </head>
 <nav th:fragment="main_navFragment">
     <!-- 로그인 실패시 alert에 출력하기위함-->
@@ -38,7 +38,7 @@
                 </label>
             </div>
             <div class="login_join_btn_box">
-                <input class="loginbtn l_jbtn" type="submit" value="LOGIN" id="loginNav">
+                <input class="loginbtn l_jbtn" id="loginNav" type="submit" value="LOGIN">
                 <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
                 <input class="joinbtn l_jbtn" type="button" value="JOIN US">
             </div>

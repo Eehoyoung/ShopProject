@@ -3,7 +3,7 @@ package com.shop.onlyfit.controller;
 import com.shop.onlyfit.domain.DeliveryAddress;
 import com.shop.onlyfit.dto.AddressChangeDto;
 import com.shop.onlyfit.dto.AddressDto;
-import com.shop.onlyfit.service.deliveryAddressServiceImpl;
+import com.shop.onlyfit.service.DeliveryAddressServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,10 +15,10 @@ import java.util.List;
 @Controller
 public class AddressController {
 
-    private final deliveryAddressServiceImpl deliveryAddressService;
+    private final DeliveryAddressServiceImpl deliveryAddressService;
 
     @Autowired
-    public AddressController(deliveryAddressServiceImpl deliveryAddressService) {
+    public AddressController(DeliveryAddressServiceImpl deliveryAddressService) {
         this.deliveryAddressService = deliveryAddressService;
     }
 

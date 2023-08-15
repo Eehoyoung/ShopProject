@@ -54,6 +54,8 @@ public class Item {
     @ManyToOne(fetch = FetchType.LAZY)
     private Market market;
 
+    private int saleCount;
+
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     private List<OrderItem> orderItemList = new ArrayList<>();
 

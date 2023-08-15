@@ -2,9 +2,11 @@
 html {
     display: flex;
 }
+
 body, html {
     height: auto;
 }
+
 body {
     width: 100%;
 }
@@ -41,7 +43,7 @@ form {
     padding-bottom: 10px;
     border-bottom: 2px solid var(--table-line-color);
     margin-bottom: 20px;
-    color : var(--caption-color);
+    color: var(--caption-color);
 }
 
 .item .item-caption .item-title {
@@ -59,15 +61,17 @@ form {
     margin-bottom: 10px;
     align-items: center;
 }
-.item .item-content .form-group .form-label{
+
+.item .item-content .form-group .form-label {
     flex-basis: 15%;
     font-weight: bold;
 }
-.item .item-content .form-group span{
+
+.item .item-content .form-group span {
     flex-basis: 85%;
 }
 
-.item .item-content .form-group .color-size input[type='text']{
+.item .item-content .form-group .color-size input[type='text'] {
     width: 20%;
 }
 
@@ -75,6 +79,7 @@ textarea {
     width: 90%;
     border: 1px solid var(--input-color);
 }
+
 select {
     height: 35px;
     border: 1px solid var(--input-color);
@@ -82,6 +87,7 @@ select {
     padding: 0px 10px;
     width: 20%;
 }
+
 input[type='file'] {
     display: none;
 }
@@ -110,15 +116,16 @@ input[type='file'] {
 }
 
 .discription-box {
-    font-size: 14px; 
+    font-size: 14px;
 }
+
 .discription-box .discription-blue {
     color: var(--btn-blue)
 }
+
 .discription-box .discription-red {
     color: var(--btn-red);
 }
-
 
 
 /*input 요소*/
@@ -138,6 +145,7 @@ input[type='button'], input[type='submit'] {
     font-weight: bold;
     background-color: var(--btn-blue);
 }
+
 input[type='submit'] {
     background-color: var(--btn-green);
 }
@@ -145,16 +153,17 @@ input[type='submit'] {
 input[type='button']:hover {
     filter: brightness(80%);
 }
+
 input[type='submit']:hover {
     filter: brightness(80%);
 }
 
-input[type='button'].itembtn{
+input[type='button'].itembtn {
     font-size: 14px;
-    padding: 5px 8px;   
+    padding: 5px 8px;
 }
 
-input[type='button'].deletesizebtn{
+input[type='button'].deletesizebtn {
     background-color: var(--btn-red);
 }
 

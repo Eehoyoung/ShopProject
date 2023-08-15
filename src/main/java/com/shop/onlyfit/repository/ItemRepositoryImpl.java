@@ -3,7 +3,6 @@ package com.shop.onlyfit.repository;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.shop.onlyfit.domain.Item;
 import com.shop.onlyfit.domain.QCart;
@@ -28,6 +27,17 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
 
     public ItemRepositoryImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
+    }
+
+    @Override
+    public Long getLatestItemIdx() {
+        Long latestItemIdx = queryFactory
+                .select(QItem.item.itemIdx)
+                .from(QItem.item)
+                .orderBy(QItem.item.itemIdx.desc())
+                .fetchFirst();
+
+        return latestItemIdx;
     }
 
     @Override
@@ -58,7 +68,7 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
     }
 
     @Override
-    public Page<ItemDto> searchAllItemByCondition(String loginId ,SearchItem search, Pageable pageable) {
+    public Page<ItemDto> searchAllItemByCondition(String loginId, SearchItem search, Pageable pageable) {
 
         if (search.getCmode().equals("whole")) {
             QueryResults results = queryFactory
@@ -74,7 +84,7 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
                             QItem.item.itemIdx
                     ))
                     .from(QItem.item)
-                    .where(QItem.item.market.seller.loginId.eq(loginId),QItem.item.rep.eq(true), saleStatusEq(search.getSalestatus()), itemNameEq(search.getItem_name()))
+                    .where(QItem.item.market.seller.loginId.eq(loginId), QItem.item.rep.eq(true), saleStatusEq(search.getSalestatus()), itemNameEq(search.getItem_name()))
                     .orderBy(QItem.item.id.desc())
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
@@ -98,7 +108,7 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
                             QItem.item.itemIdx
                     ))
                     .from(QItem.item)
-                    .where(QItem.item.market.seller.loginId.eq(loginId),QItem.item.rep.eq(true), saleStatusEq(search.getSalestatus()), cmodeEq(search.getCmode()), itemNameEq(search.getItem_name()))
+                    .where(QItem.item.market.seller.loginId.eq(loginId), QItem.item.rep.eq(true), saleStatusEq(search.getSalestatus()), cmodeEq(search.getCmode()), itemNameEq(search.getItem_name()))
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
                     .fetchResults();
@@ -282,6 +292,7 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
 
         return new PageImpl<>(content, pageable, total);
     }
+
 
     private BooleanExpression saleStatusEq(String saleStatusCondition) {
         if (StringUtils.isEmpty(saleStatusCondition)) {

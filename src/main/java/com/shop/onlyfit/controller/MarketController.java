@@ -1,6 +1,9 @@
 package com.shop.onlyfit.controller;
 
-import com.shop.onlyfit.domain.*;
+import com.shop.onlyfit.domain.Item;
+import com.shop.onlyfit.domain.SearchItem;
+import com.shop.onlyfit.domain.SearchOrder;
+import com.shop.onlyfit.domain.User;
 import com.shop.onlyfit.domain.type.OrderStatus;
 import com.shop.onlyfit.domain.type.UserGrade;
 import com.shop.onlyfit.dto.OrderDto;
@@ -35,7 +38,6 @@ import java.util.Locale;
 public class MarketController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName());
-
     private final MarketServiceImpl marketService;
     private final UserServiceImpl userService;
     private final ItemServiceImpl itemService;
@@ -71,8 +73,8 @@ public class MarketController {
 
     @GetMapping("/market/main/{marketId}")
     public String getMemberMainPage(@PathVariable Long marketId, Model model, @PageableDefault(size = 4) Pageable pageable) {
-        Page<ItemDto> itemBoards = marketService.findAllItemByMarketId(marketId,pageable);
-        Page<OrderDto> orderBoards = marketService.findAllOrderByMarketId(marketId,pageable);
+        Page<ItemDto> itemBoards = marketService.findAllItemByMarketId(marketId, pageable);
+        Page<OrderDto> orderBoards = marketService.findAllOrderByMarketId(marketId, pageable);
         int allVisitCount = marketService.getVisitCountByMarketId(marketId);
         model.addAttribute("itemList", itemBoards);
         model.addAttribute("orderList", orderBoards);
@@ -119,7 +121,7 @@ public class MarketController {
             String safeFile = folderPath + originFileName;
 
             String upperFirstCategory = firstCategory.toUpperCase(Locale.ROOT);
-            String newUrl = "/image/Item/" + upperFirstCategory + "/" +  secondCategory  + "/" + itemName + "/" + originFileName;
+            String newUrl = "/image/Item/" + upperFirstCategory + "/" + secondCategory + "/" + itemName + "/" + originFileName;
             User findMarket = userService.findByLoginId(userDetails.getUsername());
             Item item = new Item(firstCategory, secondCategory, thirdCategory, itemName, itemPrice, itemInfo, itemColor, itemFabric, itemModel, itemSize, itemQuantity, newUrl, saleStatus, newItemIdx + 1, true, findMarket.getMarket());
 
@@ -144,13 +146,13 @@ public class MarketController {
         String userId = userDetails.getUsername();
         User findUser = userService.findUserByLoginId(userId);
 
-        if(findUser.getUserGrade() != UserGrade.SELLER){
+        if (findUser.getUserGrade() != UserGrade.SELLER) {
             return "redirect:/main/index";
         }
 
         ItemPageDto itemPageDto = new ItemPageDto();
         if (searchItem.getItem_name() == null) {
-            itemPageDto = marketService.findAllItemByPaging(userId,pageable);
+            itemPageDto = marketService.findAllItemByPaging(userId, pageable);
         } else {
             itemPageDto = marketService.findAllItemByConditionByPaging(userId, searchItem, pageable);
         }
@@ -179,7 +181,7 @@ public class MarketController {
         OrderPageDto orderPageDto = new OrderPageDto();
 
         if (StringUtils.isEmpty(searchOrder.getFirstdate()) && StringUtils.isEmpty(searchOrder.getLastdate()) && StringUtils.isEmpty(searchOrder.getSinput())) {
-            orderPageDto = marketService.findAllOrderByPaging(marketId,pageable);
+            orderPageDto = marketService.findAllOrderByPaging(marketId, pageable);
         } else {
             orderPageDto = marketService.findAllOrderByConditionByPaging(marketId, searchOrder, pageable);
         }

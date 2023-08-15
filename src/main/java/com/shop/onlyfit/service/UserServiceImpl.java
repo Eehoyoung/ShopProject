@@ -144,13 +144,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         String phoneNumber = findUser.getPhoneNumber();
         String birthday = findUser.getBirthday();
 
-        if(homePhoneNumber == null){
+        if (homePhoneNumber == null) {
             homePhoneNumber = "000,0000,0000";
         }
-        if (phoneNumber == null){
+        if (phoneNumber == null) {
             phoneNumber = "000,0000,0000";
         }
-        if(birthday == null){
+        if (birthday == null) {
             birthday = "0000,00,00";
         }
 

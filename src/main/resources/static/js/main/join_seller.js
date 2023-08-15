@@ -1,6 +1,6 @@
 function joinSellerSendit() {
     let name = $('#store_name').val();
-    if(name.length < 3 || name.length > 10) {
+    if (name.length < 3 || name.length > 10) {
         alert("매장명은 3자 이상 10자 이하로 입력해주세요.");
         $('#store_name').focus();
         return false;

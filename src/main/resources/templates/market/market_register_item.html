@@ -1,19 +1,20 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>admin registerGoods</title>
-    <script src="https://kit.fontawesome.com/e6f78261b2.js" crossorigin="anonymous"></script>
+    <script crossorigin="anonymous" src="https://kit.fontawesome.com/e6f78261b2.js"></script>
     <script src="/js/jquery.js"></script>
-    <link rel="stylesheet" href="/css/market/market_nav.css">
-    <link rel="stylesheet" href="/css/market/market_register_item.css">
+    <link href="/css/market/market_nav.css" rel="stylesheet">
+    <link href="/css/market/market_register_item.css" rel="stylesheet">
 </head>
 <body>
 <nav th:replace="market/market_nav :: navFragment"></nav>
 <section>
-    <form action="/market/register" th:action="@{/market/register}" method="POST" enctype="multipart/form-data" onsubmit="return sendToServer()">
+    <form action="/market/register" enctype="multipart/form-data" method="POST" onsubmit="return sendToServer()"
+          th:action="@{/market/register}">
         <!-- 상품 기본정보 -->
         <div class="basic-info item">
             <div class="item-caption">
@@ -23,7 +24,7 @@
                 <div class="form-group">
                     <label class="form-label">상품분류</label>
                     <span class="cmode-box">
-                        <select name="cmode1" class="cmode1">
+                        <select class="cmode1" name="cmode1">
                             <option value="">1차 분류</option>
                             <option value="outer">OUTER</option>
                             <option value="top">TOP</option>
@@ -32,10 +33,10 @@
                             <option value="acc">ACC</option>
                             <option value="shoes">SHOES</option>
                         </select>
-                        <select name="cmode2" class="cmode2">
+                        <select class="cmode2" name="cmode2">
                             <option value="">2차 분류</option>
                         </select>
-                        <select name="cmode3" class="cmode3">
+                        <select class="cmode3" name="cmode3">
                             <option value="">3차 분류</option>
                             <option value="7dc">NEW 7% DC</option>
                             <option value="best30">BEST30</option>
@@ -45,11 +46,11 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label">상품명</label>
-                    <span><input type="text" name="item_name"></span>
+                    <span><input name="item_name" type="text"></span>
                 </div>
                 <div class="form-group">
                     <label class="form-label">판매가격</label>
-                    <span><input type="text" name="price"></span>
+                    <span><input name="price" type="text"></span>
                 </div>
                 <div class="form-group">
                     <label class="form-label">상품 이미지</label>
@@ -58,7 +59,7 @@
                             <label class=imguploadbtn for="upload_image">
                                 이미지 찾기
                             </label>
-                            <input type="file" name="upload_image" id="upload_image" multiple="multiple">
+                            <input id="upload_image" multiple="multiple" name="upload_image" type="file">
                         </div>
                         <div class="img-box"></div>
                         <div class="discription-box">
@@ -70,8 +71,8 @@
                 <div class="form-group">
                     <label class="form-label">판매상태</label>
                     <span>
-                        <label><input type="radio" name="salestatus" value="onsale" checked>정상판매</label>
-                        <label><input type="radio" name="salestatus" value="soldout">품절</label>
+                        <label><input checked name="salestatus" type="radio" value="onsale">정상판매</label>
+                        <label><input name="salestatus" type="radio" value="soldout">품절</label>
                     </span>
                 </div>
             </div>
@@ -86,29 +87,29 @@
                 <div class="form-group">
                     <label class="form-label">INFO</label>
                     <span>
-                        <textarea rows="7" name="info"></textarea>
+                        <textarea name="info" rows="7"></textarea>
                     </span>
                 </div>
                 <div class="form-group">
                     <label class="form-label">COLOR/SIZE</label>
                     <span>
                         <div class="color-size">
-                            <label>COLOR <input type="text" name="color"></label>
-                            <label>SIZE <input type="text" name="size"></label>
-                            <label>재고수량 <input type="text" name="stock_quantity"></label>
+                            <label>COLOR <input name="color" type="text"></label>
+                            <label>SIZE <input name="size" type="text"></label>
+                            <label>재고수량 <input name="stock_quantity" type="text"></label>
                         </div>
                     </span>
                 </div>
                 <div class="form-group">
                     <label class="form-label">FABRIC</label>
                     <span>
-                        <textarea rows="7" name="fabric"></textarea>
+                        <textarea name="fabric" rows="7"></textarea>
                     </span>
                 </div>
                 <div class="form-group">
                     <label class="form-label">MODEL</label>
                     <span>
-                        <textarea rows="7" name="model"></textarea>
+                        <textarea name="model" rows="7"></textarea>
                     </span>
                 </div>
 

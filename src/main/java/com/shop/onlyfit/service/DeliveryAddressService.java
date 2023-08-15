@@ -6,7 +6,7 @@ import com.shop.onlyfit.dto.AddressDto;
 
 import java.util.List;
 
-public interface deliveryAddressService {
+public interface DeliveryAddressService {
     List<DeliveryAddress> getDeliveryAddressByLoginId(String loginId);
 
     void registerAddress(String loginId, AddressDto addressDto);

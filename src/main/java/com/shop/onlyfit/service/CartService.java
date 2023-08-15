@@ -1,6 +1,7 @@
 package com.shop.onlyfit.service;
 
 import com.shop.onlyfit.domain.Cart;
+import com.shop.onlyfit.dto.item.ItemDto;
 
 import java.util.List;
 
@@ -11,4 +12,5 @@ public interface CartService {
 
     void deleteCartById(Long cartId);
 
+    List<ItemDto> cartListToPayment(String itemList);
 }

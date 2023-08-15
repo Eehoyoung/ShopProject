@@ -64,11 +64,11 @@ public class MarketServiceImpl implements MarketService {
     }
 
     @Override
-    public ItemPageDto findAllItemByPaging(String userId,Pageable pageable) {
+    public ItemPageDto findAllItemByPaging(String userId, Pageable pageable) {
 
         ItemPageDto itemPageDto = new ItemPageDto();
 
-        Page<ItemDto> itemBoards = itemRepository.searchAllItemByloginId(userId,pageable);
+        Page<ItemDto> itemBoards = itemRepository.searchAllItemByloginId(userId, pageable);
 
         int homeStartPage = Math.max(1, itemBoards.getPageable().getPageNumber() - 1);
         int homeEndPage = Math.min(itemBoards.getTotalPages(), itemBoards.getPageable().getPageNumber() + 3);
@@ -116,12 +116,12 @@ public class MarketServiceImpl implements MarketService {
 
     @Override
     public Page<ItemDto> findAllItemByMarketId(Long marketId, Pageable pageable) {
-        return itemRepository.searchAllItemByMarketId(marketId,pageable);
+        return itemRepository.searchAllItemByMarketId(marketId, pageable);
     }
 
     @Override
     public Page<OrderDto> findAllOrderByMarketId(Long marketId, Pageable pageable) {
-        return orderRepository.searchAllOrderByMarketId(marketId,pageable);
+        return orderRepository.searchAllOrderByMarketId(marketId, pageable);
     }
 
     @Override
@@ -134,7 +134,7 @@ public class MarketServiceImpl implements MarketService {
 
         OrderPageDto orderPageDto = new OrderPageDto();
 
-        Page<OrderDto> orderBoards = orderRepository.searchAllOrderByMarketId(marketId,pageable);
+        Page<OrderDto> orderBoards = orderRepository.searchAllOrderByMarketId(marketId, pageable);
         int homeStartPage = Math.max(1, orderBoards.getPageable().getPageNumber() - 4);
         int homeEndPage = Math.min(orderBoards.getTotalPages(), orderBoards.getPageable().getPageNumber() + 4);
 
@@ -149,7 +149,7 @@ public class MarketServiceImpl implements MarketService {
     public OrderPageDto findAllOrderByConditionByPaging(Long marketId, SearchOrder searchOrder, Pageable pageable) {
         OrderPageDto orderPageDto = new OrderPageDto();
 
-        Page<OrderDto> orderBoards = orderRepository.searchAllOrderByConditionAndMarketId(marketId,searchOrder, pageable);
+        Page<OrderDto> orderBoards = orderRepository.searchAllOrderByConditionAndMarketId(marketId, searchOrder, pageable);
         int startPage = Math.max(1, orderBoards.getPageable().getPageNumber() - 4);
         int endPage = Math.min(orderBoards.getTotalPages(), orderBoards.getPageable().getPageNumber() + 4);
 

@@ -18,6 +18,7 @@ section {
 .addr_caption {
     border-bottom: 1px solid black;
 }
+
 .addr_caption_desc {
     background-color: #555555;
     color: white;
@@ -31,9 +32,10 @@ section {
 .addrlist {
     margin-top: 20px;
 }
-table{
+
+table {
     width: 100%;
-    font-size: 12px;   
+    font-size: 12px;
     color: var(--font-color-gray2);
     border-top: 1px solid var(--border-color-basic);
     border-collapse: collapse;
@@ -56,6 +58,7 @@ td {
     justify-content: space-around;
     align-items: center;
 }
+
 .editaddrbtn:hover {
     filter: brightness(90%);
 }

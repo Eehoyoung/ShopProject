@@ -1,35 +1,39 @@
 :root {
-    --nav-main-color : #2a3f54;
-    --nav-font-color : #e5e5e5;
-    --table-line-color : #dee2e6;
-    --table-head-color : #405467;
-    --caption-color : #73879c;
-    --section-background-color : #f7f7f7;
-    --item-background-color : #ffffff;
-    --item-border-color : #e6e9ed;
-    --checkbox-color : #d7dcde;
+    --nav-main-color: #2a3f54;
+    --nav-font-color: #e5e5e5;
+    --table-line-color: #dee2e6;
+    --table-head-color: #405467;
+    --caption-color: #73879c;
+    --section-background-color: #f7f7f7;
+    --item-background-color: #ffffff;
+    --item-border-color: #e6e9ed;
+    --checkbox-color: #d7dcde;
     --btn-blue: #007bff;
     --btn-red: #ef5350;
     --btn-green: #26b99a;
     --pagenation-color: #dddddd;
     --input-color: #ced4da;
 }
-*{
+
+* {
     box-sizing: border-box;
 }
-body, html{
+
+body, html {
     margin: 0;
     padding: 0;
     height: 100%;
 }
+
 /*nav*/
 nav a, nav span {
     text-decoration: none;
     color: var(--nav-font-color);
 }
+
 ul {
     list-style-type: none;
-    padding: 0;    
+    padding: 0;
 }
 
 nav {
@@ -51,7 +55,7 @@ nav .side-menu {
     flex-direction: column;
 }
 
-nav .side-menu > li{
+nav .side-menu > li {
     width: 230px;
     padding: 10px 15px;
     font-size: 16px;
@@ -63,6 +67,7 @@ nav .side-menu .menu-dropdown > span {
     justify-content: space-between;
     align-items: center;
 }
+
 nav .side-menu .menu-dropdown > span .fa-chevron-down {
     font-size: 11px;
 }
@@ -77,7 +82,7 @@ nav .side-menu .menu-dropdown .dropdown li {
     font-size: 14px;
 }
 
-nav .side-menu .menu-dropdown .dropdown li a::before{
+nav .side-menu .menu-dropdown .dropdown li a::before {
     content: '';
     display: inline-block;
     width: 7px;

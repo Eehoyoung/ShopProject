@@ -2,8 +2,8 @@
 <html lang="en" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta name="_csrf" th:content="${_csrf.token}"/>
-<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <script src="/js/jquery.js"></script>
     <script src="/js/main/nav2.js"></script>
 </head>
@@ -40,7 +40,7 @@
                 </label>
             </div>
             <div class="login_join_btn_box">
-                <input class="loginbtn l_jbtn" type="submit" value="LOGIN" id="loginNav">
+                <input class="loginbtn l_jbtn" id="loginNav" type="submit" value="LOGIN">
                 <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
                 <input class="joinbtn l_jbtn" type="button" value="JOIN US">
             </div>
