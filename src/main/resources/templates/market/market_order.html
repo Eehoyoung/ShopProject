@@ -65,6 +65,8 @@
                 <th>결제금액</th>
                 <th>결제방식</th>
                 <th>주문일자</th>
+                <th>택배사</th>
+                <th>운송장번호</th>
                 <th>상태</th>
                 <th>변경</th>
             </tr>
@@ -76,6 +78,23 @@
                 <td th:text="${order.orderPrice}">14000원</td>
                 <td th:text="${order.payment}">카드결제</td>
                 <td th:text="${order.orderedAt}">2023-12-12</td>
+                <td>
+                    <select class="postcom" id="change-postcom" name="change-postcom">
+                        <option th:selected="${#strings.equals( order.postCompany, 'HYUNDAI' )}" value="HYUNDAI">롯데택배
+                        </option>
+                        <option th:selected="${#strings.equals( order.postCompany, 'KGB' )}" value="KGB">로젠택배
+                        </option>
+                        <option th:selected="${#strings.equals( order.postCompany, 'EPOST' )}" value="EPOST">우체국
+                        </option>
+                        <option th:selected="${#strings.equals( order.postCompany, 'HANJIN' )}" value="HANJIN">헌진택배
+                        </option>
+                        <option th:selected="${#strings.equals( order.postCompany, 'CJGLS' )}" value="CJGLS">CJ대한통운
+                        </option>
+                        <option th:selected="${#strings.equals( order.postCompany, 'NO' )}" value="NO">준비중
+                        </option>
+                    </select>
+                </td>
+                <td><input id="postNumber" name="postNumber" type="text"></td>
                 <td>
                     <select class="omode" id="change-omode" name="change-omode">
                         <!--                                <option value="whole">전체</option>-->

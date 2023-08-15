@@ -79,3 +79,28 @@ $(function () {
     })
 
 })
+
+function getPostCompanyCode(postCompanyName) {
+    switch (postCompanyName) {
+        case 'HYUNDAI':
+            return '08';
+        case 'KGB':
+            return '06';
+        case 'EPOST':
+            return '01';
+        case 'HANJIN':
+            return '05';
+        case 'CJGLS':
+            return '04';
+        case 'NO':
+            return '00';
+    }
+}
+
+// 페이지가 로드된 후 실행되는 함수
+window.onload = function() {
+    const tCodeInput = document.getElementById('t_code');
+    const postCompany = tCodeInput.dataset.postCompany;
+    const postCompanyCode = getPostCompanyCode(postCompany);
+    tCodeInput.value = postCompanyCode;
+};

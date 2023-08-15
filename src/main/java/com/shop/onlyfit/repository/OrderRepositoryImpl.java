@@ -38,7 +38,9 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
                         QOrder.order.payment,
                         QOrderItem.orderItem.orderPrice,
                         QOrderItem.orderItem.orderStatus,
-                        QOrder.order.user.market.marketId
+                        QOrder.order.user.market.marketId,
+                        QOrderItem.orderItem.postCompany,
+                        QOrderItem.orderItem.postNumber
                 ))
                 .from(QOrder.order)
                 .leftJoin(QOrderItem.orderItem).on(QOrderItem.orderItem.eq(QOrder.order.orderItemList.any()))
@@ -68,7 +70,9 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
                         QOrderItem.orderItem.orderPrice,
                         QOrderItem.orderItem.count,
                         QOrderItem.orderItem.item.imgUrl,
-                        QOrderItem.orderItem.item.color
+                        QOrderItem.orderItem.item.color,
+                        QOrderItem.orderItem.postCompany,
+                        QOrderItem.orderItem.postNumber
                 ))
                 .from(QOrder.order)
                 .leftJoin(QOrderItem.orderItem).on(QOrderItem.orderItem.eq(QOrder.order.orderItemList.any()))
@@ -99,7 +103,9 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
                         QOrderItem.orderItem.orderPrice,
                         QOrderItem.orderItem.count,
                         QOrderItem.orderItem.item.imgUrl,
-                        QOrderItem.orderItem.item.color
+                        QOrderItem.orderItem.item.color,
+                        QOrderItem.orderItem.postCompany,
+                        QOrderItem.orderItem.postNumber
                 ))
                 .from(QOrder.order)
                 .leftJoin(QOrderItem.orderItem).on(QOrderItem.orderItem.eq(QOrder.order.orderItemList.any()))
@@ -132,7 +138,9 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
                         QOrder.order.payment,
                         QOrderItem.orderItem.orderPrice,
                         QOrderItem.orderItem.orderStatus,
-                        QMarket.market.marketId
+                        QMarket.market.marketId,
+                        QOrderItem.orderItem.postCompany,
+                        QOrderItem.orderItem.postNumber
                 ))
                 .from(QOrder.order)
                 .join(QOrder.order.user, QUser.user)
@@ -163,7 +171,9 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
                         QOrder.order.payment,
                         QOrderItem.orderItem.orderPrice,
                         QOrderItem.orderItem.orderStatus,
-                        QOrder.order.user.market.marketId
+                        QOrder.order.user.market.marketId,
+                        QOrderItem.orderItem.postCompany,
+                        QOrderItem.orderItem.postNumber
                 ))
                 .from(QOrder.order)
                 .leftJoin(QOrderItem.orderItem).on(QOrderItem.orderItem.eq(QOrder.order.orderItemList.any()))

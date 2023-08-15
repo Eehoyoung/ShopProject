@@ -2,6 +2,7 @@ package com.shop.onlyfit.domain;
 
 
 import com.shop.onlyfit.domain.type.OrderStatus;
+import com.shop.onlyfit.domain.type.PostCompany;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -31,6 +32,11 @@ public class OrderItem {
 
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
+
+    @Enumerated(EnumType.STRING)
+    private PostCompany postCompany;
+
+    private String postNumber;
 
     //생성 메소드
     public static OrderItem createOrderItem(Item item, int orderPrice, int count) {

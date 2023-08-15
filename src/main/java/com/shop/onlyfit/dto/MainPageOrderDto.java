@@ -2,6 +2,7 @@ package com.shop.onlyfit.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
 import com.shop.onlyfit.domain.type.OrderStatus;
+import com.shop.onlyfit.domain.type.PostCompany;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,9 +22,11 @@ public class MainPageOrderDto {
     private int count;
     private String url;
     private String color;
+    private PostCompany postCompany;
+    private String postNumber;
 
     @QueryProjection
-    public MainPageOrderDto(Long id, Long orderItemId, Long itemId, String name, String itemName, LocalDate orderedAt, OrderStatus orderStatus, int price, int count, String url, String color) {
+    public MainPageOrderDto(Long id, Long orderItemId, Long itemId, String name, String itemName, LocalDate orderedAt, OrderStatus orderStatus, int price, int count, String url, String color, PostCompany postCompany, String postNumber) {
         this.id = id;
         this.orderItemId = orderItemId;
         this.itemId = itemId;
@@ -35,5 +38,7 @@ public class MainPageOrderDto {
         this.count = count;
         this.url = url;
         this.color = color;
+        this.postCompany = postCompany;
+        this.postNumber = postNumber;
     }
 }

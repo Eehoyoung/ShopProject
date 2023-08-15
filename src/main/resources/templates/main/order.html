@@ -86,6 +86,8 @@
                         <td>상품정보</td>
                         <td>수량</td>
                         <td>상품구매금액</td>
+                        <td>택배사</td>
+                        <td>운송장번호</td>
                         <td>주문처리상태</td>
                         <td>취소/교환/반품</td>
                     </tr>
@@ -99,9 +101,24 @@
                                 th:text="'[옵션:'+${order.color}+']'">[옵션:화이트]</span></td>
                         <td th:text="${order.count}">1</td>
                         <td th:text="'₩'+${#numbers.formatInteger(order.price, 0, 'COMMA')}">₩4,000</td>
+                        <td th:text="${order.postCompany}">택배사</td>
+                        <td th:text="${order.postNumber}">0000000000000</td>
                         <td th:if="${order.orderStatus.toString().equals('PAYWAITING')}">입금전</td>
                         <td th:if="${order.orderStatus.toString().equals('PRESHIP')}">배송준비중</td>
-                        <td th:if="${order.orderStatus.toString().equals('INSHIP')}">배송중</td>
+                        <td th:if="${order.orderStatus.toString().equals('INSHIP')}">
+                            <form action="http://info.sweettracker.co.kr/tracking/2" method="post">
+                                <div class="form-group">
+                                    <input type="hidden" value="dVoyowUMV2UUfN4iooqoqA" class="form-control" id="t_key" name="t_key" placeholder="제공받은 APIKEY">
+                                </div>
+                                <div class="form-group">
+                                    <input type="hidden" class="form-control" name="t_code" id="t_code" th:data-post-company="${order.postCompany}">
+                                </div>
+                                <div class="form-group">
+                                    <input type="hidden" class="form-control" name="t_invoice" id="t_invoice" th:value="${order.postNumber}" placeholder="운송장 번호">
+                                </div>
+                                <button type="submit">배송조회</button>
+                            </form>
+                        </td>
                         <td th:if="${order.orderStatus.toString().equals('COMPLETESHIP')}">배송완료</td>
                         <td th:if="${order.orderStatus.toString().equals('ORDERCANCEL')}">주문취소</td>
                         <td th:if="${order.orderStatus.toString().equals('ORDERCHANGE')}">교환</td>

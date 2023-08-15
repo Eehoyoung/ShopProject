@@ -5,6 +5,7 @@ import com.shop.onlyfit.domain.SearchItem;
 import com.shop.onlyfit.domain.SearchOrder;
 import com.shop.onlyfit.domain.User;
 import com.shop.onlyfit.domain.type.OrderStatus;
+import com.shop.onlyfit.domain.type.PostCompany;
 import com.shop.onlyfit.domain.type.UserGrade;
 import com.shop.onlyfit.dto.OrderDto;
 import com.shop.onlyfit.dto.OrderPageDto;
@@ -207,9 +208,13 @@ public class MarketController {
 
     @ResponseBody
     @PatchMapping("/market/orderList1/{id}")
-    public String orderStatusChangePage(@PathVariable Long id, @RequestParam OrderStatus status) {
-        marketService.changeOrderStatus(id, status);
-
+    public String orderStatusChangePage(
+            @PathVariable Long id,
+            @RequestParam OrderStatus status,
+            @RequestParam PostCompany postCompany,
+            @RequestParam String postNumber
+    ) {
+        marketService.changeOrderStatus(id, status, postCompany, postNumber);
         return "주문 상품 상태 변경완료";
     }
 }

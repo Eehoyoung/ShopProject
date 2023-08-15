@@ -1,5 +1,7 @@
-$(function () { //ajax 수정필요
+$(function () {
     $('.changestatusbtn').click(function () {
+        const post_number = $(this).closest('tr').find('input[name=postNumber]').val();
+        const post_company = $(this).closest('tr').find('select[name=change-postcom]').val();
         const order_status = $(this).closest('tr').find('.omode').val();
         const id = $(this).closest('tr').find('input[type=hidden]').val();
 
@@ -9,8 +11,12 @@ $(function () { //ajax 수정필요
         $.ajax({
             type: 'PATCH',
             url: '/market/orderList1/' + id,
-            data: {status: order_status},
-            beforeSend: function (xhr) {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+            data: {
+                status: order_status,
+                postCompany: post_company,
+                postNumber: post_number
+            },
+            beforeSend: function (xhr) {
                 xhr.setRequestHeader(header, token);
             }
         }).done(function (word) {

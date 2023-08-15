@@ -5,6 +5,7 @@ import com.shop.onlyfit.domain.SearchItem;
 import com.shop.onlyfit.domain.SearchOrder;
 import com.shop.onlyfit.domain.User;
 import com.shop.onlyfit.domain.type.OrderStatus;
+import com.shop.onlyfit.domain.type.PostCompany;
 import com.shop.onlyfit.dto.OrderDto;
 import com.shop.onlyfit.dto.OrderPageDto;
 import com.shop.onlyfit.dto.item.ItemDto;
@@ -46,5 +47,5 @@ public interface MarketService {
 
     OrderPageDto findAllOrderByConditionByPaging(Long marketId, SearchOrder searchOrder, Pageable pageable);
 
-    Long changeOrderStatus(Long id, OrderStatus status);
+    Long changeOrderStatus(Long id, OrderStatus status, PostCompany postCompany, String postNumber);
 }

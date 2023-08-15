@@ -2,6 +2,7 @@ package com.shop.onlyfit.service;
 
 import com.shop.onlyfit.domain.*;
 import com.shop.onlyfit.domain.type.OrderStatus;
+import com.shop.onlyfit.domain.type.PostCompany;
 import com.shop.onlyfit.dto.OrderDto;
 import com.shop.onlyfit.dto.OrderPageDto;
 import com.shop.onlyfit.dto.item.ItemDto;
@@ -162,13 +163,15 @@ public class MarketServiceImpl implements MarketService {
 
     @Override
     @Transactional
-    public Long changeOrderStatus(Long id, OrderStatus status) {
+    public Long changeOrderStatus(Long id, OrderStatus status, PostCompany postCompany, String postNumber) {
         Optional<OrderItem> findOrderItem = orderItemRepository.findById(id);
         OrderItem checkedOrderItem = new OrderItem();
         if (findOrderItem.isPresent()) {
             checkedOrderItem = findOrderItem.get();
         }
         checkedOrderItem.setOrderStatus(status);
+        checkedOrderItem.setPostCompany(postCompany);
+        checkedOrderItem.setPostNumber(postNumber);
 
         return checkedOrderItem.getId();
     }
