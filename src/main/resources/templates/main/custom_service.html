@@ -96,7 +96,7 @@
                          th:classappend="${boards.first ? 'hidden' : ''}">
                         <a class="abutton" th:href="@{/user/cs?page=0}">first</a>
                         <a class="abutton"
-                           th:href="@{${'/user/cs?page=' + (boards.number - 1)}}">◀</a>
+                           th:href="@{${'/main/cs?page=' + (boards.number - 1)}}">◀</a>
                     </div>
 
                     <div style="width: 30%; margin: 5px;">

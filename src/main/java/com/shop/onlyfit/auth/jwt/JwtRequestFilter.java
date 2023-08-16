@@ -43,7 +43,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             }
         }
 
-        jwtHeader = JwtProperties.TOKEN_PREFIX + jwtHeader;
+//        jwtHeader = JwtProperties.TOKEN_PREFIX + jwtHeader;
         // header 가 정상적인 형식인지 확인
         if (jwtHeader == null || !jwtHeader.startsWith(JwtProperties.TOKEN_PREFIX)) {
             filterChain.doFilter(request, response);

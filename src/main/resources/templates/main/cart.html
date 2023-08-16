@@ -41,6 +41,7 @@
             <div class="benefit_info_desc">
                 <div class="benefit_info_desc_item"><b th:text="${user.name}">홍길동</b> 님은 <b
                         sec:authorize="hasRole('ROLE_ADMIN')">[관리자]</b><b
+                        sec:authorize="hasRole('ROLE_SELLER')">[판매자]</b><b
                         sec:authorize="hasRole('ROLE_USER')">[일반회원]</b> 이십니다
                 </div>
                 <div class="benefit_info_mileage benefit_info_desc_item">

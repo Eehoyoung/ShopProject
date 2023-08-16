@@ -2,15 +2,12 @@ package com.shop.onlyfit.dto;
 
 
 import com.querydsl.core.annotations.QueryProjection;
-import com.shop.onlyfit.domain.CustomServiceReply;
 import com.shop.onlyfit.domain.User;
 import com.shop.onlyfit.domain.type.CSBoardType;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.jpa.repository.Query;
 
 import java.sql.Timestamp;
-import java.util.List;
 
 @Getter
 @Setter
@@ -34,7 +31,7 @@ public class CustomServiceBoardDto {
 
     @QueryProjection
     public CustomServiceBoardDto(int id, User user, String title, CSBoardType csBoardType,
-                                 int count, String content, Timestamp createTime, int secret){
+                                 int count, String content, Timestamp createTime, int secret) {
         this.id = id;
         this.user = user;
         this.title = title;

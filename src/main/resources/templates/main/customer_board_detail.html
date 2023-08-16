@@ -24,7 +24,7 @@
         <div class="container">
             <h3 class="csdetial-title" th:text="${board.title}"></h3>
             <h6 class="csdetial-title">조회수 : <span th:text="${board.count}"></span></h6>
-            <h6 class="csdetial-title">작성자 : <span th:text="${board.user.username}"></span></h6>
+            <h6 class="csdetial-title">작성자 : <span th:text="${board.user.name}"></span></h6>
         </div>
     </div>
     <div id="board-list">
@@ -32,9 +32,9 @@
             <div class="detail-table">
                 <div class="csdetail-content container" th:text="${board.content}"></div>
                 <div class="btn-groub">
-                    <a class="detail-a" href="/user/cs">[목록으로]</a>
+                    <a class="detail-a" href="/main/cs">[목록으로]</a>
                     <div th:if="${#authorization.expression('isAuthenticated() and #oauth2.hasScope(''write'') and #oauth2.clientHasRole(''ADMIN'')')}">
-                        <a class="detail-a" th:href="@{/guest/cs-update/{id}(id=${board.id})}">[수정]</a>
+                        <a class="detail-a" th:href="@{/main/cs-update/{id}(id=${board.id})}">[수정]</a>
                         <a class="detail-a" onclick="deleteBoard([[${board.id}]])">[삭제]</a>
                     </div>
                 </div>

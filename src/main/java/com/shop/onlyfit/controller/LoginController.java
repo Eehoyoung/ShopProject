@@ -59,36 +59,6 @@ public class LoginController {
         return "redirect:/main/index";
     }
 
-
-//    @GetMapping("/logout")
-//    public String logout() {
-//        return "redirect:/main/index";
-//
-//    }
-
-//    @PostMapping("/logout")
-//    @ResponseBody
-//    public ResponseEntity<?> logout(HttpServletRequest request) {
-//
-//        String jwtHeader = null;
-//        Cookie[] cookies = request.getCookies();
-//        if (cookies != null) {
-//            for (Cookie cookie : cookies) {
-//                if (JwtProperties.HEADER_STRING.equals(cookie.getName())) {
-//                    jwtHeader = cookie.getValue();
-//                    break;
-//                }
-//            }
-//        }
-//
-//        if (jwtHeader == null) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("토큰이 없습니다.");
-//        }
-//
-//
-//        return ResponseEntity.ok("로그아웃을 성공했습니다.");
-//    }
-
     @GetMapping("main/join")
     public String join(@AuthenticationPrincipal UserDetails userDetails, HttpServletResponse response) {
         if (userDetails != null) {
@@ -201,7 +171,8 @@ public class LoginController {
         UserDetails userDetails = this.userService.loadUserByUsername(authenticatedUser.getLoginId());
         Authentication auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(auth);
-
+        jwtToken = JwtProperties.TOKEN_PREFIX.trim() + jwtToken;
+        System.out.println("토큰은?" + jwtToken);
         Cookie jwtCookie = new Cookie("Authorization", jwtToken);
         jwtCookie.setHttpOnly(true);
         jwtCookie.setMaxAge(JwtProperties.EXPIRATION_TIME);

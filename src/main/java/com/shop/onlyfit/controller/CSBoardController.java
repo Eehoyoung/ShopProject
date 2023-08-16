@@ -5,10 +5,7 @@ import com.shop.onlyfit.domain.CustomServiceReply;
 import com.shop.onlyfit.domain.User;
 import com.shop.onlyfit.domain.type.CSBoardType;
 import com.shop.onlyfit.domain.type.UserGrade;
-import com.shop.onlyfit.dto.CsPageDto;
-import com.shop.onlyfit.dto.CustomServiceBoardDto;
 import com.shop.onlyfit.dto.ResponseDto;
-import com.shop.onlyfit.dto.item.ItemDto;
 import com.shop.onlyfit.service.CSBoardServiceImpl;
 import com.shop.onlyfit.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +21,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 

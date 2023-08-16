@@ -2,9 +2,7 @@ package com.shop.onlyfit.repository;
 
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.shop.onlyfit.domain.CustomServiceBoard;
 import com.shop.onlyfit.domain.QCustomServiceBoard;
-import com.shop.onlyfit.domain.type.CSBoardType;
 import com.shop.onlyfit.dto.CustomServiceBoardDto;
 import com.shop.onlyfit.dto.QCustomServiceBoardDto;
 import org.springframework.data.domain.Page;

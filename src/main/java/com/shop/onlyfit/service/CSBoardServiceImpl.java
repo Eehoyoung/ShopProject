@@ -28,7 +28,6 @@ public class CSBoardServiceImpl implements CSBoardService {
     @Override
     @Transactional(readOnly = true)
     public Page<CustomServiceBoard> findByTitle(String st, Pageable pageable) {
-        System.out.println("서비스단  " + st);
         return csBoardRepository.findByTitleContaining(st, pageable);
     }
 
