@@ -141,7 +141,8 @@
                                 <div><input checked id="0" name="address_id" type="radio" value="new_addr"> <label
                                         for="0">새로운 배송지</label></div>
                                 <div th:each="address, i:${addressList}"><input id="2" name="address_id"
-                                                                                th:id="${i.count}" th:value="${address.id}"
+                                                                                th:id="${i.count}"
+                                                                                th:value="${address.id}"
                                                                                 type="radio"
                                                                                 value="home">
                                     <label for="2" th:for="${i.count}" th:text="${address.placeName}">우리집</label>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title>문의글 상세보기</title>
+    <link href="/css/main/header.css" rel="stylesheet" type="text/css">
+    <link href="/css/main/footer.css" rel="stylesheet" type="text/css">
+    <link href="/css/main/nav.css" rel="stylesheet" type="text/css">
+    <link href="/css/main/customer.css" rel="stylesheet" type="text/css">
+    <script src="/js/jquery.js"></script>
+    <script src="/js/main/header.js"></script>
+    <script src="/js/main/nav2.js"></script>
+    <script src="/js/main/board.js"></script>
+</head>
+<body>
+
+<header th:replace="main/layout/header :: main_headerFragment">
+</header>
+
+<section class="detail">
+    <div class="page-title">
+        <div class="container">
+            <h3 class="csdetial-title" th:text="${board.title}"></h3>
+            <h6 class="csdetial-title">조회수 : <span th:text="${board.count}"></span></h6>
+            <h6 class="csdetial-title">작성자 : <span th:text="${board.user.username}"></span></h6>
+        </div>
+    </div>
+    <div id="board-list">
+        <div class="container justify-content-center">
+            <div class="detail-table">
+                <div class="csdetail-content container" th:text="${board.content}"></div>
+                <div class="btn-groub">
+                    <a class="detail-a" href="/user/cs">[목록으로]</a>
+                    <div th:if="${#authorization.expression('isAuthenticated() and #oauth2.hasScope(''write'') and #oauth2.clientHasRole(''ADMIN'')')}">
+                        <a class="detail-a" th:href="@{/guest/cs-update/{id}(id=${board.id})}">[수정]</a>
+                        <a class="detail-a" onclick="deleteBoard([[${board.id}]])">[삭제]</a>
+                    </div>
+                </div>
+                <br/>
+
+                <div class="reply_view" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+                    <h5>댓글</h5>
+                    <div class="dap_lo">
+                        <div class="dap_to comt_edit"></div>
+                        <div class="rep_me dap_to"></div>
+                    </div>
+                    <form>
+                        <div style="margin-top: 10px;">
+                            <textarea class="form-control" id="re_content" name="content"
+                                      th:text="${reContent}"></textarea>
+                            <button class="btn btn-dark float-right" id="rep_bt" onclick="writeReply([[${board.id}]])"
+                                    style="margin-top: 10px;">댓글
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <!--- 댓글 불러오기 끝 -->
+                <br/>
+                <br/>
+                <div class="reply-wrap">
+                    <ol id="reply-list-table" style="padding: 5px; list-style: none;">
+                        <li class="reply-list-[[${reply.id}]]" th:each="reply : ${board.replys}">
+                            <hr/>
+                            <div class="name time" style="font-size: 20px; color: black;">
+                                <strong>운영자</strong><a style="margin-left: 10px; color: grey;"
+                                                       th:text="${#dates.format(reply.createTime, 'yyyy-MM-dd hh:mm')}"></a>
+                            </div>
+                            <div class="comment_content" style="font-family: sans-serif; color:black;"
+                                 th:text="${reply.content}"></div>
+                            <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+                                <button class="reply-dbtn custom-sm-btn" onclick="deleteReply([[${reply.id}]])">삭제
+                                </button>
+                            </div>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<nav th:replace="main/layout/nav :: main_navFragment">
+</nav>
+
+<!--footer-->
+<footer th:replace="main/layout/footer :: main_footerFragment">
+</footer>
+</body>
+</html>

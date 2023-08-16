@@ -98,7 +98,7 @@ function getPostCompanyCode(postCompanyName) {
 }
 
 // 페이지가 로드된 후 실행되는 함수
-window.onload = function() {
+window.onload = function () {
     const tCodeInput = document.getElementById('t_code');
     const postCompany = tCodeInput.dataset.postCompany;
     const postCompanyCode = getPostCompanyCode(postCompany);

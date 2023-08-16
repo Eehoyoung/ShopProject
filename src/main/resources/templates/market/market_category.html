@@ -57,7 +57,8 @@
         <li th:classappend="${1 == itemList.pageable.pageNumber + 1} ? 'disabled'">
             <a aria-disabled="true" class="prev bracket"
                href="#"
-               tabindex="-1" th:href="@{/main/category/{marketId}(marketId=${marketId}, page=${itemList.pageable.pageNumber - 1})}">
+               tabindex="-1"
+               th:href="@{/main/category/{marketId}(marketId=${marketId}, page=${itemList.pageable.pageNumber - 1})}">
                 <i class="fas fa-chevron-left"></i> PREV
             </a>
         </li>

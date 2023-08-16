@@ -201,7 +201,7 @@ function callback(response) {
         }).done(function (word) {
             $('#flag').val('true');
             alert("좋아 아주 좋아");
-            location.href="/main/order";
+            location.href = "/main/order";
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });

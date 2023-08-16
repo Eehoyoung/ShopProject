@@ -126,11 +126,7 @@ public class MarketController {
             User findMarket = userService.findByLoginId(userDetails.getUsername());
             Item item = new Item(firstCategory, secondCategory, thirdCategory, itemName, itemPrice, itemInfo, itemColor, itemFabric, itemModel, itemSize, itemQuantity, newUrl, saleStatus, newItemIdx + 1, true, findMarket.getMarket());
 
-            if (i == 0) {
-                item.setRep(true);
-            } else {
-                item.setRep(false);
-            }
+            item.setRep(i == 0);
             marketService.saveItem(item);
             try {
                 fileList.get(i).transferTo(new File(safeFile));

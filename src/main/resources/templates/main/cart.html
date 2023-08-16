@@ -94,7 +94,8 @@
                         </td>
                         <td><b th:text="'₩'+${#numbers.formatInteger(item.price, 0, 'COMMA')}">₩32,000</b></td>
                         <td>
-                            <input class="item_quantity" max="100" min="0" th:value="${cartList[index.index].cartCount}" type="number"
+                            <input class="item_quantity" max="100" min="0" th:value="${cartList[index.index].cartCount}"
+                                   type="number"
                                    value="4">
                             <button class="numberupdatebtn" onclick="">변경</button> <!--th:onclick으로 item_key 넘겨주기-->
                         </td>

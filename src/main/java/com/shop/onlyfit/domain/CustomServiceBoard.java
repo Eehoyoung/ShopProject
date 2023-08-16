@@ -16,14 +16,15 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "customserviceboard")
 public class CustomServiceBoard {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "userId")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Column(nullable = false, length = 100)
@@ -39,6 +40,7 @@ public class CustomServiceBoard {
     private String content;
 
     @CreationTimestamp
+    @Column(updatable = false)
     private Timestamp createTime;
 
     @OneToMany(mappedBy = "customServiceBoard", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)

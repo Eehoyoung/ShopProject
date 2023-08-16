@@ -62,13 +62,15 @@
                 <div class="item_caption">입금전</div>
                 <div class="item_content"><a
                         href=""
-                        th:href="@{/main/order(omode='PAYWAITING',firstdate='2023-06-01',lastdate=${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')})}" th:text="${orderStatus.payWaitingNum}">0</a></div>
+                        th:href="@{/main/order(omode='PAYWAITING',firstdate='2023-06-01',lastdate=${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')})}"
+                        th:text="${orderStatus.payWaitingNum}">0</a></div>
             </div>
             <div class="myshop_orderstate_item">
                 <div class="item_caption">배송준비중</div>
                 <div class="item_content"><a
                         href=""
-                        th:href="@{/main/order(omode='PRESHIP',firstdate='2023-06-01',lastdate=${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')})}" th:text="${orderStatus.preShipNum}">0</a></div>
+                        th:href="@{/main/order(omode='PRESHIP',firstdate='2023-06-01',lastdate=${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')})}"
+                        th:text="${orderStatus.preShipNum}">0</a></div>
             </div>
             <div class="myshop_orderstate_item">
                 <div class="item_caption">배송중</div>
@@ -86,13 +88,15 @@
                 <ul>
                     <li>· 취소 &nbsp;:&nbsp;&nbsp; <span><a
                             href="#"
-                            th:href="@{/main/order(omode='ORDERCANCEL',firstdate='2023-06-01',lastdate=${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')})}" th:text="${orderStatus.orderCancelNum}">0</a></span></li>
+                            th:href="@{/main/order(omode='ORDERCANCEL',firstdate='2023-06-01',lastdate=${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')})}"
+                            th:text="${orderStatus.orderCancelNum}">0</a></span></li>
                     <li>· 교환 &nbsp;:&nbsp;&nbsp; <span><a
                             th:href="@{/main/order(omode='ORDERCHANGE',firstdate='2023-06-01',lastdate=${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')})}">0</a></span>
                     </li>
                     <li>· 반품 &nbsp;:&nbsp;&nbsp; <span><a
                             href="#"
-                            th:href="@{/main/order(omode='ORDERREFUND',firstdate='2023-06-01',lastdate=${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')})}" th:text="${orderStatus.orderRefundNum}">0</a></span></li>
+                            th:href="@{/main/order(omode='ORDERREFUND',firstdate='2023-06-01',lastdate=${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')})}"
+                            th:text="${orderStatus.orderRefundNum}">0</a></span></li>
                 </ul>
             </div>
 

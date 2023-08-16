@@ -84,7 +84,7 @@ public class PaymentController {
         orderService.doOrder
                 (user.getId(), itemListToOrderDto.getItemList(),
                         itemListToOrderDto.getItemCountList(),
-                        paymentAddressDto, paymentPriceDto,payType);
+                        paymentAddressDto, paymentPriceDto, payType);
 
         model.addAttribute("user", myPageDto);
         model.addAttribute("payment", paymentPriceDto);

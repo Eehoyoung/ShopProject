@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title>문의글 작성</title>
+    <link href="/css/main/header.css" rel="stylesheet" type="text/css">
+    <link href="/css/main/footer.css" rel="stylesheet" type="text/css">
+    <link href="/css/main/nav.css" rel="stylesheet" type="text/css">
+    <link href="/css/main/customer.css" rel="stylesheet" type="text/css">
+    <script src="/js/jquery.js"></script>
+    <script src="/js/main/header.js"></script>
+    <script src="/js/main/nav2.js"></script>
+    <script src="/js/main/board.js"></script>
+</head>
+<body>
+
+<header th:replace="main/layout/header :: main_headerFragment">
+</header>
+<div class="container">
+    <h2 class="info-txt text-center" id="pTranMsg">문의글 작성</h2>
+    <input id="user_id" th:if="${principal != null and principal.user != null}" th:value="${principal.user.id}" type="hidden"/> <br/>
+
+    <div class="container">
+        <div class="container">
+            <label for="title">제목</label>
+            <input class="form-control" id="title" name="title" type="text"/>
+        </div>
+        <br/>
+        <div class="container" id="dl_tel">
+            <label for="content">내용</label>
+            <div class="contentArea">
+                <textarea class="summernote" id="content" maxlength="11" name="content" type="text"></textarea>
+            </div>
+        </div>
+
+
+
+    </div>
+    <button class="custom-sm-btn float-right" onclick="writeBoard()" type="button">
+        <span>저장</span>
+    </button>
+    <br/> <br/> <br/> <br/> <br/>
+</div>
+
+
+<nav th:replace="main/layout/nav :: main_navFragment">
+</nav>
+
+<!--footer-->
+<footer th:replace="main/layout/footer :: main_footerFragment">
+</footer>
+</body>
+</html>

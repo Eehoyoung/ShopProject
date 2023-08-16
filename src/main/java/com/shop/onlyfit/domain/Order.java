@@ -52,9 +52,9 @@ public class Order extends BaseTimeEntity {
             order.addOrderItem(orderItem);
         }
         order.setOrderedAt(LocalDate.now());
-        if(payType.equals("card")){
+        if (payType.equals("card")) {
             order.setPayment("카드결제");
-        }else {
+        } else {
             order.setPayment("무통장결제");
         }
         order.setTotalPrice(order.getCalTotalPrice());

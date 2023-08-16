@@ -56,7 +56,8 @@
                         <button id="postbtn" onclick="sample6_execDaumPostcode()" type="button"><span>우편번호</span><i
                                 class="fas fa-chevron-right"></i></button>
                         <br>
-                        <input class="address_margin" id="sample6_address" name="city" placeholder="주소" th:value="${address.city}"
+                        <input class="address_margin" id="sample6_address" name="city" placeholder="주소"
+                               th:value="${address.city}"
                                type="text"> 기본주소<br>
                         <input class="address_margin" id="sample6_detailAddress" name="street" placeholder="상세주소"
                                th:value="${address.street}" type="text"> 나머지주소
@@ -107,10 +108,12 @@
                             </option>
                         </select>
                         -
-                        <input class="address_home_number" name="addressHomePhoneNumber[]" th:value="${address.addressHomePhoneNumber[1]}"
+                        <input class="address_home_number" name="addressHomePhoneNumber[]"
+                               th:value="${address.addressHomePhoneNumber[1]}"
                                type="text">
                         -
-                        <input class="address_home_number" name="addressHomePhoneNumber[]" th:value="${address.addressHomePhoneNumber[2]}"
+                        <input class="address_home_number" name="addressHomePhoneNumber[]"
+                               th:value="${address.addressHomePhoneNumber[2]}"
                                type="text">
                     </td>
                 </tr>
@@ -123,10 +126,12 @@
                             </option>
                         </select>
                         -
-                        <input class="address_phone_number" name="addressPhoneNumber[]" th:value="${address.addressPhoneNumber[1]}"
+                        <input class="address_phone_number" name="addressPhoneNumber[]"
+                               th:value="${address.addressPhoneNumber[1]}"
                                type="text">
                         -
-                        <input class="address_phone_number" name="addressPhoneNumber[]" th:value="${address.addressPhoneNumber[2]}"
+                        <input class="address_phone_number" name="addressPhoneNumber[]"
+                               th:value="${address.addressPhoneNumber[2]}"
                                type="text">
                     </td>
                 </tr>

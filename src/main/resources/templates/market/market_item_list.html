@@ -114,7 +114,8 @@
                 <li class="page-item" th:classappend="${1 == productList.pageable.pageNumber + 1} ? 'disabled'">
                     <a aria-disabled="true" class="page-link"
                        href="#"
-                       tabindex="-1" th:href="@{/market/itemList(page=${productList.pageable.pageNumber - 1},salestatus=${saleStatus},cmode=${firstCategory},item_name=${itemName})}">Previous</a>
+                       tabindex="-1"
+                       th:href="@{/market/itemList(page=${productList.pageable.pageNumber - 1},salestatus=${saleStatus},cmode=${firstCategory},item_name=${itemName})}">Previous</a>
                 </li>
 
                 <li class="page-item" th:classappend="${i == productList.pageable.pageNumber + 1} ? 'disabled'"

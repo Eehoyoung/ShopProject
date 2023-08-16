@@ -5,7 +5,7 @@ $(function () {
         } else {
             $('.check').prop('checked', false);
         }
-        ;
+
     });
     $('.deletebtn').on('click', function () {
         var token = $("meta[name='_csrf']").attr("content");
@@ -15,7 +15,7 @@ $(function () {
             if ($(this).is(':checked')) {
                 addresslist.push(parseInt($(this).closest('tr').find('.address_key').val()));
             }
-            ;
+
         });
         $.ajax({
             type: 'DELETE',

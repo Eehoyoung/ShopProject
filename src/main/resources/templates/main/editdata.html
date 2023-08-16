@@ -78,7 +78,8 @@
                         <button id="postbtn" onclick="sample6_execDaumPostcode()" type="button"><span>우편번호</span><i
                                 class="fas fa-chevron-right"></i></button>
                         <br>
-                        <input class="address_margin" id="sample6_address" name="street" placeholder="주소" th:value="${user.city}"
+                        <input class="address_margin" id="sample6_address" name="street" placeholder="주소"
+                               th:value="${user.city}"
                                type="text"> 기본주소<br>
                         <input class="address_margin" id="sample6_detailAddress" name="city" placeholder="상세주소"
                                th:value="${user.street}" type="text"> 나머지주소
@@ -116,14 +117,18 @@
                             </option>
                         </select>
                         -
-                        <input class="home_number" name="homePhoneNumber" th:if="${#lists.size(user.homePhoneNumber) >= 2}"
+                        <input class="home_number" name="homePhoneNumber"
+                               th:if="${#lists.size(user.homePhoneNumber) >= 2}"
                                th:value="${user.homePhoneNumber[1]}" type="text">
-                        <input class="home_number" name="homePhoneNumber" th:if="${#lists.size(user.homePhoneNumber) < 2}"
+                        <input class="home_number" name="homePhoneNumber"
+                               th:if="${#lists.size(user.homePhoneNumber) < 2}"
                                type="text">
                         -
-                        <input class="home_number" name="homePhoneNumber" th:if="${#lists.size(user.homePhoneNumber) >= 2}"
+                        <input class="home_number" name="homePhoneNumber"
+                               th:if="${#lists.size(user.homePhoneNumber) >= 2}"
                                th:value="${user.homePhoneNumber[2]}" type="text">
-                        <input class="home_number" name="homePhoneNumber" th:if="${#lists.size(user.homePhoneNumber) < 2}"
+                        <input class="home_number" name="homePhoneNumber"
+                               th:if="${#lists.size(user.homePhoneNumber) < 2}"
                                type="text">
                     </td>
                 </tr>
@@ -163,15 +168,18 @@
                 <tr>
                     <th><label for="birth_year">생년월일</label></th>
                     <td>
-                        <input id="birth_year" name="birthday" th:if="${#lists.size(user.birthday) >= 2}" th:value="${user.birthday[0]}"
+                        <input id="birth_year" name="birthday" th:if="${#lists.size(user.birthday) >= 2}"
+                               th:value="${user.birthday[0]}"
                                type="text">
                         <input id="birth_year" name="birthday" th:if="${#lists.size(user.birthday) < 2}" type="text">
                         년&nbsp;&nbsp;&nbsp;
-                        <input id="birth_month" name="birthday" th:if="${#lists.size(user.birthday) >= 2}" th:value="${user.birthday[1]}"
+                        <input id="birth_month" name="birthday" th:if="${#lists.size(user.birthday) >= 2}"
+                               th:value="${user.birthday[1]}"
                                type="text">
                         <input id="birth_month" name="birthday" th:if="${#lists.size(user.birthday) < 2}" type="text">
                         월&nbsp;&nbsp;&nbsp;
-                        <input id="birth_date" name="birthday" th:if="${#lists.size(user.birthday) >= 2}" th:value="${user.birthday[2]}"
+                        <input id="birth_date" name="birthday" th:if="${#lists.size(user.birthday) >= 2}"
+                               th:value="${user.birthday[2]}"
                                type="text">
                         <input id="birth_date" name="birthday" th:if="${#lists.size(user.birthday) < 2}" type="text">
                         일

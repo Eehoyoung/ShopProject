@@ -116,9 +116,9 @@ public class OrderServiceImpl implements OrderService {
             );
 
             OrderItem testOrderItem = OrderItem.createOrderItem(checkedItem, checkedItem.getPrice(), itemCountList.get(i));
-            if(payType.equals("card")){
+            if (payType.equals("card")) {
                 testOrderItem.setOrderStatus(OrderStatus.PAYCOMPLETE);
-            }else {
+            } else {
                 testOrderItem.setOrderStatus(OrderStatus.PAYWAITING);
             }
             checkedTestOrderItem.add(testOrderItem);
