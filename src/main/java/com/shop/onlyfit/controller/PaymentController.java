@@ -9,7 +9,7 @@ import com.shop.onlyfit.dto.PaymentPriceDto;
 import com.shop.onlyfit.dto.item.ItemDto;
 import com.shop.onlyfit.dto.item.ItemListToOrderDto;
 import com.shop.onlyfit.service.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
+@RequiredArgsConstructor
 public class PaymentController {
 
     private final CartServiceImpl cartService;
@@ -29,15 +30,6 @@ public class PaymentController {
     private final UserServiceImpl userService;
     private final DeliveryAddressServiceImpl deliveryAddressService;
     private final OrderServiceImpl orderService;
-
-    @Autowired
-    public PaymentController(CartServiceImpl cartService, ItemServiceImpl itemService, UserServiceImpl userService, DeliveryAddressServiceImpl deliveryAddressService, OrderServiceImpl orderService) {
-        this.cartService = cartService;
-        this.itemService = itemService;
-        this.userService = userService;
-        this.deliveryAddressService = deliveryAddressService;
-        this.orderService = orderService;
-    }
 
     @PostMapping("/main/payment")
     public String getPaymentDataPage(Principal principal, Model model, @RequestParam(value = "itemlist") String itemlist, @RequestParam(value = "where") String where) {

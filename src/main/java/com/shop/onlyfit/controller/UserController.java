@@ -6,7 +6,7 @@ import com.shop.onlyfit.dto.MyPageOrderStatusDto;
 import com.shop.onlyfit.dto.ProfileDto;
 import com.shop.onlyfit.service.OrderServiceImpl;
 import com.shop.onlyfit.service.UserServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,16 +20,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
 
 @Controller
+@RequiredArgsConstructor
 public class UserController {
 
     private final UserServiceImpl userService;
     private final OrderServiceImpl orderService;
-
-    @Autowired
-    public UserController(UserServiceImpl userService, OrderServiceImpl orderService) {
-        this.userService = userService;
-        this.orderService = orderService;
-    }
 
     @GetMapping("main/mypage")
     public String getMyPage(Principal principal, Model model) {

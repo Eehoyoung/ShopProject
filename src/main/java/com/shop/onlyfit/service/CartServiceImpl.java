@@ -9,6 +9,7 @@ import com.shop.onlyfit.exception.CartNotFoundException;
 import com.shop.onlyfit.exception.MaxQuantityExceededException;
 import com.shop.onlyfit.repository.CartRepository;
 import com.shop.onlyfit.repository.ItemRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,15 +18,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class CartServiceImpl implements CartService {
 
     private final CartRepository cartRepository;
     private final ItemRepository itemRepository;
-
-    public CartServiceImpl(CartRepository cartRepository, ItemRepository itemRepository) {
-        this.cartRepository = cartRepository;
-        this.itemRepository = itemRepository;
-    }
 
     @Override
     public List<Cart> findAllCartByUserId(Long id) {

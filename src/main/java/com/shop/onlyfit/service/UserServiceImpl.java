@@ -12,7 +12,7 @@ import com.shop.onlyfit.dto.user.UserInfoDto;
 import com.shop.onlyfit.exception.LoginIdNotFoundException;
 import com.shop.onlyfit.repository.MarketRepository;
 import com.shop.onlyfit.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,18 +27,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository userRepository;
     private final MarketRepository marketRepository;
     private final BCryptPasswordEncoder encoder;
-
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository, MarketRepository marketRepository, BCryptPasswordEncoder encoder) {
-        this.userRepository = userRepository;
-        this.marketRepository = marketRepository;
-        this.encoder = encoder;
-    }
 
     @Override
     @Transactional
@@ -83,7 +77,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             user.setUserGrade(UserGrade.USER);
             userRepository.save(user);
         } catch (Exception e) {
-            e.printStackTrace();
+            e.getStackTrace();
             return -1;
         }
         return 1;
@@ -115,7 +109,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         MyPageDto myPageDto = new MyPageDto();
 
         User findUser = userRepository.findByLoginId(loginId).orElseThrow(
-                () -> new LoginIdNotFoundException("해당하는 회원이 존재하지 않습니다")
+                () -> new LoginIdNotFoundException("해당 유저를 찾을 수 없습니다.")
         );
 
         for (int i = 0; i < findUser.getMileageList().size(); i++) {
@@ -137,7 +131,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         ProfileDto myProfileDto = new ProfileDto();
 
         User findUser = userRepository.findByLoginId(loginId).orElseThrow(
-                () -> new LoginIdNotFoundException("해당하는 회원을 찾을 수 없습니다")
+                () -> new LoginIdNotFoundException("해당 유저를 찾을 수 없습니다.")
         );
 
         String homePhoneNumber = findUser.getHomePhoneNumber();
@@ -184,7 +178,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
         User findUser = userRepository.findByLoginId(loginId).orElseThrow(
-                () -> new LoginIdNotFoundException("해당하는 회원을 찾을 수 없습니다")
+                () -> new LoginIdNotFoundException("해당 유저를 찾을 수 없습니다.")
         );
 
         String homePhoneNumberResult = profileDto.getHomePhoneNumber()[0] + "," + profileDto.getHomePhoneNumber()[1] + "," + profileDto.getHomePhoneNumber()[2];
@@ -210,14 +204,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User findUserByLoginId(String loginId) {
         return userRepository.findByLoginId(loginId).orElseThrow(
-                () -> new LoginIdNotFoundException("해당하는 회원이 없습니다.")
+                () -> new LoginIdNotFoundException("해당 하는 회원이 없습니다.")
         );
     }
 
     @Override
     @Transactional
     public void joinSeller(String loginId, MarketInfoDto marketInfoDto) {
-        User findUser = userRepository.findByLoginId(loginId).get();
+        User findUser = userRepository.findByLoginId(loginId).orElseThrow(
+                () -> new LoginIdNotFoundException("해당 유저를 찾을 수 없습니다.")
+        );
         marketInfoDto.setUser(findUser);
         marketInfoDto.setVisitCount(0);
         marketRepository.save(marketInfoDto.toEntity());
@@ -226,7 +222,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     @Transactional
     public void changeUserGradeToSeller(Long id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다."));
+        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다."));
         user.setUserGrade(UserGrade.SELLER);
         userRepository.save(user);
     }

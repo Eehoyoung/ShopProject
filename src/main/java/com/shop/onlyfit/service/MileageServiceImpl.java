@@ -6,28 +6,26 @@ import com.shop.onlyfit.dto.MileagePageDto;
 import com.shop.onlyfit.exception.LoginIdNotFoundException;
 import com.shop.onlyfit.repository.MileageRepository;
 import com.shop.onlyfit.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class MileageServiceImpl implements MileageService {
 
     private final UserRepository userRepository;
     private final MileageRepository mileageRepository;
 
-    @Autowired
-    public MileageServiceImpl(UserRepository userRepository, MileageRepository mileageRepository) {
-        this.userRepository = userRepository;
-        this.mileageRepository = mileageRepository;
-    }
 
     @Override
     @Transactional
     public Long joinMileage(Long userId) {
-        User user = userRepository.findById(userId).get();
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new LoginIdNotFoundException("사용자를 찾을 수 없습니다.")
+        );
         Mileage mileage = new Mileage();
         mileage.setMileagePrice(2000);
         mileage.setMileageContent("회원가입을 축하합니다.");
@@ -40,8 +38,9 @@ public class MileageServiceImpl implements MileageService {
 
     @Override
     public int getTotalMileage(String loginId) {
-        User user = userRepository.findByLoginId(loginId).get();
-
+        User user = userRepository.findByLoginId(loginId).orElseThrow(
+                () -> new LoginIdNotFoundException("사용자를 찾을 수 없습니다.")
+        );
         int totalMileage = 0;
 
         for (int i = 0; i < user.getMileageList().size(); i++) {
@@ -52,8 +51,9 @@ public class MileageServiceImpl implements MileageService {
 
     @Override
     public int getTotalUsedMileage(String loginId) {
-        User user = userRepository.findByLoginId(loginId).get();
-
+        User user = userRepository.findByLoginId(loginId).orElseThrow(
+                () -> new LoginIdNotFoundException("사용자를 찾을 수 없습니다.")
+        );
         int totalUsedMileage = 0;
 
         for (int i = 0; i < user.getOrderList().size(); i++) {

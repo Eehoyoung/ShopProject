@@ -9,7 +9,7 @@ import com.shop.onlyfit.dto.user.UserInfoDto;
 import com.shop.onlyfit.service.AuthService;
 import com.shop.onlyfit.service.MileageServiceImpl;
 import com.shop.onlyfit.service.UserServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,19 +26,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
 
 @Controller
+@RequiredArgsConstructor
 public class LoginController {
     private final UserServiceImpl userService;
     private final MileageServiceImpl mileageService;
     private final AuthService authService;
     private final JwtTokenUtil jwtTokenUtil;
-
-    @Autowired
-    public LoginController(UserServiceImpl userService, MileageServiceImpl mileageService, AuthService authService, JwtTokenUtil jwtTokenUtil) {
-        this.userService = userService;
-        this.mileageService = mileageService;
-        this.authService = authService;
-        this.jwtTokenUtil = jwtTokenUtil;
-    }
 
     @GetMapping("/main/login")
     public String login(@AuthenticationPrincipal UserDetails userDetails, HttpServletResponse response) {

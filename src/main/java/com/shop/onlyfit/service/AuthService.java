@@ -8,7 +8,7 @@ import com.shop.onlyfit.auth.jwt.JwtProperties;
 import com.shop.onlyfit.domain.User;
 import com.shop.onlyfit.domain.type.LoginType;
 import com.shop.onlyfit.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,18 +21,14 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class AuthService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder encoder;
 
-    @Autowired
-    public AuthService(UserRepository userRepository, BCryptPasswordEncoder encoder) {
-        this.userRepository = userRepository;
-        this.encoder = encoder;
-    }
 
-    public String getAccessToken(String code, String redirectUri, String clientId) throws Exception {
+    public String getAccessToken(String code, String redirectUri, String clientId) {
         OAuthToken oauthToken = getOauthToken(code, redirectUri, clientId);
         return oauthToken.getAccessToken();
     }
@@ -106,15 +102,6 @@ public class AuthService {
         return JWT.create()
                 .withSubject(user.getEmail())
                 .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRATION_TIME))
-                .withClaim("id", user.getId())
-                .withClaim("nickname", user.getName())
-                .sign(Algorithm.HMAC512(JwtProperties.SECRET));
-    }
-
-    public String logoutToken(User user) {
-        return JWT.create()
-                .withSubject(user.getEmail())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 120))
                 .withClaim("id", user.getId())
                 .withClaim("nickname", user.getName())
                 .sign(Algorithm.HMAC512(JwtProperties.SECRET));

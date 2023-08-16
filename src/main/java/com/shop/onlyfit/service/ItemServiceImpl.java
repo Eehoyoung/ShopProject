@@ -11,10 +11,11 @@ import com.shop.onlyfit.dto.item.ItemDetailDto;
 import com.shop.onlyfit.dto.item.ItemDto;
 import com.shop.onlyfit.dto.item.ItemListToOrderDto;
 import com.shop.onlyfit.dto.item.ItemPageDto;
+import com.shop.onlyfit.exception.LoginIdNotFoundException;
 import com.shop.onlyfit.repository.CartRepository;
 import com.shop.onlyfit.repository.ItemRepository;
 import com.shop.onlyfit.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -23,18 +24,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
     private final CartRepository cartRepository;
-
-    @Autowired
-    public ItemServiceImpl(ItemRepository itemRepository, UserRepository userRepository, CartRepository cartRepository) {
-        this.itemRepository = itemRepository;
-        this.userRepository = userRepository;
-        this.cartRepository = cartRepository;
-    }
 
     @Override
     public List<Item> MainCarouselItemList() {
@@ -46,20 +41,6 @@ public class ItemServiceImpl implements ItemService {
             mainCarouselList.add(item);
         }
         return mainCarouselList;
-//        Long idx = itemRepository.findItemIdx();
-//        Item firstItem = itemRepository.findByItemIdxAndColorAndRep(idx, "블루", true);
-//        Item secondItem = itemRepository.findByItemIdxAndColorAndRep(idx-1, "블랙", true);
-//        Item thirdItem = itemRepository.findByItemIdxAndColorAndRep(idx-2, "네이비", true);
-//        Item fourthItem = itemRepository.findByItemIdxAndColorAndRep(idx-3, "블랙 M size", true);
-//        Item fifthItem = itemRepository.findByItemIdxAndColorAndRep(idx-4, "아이보리", true);
-//
-//        mainCarouselList.add(firstItem);
-//        mainCarouselList.add(secondItem);
-//        mainCarouselList.add(thirdItem);
-//        mainCarouselList.add(fourthItem);
-//        mainCarouselList.add(fifthItem);
-//
-//        return mainCarouselList;
     }
 
     @Override
@@ -196,7 +177,9 @@ public class ItemServiceImpl implements ItemService {
     public void moveItemToCart(String loginId, Long itemIdx, String itemColor, int quantity) {
 
         Cart cart = new Cart();
-        User findUser = userRepository.findByLoginId(loginId).get();
+        User findUser = userRepository.findByLoginId(loginId).orElseThrow(
+                () -> new LoginIdNotFoundException("해당 사용자를 찾을 수 없습니다.")
+        );
         Item findItem = itemRepository.findByItemIdxAndColorAndRep(itemIdx, itemColor, true);
         cart.setUser(findUser);
         cart.setCartCount(quantity);

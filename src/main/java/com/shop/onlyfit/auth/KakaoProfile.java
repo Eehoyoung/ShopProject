@@ -24,7 +24,7 @@ public class KakaoProfile {
     @JsonProperty("kakao_account")
     public KakaoAccount kakaoAccount;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
     @JsonAnyGetter
     public Map<String, Object> getAdditionalProperties() {
@@ -40,7 +40,7 @@ public class KakaoProfile {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonPropertyOrder({"profile_nickname_needs_agreement", "profile", "has_email", "email_needs_agreement",
             "is_email_valid", "is_email_verified", "email"})
-    public class KakaoAccount {
+    public static class KakaoAccount {
 
         @JsonProperty("profile_nickname_needs_agreement")
         public Boolean profileNicknameNeedsAgreement;
@@ -59,7 +59,7 @@ public class KakaoProfile {
         @JsonProperty("gender")
         public String gender;
         @JsonIgnore
-        private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+        private Map<String, Object> additionalProperties = new HashMap<>();
 
         @JsonAnyGetter
         public Map<String, Object> getAdditionalProperties() {
@@ -74,12 +74,12 @@ public class KakaoProfile {
         @Data
         @JsonInclude(JsonInclude.Include.NON_NULL)
         @JsonPropertyOrder({"nickname"})
-        public class Profile {
+        public static class Profile {
 
             @JsonProperty("nickname")
             public String nickname;
             @JsonIgnore
-            private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+            private Map<String, Object> additionalProperties = new HashMap<>();
 
             @JsonAnyGetter
             public Map<String, Object> getAdditionalProperties() {
@@ -98,12 +98,12 @@ public class KakaoProfile {
     @Data
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonPropertyOrder({"nickname"})
-    public class Properties {
+    public static class Properties {
 
         @JsonProperty("nickname")
         public String nickname;
         @JsonIgnore
-        private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+        private Map<String, Object> additionalProperties = new HashMap<>();
 
         @JsonAnyGetter
         public Map<String, Object> getAdditionalProperties() {

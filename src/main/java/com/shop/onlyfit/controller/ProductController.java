@@ -3,7 +3,7 @@ package com.shop.onlyfit.controller;
 import com.shop.onlyfit.dto.item.ItemDetailDto;
 import com.shop.onlyfit.dto.item.ItemToCartDto;
 import com.shop.onlyfit.service.ItemServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,14 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import java.security.Principal;
 
 @Controller
+@RequiredArgsConstructor
 public class ProductController {
 
     private final ItemServiceImpl itemService;
-
-    @Autowired
-    public ProductController(ItemServiceImpl itemService) {
-        this.itemService = itemService;
-    }
 
     @GetMapping("/main/product/{itemIdx}")
     public String getProductPage(@PathVariable Long itemIdx, Model model) {

@@ -9,8 +9,8 @@ import com.shop.onlyfit.repository.ItemRepository;
 import com.shop.onlyfit.repository.MileageRepository;
 import com.shop.onlyfit.repository.OrderRepository;
 import com.shop.onlyfit.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,20 +21,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
     private final MileageRepository mileageRepository;
-
-    @Autowired
-    public OrderServiceImpl(ItemRepository itemRepository, UserRepository userRepository, OrderRepository orderRepository, MileageRepository mileageRepository) {
-        this.itemRepository = itemRepository;
-        this.userRepository = userRepository;
-        this.orderRepository = orderRepository;
-        this.mileageRepository = mileageRepository;
-    }
 
     @Override
     public MyPageOrderStatusDto showOrderStatus(String loginId) {

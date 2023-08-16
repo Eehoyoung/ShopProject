@@ -14,10 +14,10 @@ import com.shop.onlyfit.dto.item.ItemPageDto;
 import com.shop.onlyfit.service.ItemServiceImpl;
 import com.shop.onlyfit.service.MarketServiceImpl;
 import com.shop.onlyfit.service.UserServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -36,19 +36,13 @@ import java.util.List;
 import java.util.Locale;
 
 @Controller
+@RequiredArgsConstructor
 public class MarketController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName());
     private final MarketServiceImpl marketService;
     private final UserServiceImpl userService;
     private final ItemServiceImpl itemService;
-
-    @Autowired
-    public MarketController(MarketServiceImpl marketService, UserServiceImpl userService, ItemServiceImpl itemService) {
-        this.marketService = marketService;
-        this.userService = userService;
-        this.itemService = itemService;
-    }
 
     @GetMapping("/getMarketId")
     @ResponseBody

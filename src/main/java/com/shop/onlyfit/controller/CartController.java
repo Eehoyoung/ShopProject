@@ -8,7 +8,7 @@ import com.shop.onlyfit.exception.MaxQuantityExceededException;
 import com.shop.onlyfit.service.CartServiceImpl;
 import com.shop.onlyfit.service.ItemServiceImpl;
 import com.shop.onlyfit.service.UserServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,18 +17,12 @@ import java.security.Principal;
 import java.util.List;
 
 @Controller
+@RequiredArgsConstructor
 public class CartController {
 
     private final UserServiceImpl userService;
     private final CartServiceImpl cartService;
     private final ItemServiceImpl itemService;
-
-    @Autowired
-    public CartController(UserServiceImpl userService, CartServiceImpl cartService, ItemServiceImpl itemService) {
-        this.userService = userService;
-        this.cartService = cartService;
-        this.itemService = itemService;
-    }
 
     @GetMapping("/main/cart")
     public String getCartPage(Principal principal, Model model) {

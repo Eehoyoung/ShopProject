@@ -8,7 +8,7 @@ import com.shop.onlyfit.domain.type.UserGrade;
 import com.shop.onlyfit.dto.ResponseDto;
 import com.shop.onlyfit.service.CSBoardServiceImpl;
 import com.shop.onlyfit.service.UserServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -25,15 +25,10 @@ import java.util.List;
 import java.util.Objects;
 
 @Controller
+@RequiredArgsConstructor
 public class CSBoardController {
     private final CSBoardServiceImpl csBoardService;
     private final UserServiceImpl userService;
-
-    @Autowired
-    public CSBoardController(CSBoardServiceImpl csBoardService, UserServiceImpl userService) {
-        this.csBoardService = csBoardService;
-        this.userService = userService;
-    }
 
     @GetMapping("/main/cs")
     public String intoCustomerService(

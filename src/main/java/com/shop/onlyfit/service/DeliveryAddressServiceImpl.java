@@ -8,6 +8,7 @@ import com.shop.onlyfit.exception.AddressNotFoundException;
 import com.shop.onlyfit.exception.LoginIdNotFoundException;
 import com.shop.onlyfit.repository.DeliveryAddressRepository;
 import com.shop.onlyfit.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,15 +16,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class DeliveryAddressServiceImpl implements DeliveryAddressService {
 
     private final UserRepository userRepository;
     private final DeliveryAddressRepository deliveryAddressRepository;
-
-    public DeliveryAddressServiceImpl(UserRepository userRepository, DeliveryAddressRepository deliveryAddressRepository) {
-        this.userRepository = userRepository;
-        this.deliveryAddressRepository = deliveryAddressRepository;
-    }
 
     @Transactional
     @Override

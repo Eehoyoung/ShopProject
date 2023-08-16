@@ -7,8 +7,10 @@ import com.shop.onlyfit.dto.OrderDto;
 import com.shop.onlyfit.dto.OrderPageDto;
 import com.shop.onlyfit.dto.item.ItemDto;
 import com.shop.onlyfit.dto.item.ItemPageDto;
+import com.shop.onlyfit.exception.LoginIdNotFoundException;
 import com.shop.onlyfit.repository.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class MarketServiceImpl implements MarketService {
 
     private final UserRepository userRepository;
@@ -24,15 +27,6 @@ public class MarketServiceImpl implements MarketService {
     private final ItemRepository itemRepository;
     private final OrderRepository orderRepository;
     private final MarketRepository marketRepository;
-
-    @Autowired
-    public MarketServiceImpl(UserRepository userRepository, OrderItemRepository orderItemRepository, ItemRepository itemRepository, OrderRepository orderRepository, MarketRepository marketRepository) {
-        this.userRepository = userRepository;
-        this.orderItemRepository = orderItemRepository;
-        this.itemRepository = itemRepository;
-        this.orderRepository = orderRepository;
-        this.marketRepository = marketRepository;
-    }
 
     @Override
     public Page<User> findAllMemberByOrderByCreatedAt(Pageable pageable) {
@@ -71,14 +65,7 @@ public class MarketServiceImpl implements MarketService {
 
         Page<ItemDto> itemBoards = itemRepository.searchAllItemByloginId(userId, pageable);
 
-        int homeStartPage = Math.max(1, itemBoards.getPageable().getPageNumber() - 1);
-        int homeEndPage = Math.min(itemBoards.getTotalPages(), itemBoards.getPageable().getPageNumber() + 3);
-
-        itemPageDto.setItemPage(itemBoards);
-        itemPageDto.setHomeStartPage(homeStartPage);
-        itemPageDto.setHomeEndPage(homeEndPage);
-
-        return itemPageDto;
+        return getPage(itemPageDto, itemBoards);
     }
 
     @Override
@@ -86,6 +73,11 @@ public class MarketServiceImpl implements MarketService {
         ItemPageDto itemPageDto = new ItemPageDto();
         Page<ItemDto> itemBoards = itemRepository.searchAllItemByCondition(userId, searchItem, pageable);
 
+        return getPage(itemPageDto, itemBoards);
+    }
+
+    @NotNull
+    private ItemPageDto getPage(ItemPageDto itemPageDto, Page<ItemDto> itemBoards) {
         int homeStartPage = Math.max(1, itemBoards.getPageable().getPageNumber() - 1);
         int homeEndPage = Math.min(itemBoards.getTotalPages(), itemBoards.getPageable().getPageNumber() + 3);
 
@@ -104,7 +96,9 @@ public class MarketServiceImpl implements MarketService {
     @Override
     @Transactional
     public void updateMarketVisitCount(Long marketId) {
-        Market market = marketRepository.findById(marketId).get();
+        Market market = marketRepository.findById(marketId).orElseThrow(
+                () -> new LoginIdNotFoundException("해당 마켓은 존재하지 않습니다.")
+        );
         int visitCount = marketRepository.findVisitCountByMarketId(marketId);
         market.setVisitCount(++visitCount);
         marketRepository.save(market);
@@ -136,6 +130,11 @@ public class MarketServiceImpl implements MarketService {
         OrderPageDto orderPageDto = new OrderPageDto();
 
         Page<OrderDto> orderBoards = orderRepository.searchAllOrderByMarketId(marketId, pageable);
+        return getPageNum(orderPageDto, orderBoards);
+    }
+
+    @NotNull
+    private OrderPageDto getPageNum(OrderPageDto orderPageDto, Page<OrderDto> orderBoards) {
         int homeStartPage = Math.max(1, orderBoards.getPageable().getPageNumber() - 4);
         int homeEndPage = Math.min(orderBoards.getTotalPages(), orderBoards.getPageable().getPageNumber() + 4);
 
@@ -151,14 +150,7 @@ public class MarketServiceImpl implements MarketService {
         OrderPageDto orderPageDto = new OrderPageDto();
 
         Page<OrderDto> orderBoards = orderRepository.searchAllOrderByConditionAndMarketId(marketId, searchOrder, pageable);
-        int startPage = Math.max(1, orderBoards.getPageable().getPageNumber() - 4);
-        int endPage = Math.min(orderBoards.getTotalPages(), orderBoards.getPageable().getPageNumber() + 4);
-
-        orderPageDto.setOrderBoards(orderBoards);
-        orderPageDto.setHomeStartPage(startPage);
-        orderPageDto.setHomeEndPage(endPage);
-
-        return orderPageDto;
+        return getPageNum(orderPageDto, orderBoards);
     }
 
     @Override

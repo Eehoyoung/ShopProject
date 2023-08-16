@@ -12,7 +12,7 @@ import com.shop.onlyfit.dto.OrderMainPageDto;
 import com.shop.onlyfit.dto.WeeklyBestDto;
 import com.shop.onlyfit.dto.item.ItemPageDto;
 import com.shop.onlyfit.service.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
@@ -25,6 +25,7 @@ import java.security.Principal;
 import java.util.List;
 
 @Controller
+@RequiredArgsConstructor
 public class MainController {
 
     private final ItemServiceImpl itemService;
@@ -32,17 +33,6 @@ public class MainController {
     private final MileageServiceImpl mileageService;
     private final OrderServiceImpl orderService;
     private final OrderItemServiceImpl orderItemService;
-    private final MarketServiceImpl marketService;
-
-    @Autowired
-    public MainController(ItemServiceImpl itemService, UserServiceImpl userService, MileageServiceImpl mileageService, OrderServiceImpl orderService, OrderItemServiceImpl orderItemService, MarketServiceImpl marketService) {
-        this.itemService = itemService;
-        this.userService = userService;
-        this.mileageService = mileageService;
-        this.orderService = orderService;
-        this.orderItemService = orderItemService;
-        this.marketService = marketService;
-    }
 
     public User getAuthenticatedUser(HttpServletRequest request) {
         String jwtHeader = null;

@@ -4,7 +4,7 @@ import com.shop.onlyfit.domain.CustomServiceBoard;
 import com.shop.onlyfit.domain.CustomServiceReply;
 import com.shop.onlyfit.repository.CSBoardRepository;
 import com.shop.onlyfit.repository.CSReplyRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -14,16 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class CSBoardServiceImpl implements CSBoardService {
 
     private final CSBoardRepository csBoardRepository;
     private final CSReplyRepository csReplyRepository;
-
-    @Autowired
-    public CSBoardServiceImpl(CSBoardRepository csBoardRepository, CSReplyRepository csReplyRepository) {
-        this.csBoardRepository = csBoardRepository;
-        this.csReplyRepository = csReplyRepository;
-    }
 
     @Override
     @Transactional(readOnly = true)
@@ -44,7 +39,7 @@ public class CSBoardServiceImpl implements CSBoardService {
         int nowPage = boards.getPageable().getPageNumber();
         int startPage = Math.max(nowPage - 2, 0); // 두 인트값 중에 큰 값을 반환 한다.
         int endPage = Math.min(nowPage + 2, boards.getTotalPages() - 1);
-        ArrayList<Integer> list = new ArrayList<Integer>();
+        ArrayList<Integer> list = new ArrayList<>();
         for (int i = startPage; i <= endPage; i++) {
             list.add(i);
         }

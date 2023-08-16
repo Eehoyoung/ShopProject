@@ -4,7 +4,7 @@ import com.shop.onlyfit.domain.DeliveryAddress;
 import com.shop.onlyfit.dto.AddressChangeDto;
 import com.shop.onlyfit.dto.AddressDto;
 import com.shop.onlyfit.service.DeliveryAddressServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,14 +13,10 @@ import java.security.Principal;
 import java.util.List;
 
 @Controller
+@RequiredArgsConstructor
 public class AddressController {
 
     private final DeliveryAddressServiceImpl deliveryAddressService;
-
-    @Autowired
-    public AddressController(DeliveryAddressServiceImpl deliveryAddressService) {
-        this.deliveryAddressService = deliveryAddressService;
-    }
 
     @GetMapping("/main/address")
     public String getAddressPage(Principal principal, Model model) {
