@@ -1,10 +1,7 @@
 package com.shop.onlyfit.service;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.shop.onlyfit.auth.KakaoProfile;
 import com.shop.onlyfit.auth.OAuthToken;
-import com.shop.onlyfit.auth.jwt.JwtProperties;
 import com.shop.onlyfit.domain.User;
 import com.shop.onlyfit.domain.type.LoginType;
 import com.shop.onlyfit.repository.UserRepository;
@@ -16,7 +13,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -97,14 +93,4 @@ public class AuthService {
 
         return userRepository.save(newUser);
     }
-
-    public String createToken(User user) {
-        return JWT.create()
-                .withSubject(user.getEmail())
-                .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRATION_TIME))
-                .withClaim("id", user.getId())
-                .withClaim("nickname", user.getName())
-                .sign(Algorithm.HMAC512(JwtProperties.SECRET));
-    }
-
 }

@@ -1,6 +1,9 @@
 package com.shop.onlyfit.controller;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.shop.onlyfit.auth.jwt.JwtProperties;
+import com.shop.onlyfit.auth.jwt.JwtTokenProvider;
 import com.shop.onlyfit.auth.jwt.JwtTokenUtil;
 import com.shop.onlyfit.domain.User;
 import com.shop.onlyfit.dto.Login;
@@ -8,6 +11,7 @@ import com.shop.onlyfit.dto.MarketInfoDto;
 import com.shop.onlyfit.dto.user.UserInfoDto;
 import com.shop.onlyfit.service.AuthService;
 import com.shop.onlyfit.service.MileageServiceImpl;
+import com.shop.onlyfit.service.RedisService;
 import com.shop.onlyfit.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +28,9 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
+import java.util.Base64;
+import java.util.Date;
+import java.util.Objects;
 
 @Controller
 @RequiredArgsConstructor
@@ -32,6 +39,8 @@ public class LoginController {
     private final MileageServiceImpl mileageService;
     private final AuthService authService;
     private final JwtTokenUtil jwtTokenUtil;
+    private final RedisService redisService;
+    private final JwtTokenProvider tokenProvider;
 
     @GetMapping("/main/login")
     public String login(@AuthenticationPrincipal UserDetails userDetails, HttpServletResponse response) {
@@ -48,8 +57,50 @@ public class LoginController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
             new SecurityContextLogoutHandler().logout(request, response, authentication);
+            logoutToken(request, response);
         }
         return "redirect:/main/index";
+    }
+
+    public void logoutToken(HttpServletRequest request, HttpServletResponse response) {
+
+        String token = tokenProvider.getTokenFromRequest(request);
+
+        Base64.Decoder decoder = Base64.getDecoder();
+        final String[] splitJwt = Objects.requireNonNull(token).split("\\.");
+        final String payloadStr = new String(decoder.decode(splitJwt[1].getBytes()));
+
+        Long userId = getUserIdFromToken(payloadStr);
+        Date expirationDate = getDateExpFromToken(payloadStr);
+        System.out.println("아이디  " + userId + "시간:  " + expirationDate);
+        redisService.saveToken(token, userId, expirationDate);
+        clearCookie(JwtProperties.HEADER_STRING, request, response);
+    }
+
+    public Long getUserIdFromToken(String payloadStr) {
+        JsonObject jsonObject = new Gson().fromJson(payloadStr, JsonObject.class);
+        return jsonObject.get("id").getAsLong();
+    }
+
+    public Date getDateExpFromToken(String payloadStr) {
+        JsonObject jsonObject = new Gson().fromJson(payloadStr, JsonObject.class);
+        long exp = jsonObject.get("exp").getAsLong();
+        return new Date(exp * 1000);
+    }
+
+    public void clearCookie(String cookieName, HttpServletRequest request, HttpServletResponse response) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(cookieName)) {
+                    cookie.setMaxAge(0); // 쿠키의 만료시간을 0으로 설정하여 삭제
+                    cookie.setHttpOnly(true); // HttpOnly 설정
+                    cookie.setPath("/");
+                    response.addCookie(cookie);
+                    break;
+                }
+            }
+        }
     }
 
     @GetMapping("main/join")
@@ -125,7 +176,7 @@ public class LoginController {
         try {
             String accessToken = authService.getAccessToken(code, redirectUri, clientId);
             User authenticatedUser = authService.getAuthenticatedUser(accessToken);
-            String JwtToken = authService.createToken(authenticatedUser);
+            String JwtToken = tokenProvider.createToken(authenticatedUser);
 
             Cookie jwtCookie = createJwtCookie(authenticatedUser, JwtToken);
 
@@ -152,7 +203,6 @@ public class LoginController {
 
         final String JwtToken = jwtTokenUtil.generateToken(authenticatedUser);
 
-
         Cookie jwtCookie = createJwtCookie(authenticatedUser, JwtToken);
 
         response.addCookie(jwtCookie);
@@ -165,7 +215,6 @@ public class LoginController {
         Authentication auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(auth);
         jwtToken = JwtProperties.TOKEN_PREFIX.trim() + jwtToken;
-        System.out.println("토큰은?" + jwtToken);
         Cookie jwtCookie = new Cookie("Authorization", jwtToken);
         jwtCookie.setHttpOnly(true);
         jwtCookie.setMaxAge(JwtProperties.EXPIRATION_TIME);

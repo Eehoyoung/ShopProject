@@ -1,9 +1,8 @@
 package com.shop.onlyfit.auth.jwt;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.shop.onlyfit.service.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -12,7 +11,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -23,6 +21,9 @@ import java.util.Arrays;
 @Slf4j
 public class JwtRequestFilter extends OncePerRequestFilter {
 
+    private final RedisService redisService;
+    private final JwtTokenProvider jwtTokenProvider; // JwtTokenProvider 추가
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull FilterChain filterChain) throws ServletException, IOException {
         String servletPath = request.getServletPath();
@@ -32,17 +33,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             return;
         }
 
+        String jwtHeader = jwtTokenProvider.getTokenFromRequest(request);
 
-        String jwtHeader = null;
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (JwtProperties.HEADER_STRING.equals(cookie.getName())) {
-                    jwtHeader = cookie.getValue();
-                    break;
-                }
-            }
-        }
 
         // header 가 정상 비정상 ?
         if (jwtHeader == null || !jwtHeader.startsWith(JwtProperties.TOKEN_PREFIX)) {
@@ -53,11 +45,17 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         // jwt 토큰을 검증 정상 사용자 확인
         String token = jwtHeader.replace(JwtProperties.TOKEN_PREFIX, "").trim();
 
-        Long userCode = null;
+        Boolean isTokenRevokedOrExpired = redisService.isTokenExpired(token); // Redis 저장된 토큰 확인
 
+        if (isTokenRevokedOrExpired) { // 전환된 토큰이거나 토큰 만료된 경우
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "전환된 토큰 또는 만료된 토큰입니다.");
+            return;
+        }
+
+
+        Long userCode = null;
         try {
-            userCode = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(token)
-                    .getClaim("id").asLong();
+            userCode = jwtTokenProvider.getUserIdFromToken(jwtHeader);
 
         } catch (TokenExpiredException e) {
             e.getStackTrace();

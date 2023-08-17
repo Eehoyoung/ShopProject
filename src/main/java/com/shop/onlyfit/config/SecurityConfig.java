@@ -2,7 +2,9 @@ package com.shop.onlyfit.config;
 
 import com.shop.onlyfit.auth.jwt.JwtAuthenticationEntryPoint;
 import com.shop.onlyfit.auth.jwt.JwtRequestFilter;
+import com.shop.onlyfit.auth.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,7 +25,8 @@ public class SecurityConfig {
 
     private final JwtRequestFilter jwtRequestFilter;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider; // JwtTokenProvider를 주입하도록 수정
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
