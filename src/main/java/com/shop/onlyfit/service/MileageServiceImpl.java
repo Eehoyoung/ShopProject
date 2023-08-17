@@ -9,8 +9,12 @@ import com.shop.onlyfit.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -18,8 +22,6 @@ public class MileageServiceImpl implements MileageService {
 
     private final UserRepository userRepository;
     private final MileageRepository mileageRepository;
-
-
     @Override
     @Transactional
     public Long joinMileage(Long userId) {
@@ -79,5 +81,18 @@ public class MileageServiceImpl implements MileageService {
         mileagePageDto.setHomeEndPage(homeEndPage);
 
         return mileagePageDto;
+    }
+
+    @Scheduled(cron = "0 0 0 * * *")
+    public void birthMileage() {
+        LocalDate now = LocalDate.now();
+        List<User> userList = userRepository.findByBirthday(now);
+        for (User user : userList) {
+            Mileage mileage = new Mileage();
+            mileage.setMileageContent("생일을 축하 합니다.");
+            mileage.setMileagePrice(5000);
+            mileage.setUser(user);
+            mileageRepository.save(mileage);
+        }
     }
 }

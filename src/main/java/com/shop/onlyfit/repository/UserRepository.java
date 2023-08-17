@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -24,4 +26,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT m.visitCount FROM Market m WHERE m.marketId = :marketId")
     int visitCountResultByMarketId(@Param("marketId") Long marketId);
+
+    List<User> findByBirthday(LocalDate now);
 }
