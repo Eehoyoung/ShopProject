@@ -37,4 +37,7 @@ public interface UserService {
 
     void changeUserGradeToSeller(Long id);
 
+    String findLoginId(String name, String phoneNum);
+
+    boolean resetPassword(String userId, String name, String phoneNum, String newPassword);
 }

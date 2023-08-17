@@ -23,10 +23,12 @@ public class User extends BaseTimeEntity {
     @Column(name = "user_id")
     private Long id;
 
+    @Column
     private String loginId;
 
     private String password;
 
+    @Column
     private String name;
 
     private String sex;
@@ -45,6 +47,7 @@ public class User extends BaseTimeEntity {
 
     private int orderCount;
 
+    @Column
     private String phoneNumber;
 
     @Nullable

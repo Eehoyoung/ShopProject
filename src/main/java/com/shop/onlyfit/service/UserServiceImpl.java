@@ -227,6 +227,24 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         userRepository.save(user);
     }
 
+    @Override
+    public String findLoginId(String name, String phoneNum) {
+        String queryPhoneNum = phoneNum.substring(0, 3) + "," + phoneNum.substring(3, 7) + "," + phoneNum.substring(7, 11);
+        return userRepository.findByFindLoginId(name, queryPhoneNum);
+    }
+
+    @Override
+    public boolean resetPassword(String userId, String name, String phoneNum, String newPassword) {
+        Long flag = userRepository.checkUserInfo(userId, name, phoneNum);
+        if (flag > 0) {
+            User user = new User();
+            user.setPassword(encoder.encode(newPassword));
+            userRepository.save(user);
+            return true;
+        }
+        return false;
+    }
+
     private String changePhoneNumFormat(String phoneNum) {
         if (phoneNum.length() != 11) {
             return phoneNum;

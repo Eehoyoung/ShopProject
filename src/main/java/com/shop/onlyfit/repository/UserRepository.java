@@ -28,4 +28,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     int visitCountResultByMarketId(@Param("marketId") Long marketId);
 
     List<User> findByBirthday(LocalDate now);
+
+    @Query("select u.loginId from User u where u.name = :name and u.phoneNumber like :phoneNum")
+    String findByFindLoginId(@Param("name") String name, @Param("phoneNum") String phoneNum);
+
+    @Query("select u.id from User u where u.loginId = :loginId and u.name = :name and u.phoneNumber = :phoneNum")
+    Long checkUserInfo(@Param("loginId") String loginId, @Param("name") String name, @Param("phoneNum") String phoneNum);
 }

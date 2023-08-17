@@ -6,6 +6,8 @@ import com.shop.onlyfit.auth.jwt.JwtProperties;
 import com.shop.onlyfit.auth.jwt.JwtTokenProvider;
 import com.shop.onlyfit.auth.jwt.JwtTokenUtil;
 import com.shop.onlyfit.domain.User;
+import com.shop.onlyfit.dto.FindIdRep;
+import com.shop.onlyfit.dto.FindIdReq;
 import com.shop.onlyfit.dto.Login;
 import com.shop.onlyfit.dto.MarketInfoDto;
 import com.shop.onlyfit.dto.user.UserInfoDto;
@@ -28,9 +30,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
-import java.util.Base64;
-import java.util.Date;
-import java.util.Objects;
+import java.util.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -227,5 +227,33 @@ public class LoginController {
     @ResponseBody
     public String getUser(Principal principal) {
         return principal.getName();
+    }
+
+    @PostMapping("/findId")
+    @ResponseBody
+    public ResponseEntity<?> findId(@RequestBody FindIdReq findIdReq) {
+        String loginId = userService.findLoginId(findIdReq.getName(), findIdReq.getPhoneNum());
+        System.out.println("못찾아?   " + loginId);
+        if (loginId != null) {
+            return ResponseEntity.ok(new FindIdRep(loginId));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PostMapping("/api/password-reset")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> passwordReset(@RequestBody Map<String, String> requestData) {
+        String userId = requestData.get("userId");
+        String name = requestData.get("name");
+        String phoneNum = requestData.get("phoneNum");
+        String newPassword = requestData.get("newPassword");
+
+        boolean success = userService.resetPassword(userId, name, phoneNum, newPassword);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", success);
+
+        return ResponseEntity.ok(response);
     }
 }
