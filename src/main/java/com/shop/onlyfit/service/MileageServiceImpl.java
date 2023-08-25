@@ -25,7 +25,7 @@ public class MileageServiceImpl implements MileageService {
 
     @Override
     @Transactional
-    public Long joinMileage(Long userId) {
+    public void joinMileage(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new LoginIdNotFoundException("사용자를 찾을 수 없습니다.")
         );
@@ -36,7 +36,6 @@ public class MileageServiceImpl implements MileageService {
 
         mileageRepository.save(mileage);
 
-        return mileage.getId();
     }
 
     @Override

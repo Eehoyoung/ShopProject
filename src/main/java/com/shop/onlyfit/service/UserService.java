@@ -15,10 +15,6 @@ public interface UserService {
 
     boolean checkId(String loginId);
 
-    User checkUsername(String username);
-
-    int saveUser(User user);
-
     User findByLoginId(String loginId);
 
     Optional<User> loadUserByLoginId(String loginId);
@@ -40,10 +36,6 @@ public interface UserService {
     String findLoginId(String name, String phoneNum);
 
     boolean resetPassword(String userId, String name, String phoneNum, String newPassword);
-
-    boolean userStatus(Long userId);
-
-    User validateVerifyUser(Long userId);
 
     Long getUserId(String loginId);
 }

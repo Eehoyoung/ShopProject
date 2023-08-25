@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     @Transactional(readOnly = true)
     public boolean checkId(String loginId) {
-        Optional<User> findUser = userRepository.findbyusernameorloginid(null, loginId);
+        Optional<User> findUser = userRepository.findByUsernameOrLoginId(null, loginId);
         return findUser.isPresent();
     }
 
@@ -64,32 +64,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return findMarket.isPresent();
     }
 
-    @Override
-    @Transactional
-    public User checkUsername(String username) {
-
-        return userRepository.findbyusernameorloginid(username, null).orElseGet(User::new);
-    }
-
-    @Override
-    @Transactional
-    public int saveUser(User user) {
-        try {
-            String rawPassword = user.getPassword();
-            String encPassword = encoder.encode(rawPassword);
-            user.setPhoneNumber(changePhoneNumFormat(user.getPhoneNumber()));
-            user.setPassword(encPassword);
-            if (!user.getName().startsWith("kakao_")) {
-                user.setLoginType(LoginType.ORIGIN);
-            }
-            user.setUserGrade(UserGrade.USER);
-            userRepository.save(user);
-        } catch (Exception e) {
-            e.getStackTrace();
-            return -1;
-        }
-        return 1;
-    }
 
     public User findByUserId(Long id) {
         return userRepository.findById(id).orElseThrow(
@@ -99,7 +73,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public User findByLoginId(String loginId) {
-        return userRepository.findbyusernameorloginid(loginId, loginId).orElseThrow(
+        return userRepository.findByUsernameOrLoginId(loginId, loginId).orElseThrow(
                 () -> new UsernameNotFoundException("해당 유저를 찾을 수 없습니다.")
         );
     }
@@ -251,12 +225,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return false;
     }
 
-    @Override
-    @Transactional
-    public boolean userStatus(Long userId) {
-        Optional<User> user = userRepository.findById(userId);
-        return user.isPresent();
-    }
 
     private String changePhoneNumFormat(String phoneNum) {
         if (phoneNum.length() != 11) {
@@ -269,7 +237,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Transactional
     @Override
     public UserDetails loadUserByUsername(String identifier) throws UsernameNotFoundException {
-        User userEntity = userRepository.findbyusernameorloginid(identifier, identifier)
+        User userEntity = userRepository.findByUsernameOrLoginId(identifier, identifier)
                 .orElseThrow(() -> new UsernameNotFoundException("해당 유저를 찾을 수 없습니다."));
 
         List<GrantedAuthority> authorities = new ArrayList<>();
@@ -289,13 +257,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         userEntity.setVisitCount(++visitCount);
 
         return new org.springframework.security.core.userdetails.User(userEntity.getLoginId(), userEntity.getPassword(), authorities);
-    }
-
-    @Override
-    public User validateVerifyUser(Long userId) {
-        return userRepository.findById(userId).orElseThrow(
-                () -> new UsernameNotFoundException("회원을 찾을 수 없습니다.")
-        );
     }
 
     @Override

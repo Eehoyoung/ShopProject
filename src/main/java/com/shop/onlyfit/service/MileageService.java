@@ -5,7 +5,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface MileageService {
 
-    Long joinMileage(Long userId);
+    void joinMileage(Long userId);
 
     int getTotalMileage(String loginId);
 

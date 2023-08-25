@@ -3,7 +3,6 @@ package com.shop.onlyfit.service;
 import com.shop.onlyfit.domain.Item;
 import com.shop.onlyfit.domain.SearchItem;
 import com.shop.onlyfit.domain.SearchOrder;
-import com.shop.onlyfit.domain.User;
 import com.shop.onlyfit.domain.type.OrderStatus;
 import com.shop.onlyfit.domain.type.PostCompany;
 import com.shop.onlyfit.dto.OrderDto;
@@ -14,13 +13,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface MarketService {
-    Page<User> findAllMemberByOrderByCreatedAt(Pageable pageable);
-
-    Page<ItemDto> findAllItem(Pageable pageable);
-
-    Page<OrderDto> findAllOrder(Pageable pageable);
-
-    int getVisitCount();
 
     Long getMaxItemIdx();
 
@@ -40,12 +32,11 @@ public interface MarketService {
 
     Page<OrderDto> findAllOrderByMarketId(Long marketId, Pageable pageable);
 
-
     int getVisitCountByMarketId(Long marketId);
 
     OrderPageDto findAllOrderByPaging(Long marketId, Pageable pageable);
 
     OrderPageDto findAllOrderByConditionByPaging(Long marketId, SearchOrder searchOrder, Pageable pageable);
 
-    Long changeOrderStatus(Long id, OrderStatus status, PostCompany postCompany, String postNumber);
+    void changeOrderStatus(Long id, OrderStatus status, PostCompany postCompany, String postNumber);
 }

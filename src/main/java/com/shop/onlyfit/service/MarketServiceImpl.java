@@ -29,26 +29,6 @@ public class MarketServiceImpl implements MarketService {
     private final MarketRepository marketRepository;
 
     @Override
-    public Page<User> findAllMemberByOrderByCreatedAt(Pageable pageable) {
-        return userRepository.findAllByOrderByCreatedAt(pageable);
-    }
-
-    @Override
-    public Page<ItemDto> findAllItem(Pageable pageable) {
-        return itemRepository.searchAllItem(pageable);
-    }
-
-    @Override
-    public Page<OrderDto> findAllOrder(Pageable pageable) {
-        return orderRepository.searchAllOrder(pageable);
-    }
-
-    @Override
-    public int getVisitCount() {
-        return userRepository.visitCountResult();
-    }
-
-    @Override
     public Long getMaxItemIdx() {
         return itemRepository.searchMaxItemIdx();
     }
@@ -155,7 +135,7 @@ public class MarketServiceImpl implements MarketService {
 
     @Override
     @Transactional
-    public Long changeOrderStatus(Long id, OrderStatus status, PostCompany postCompany, String postNumber) {
+    public void changeOrderStatus(Long id, OrderStatus status, PostCompany postCompany, String postNumber) {
         Optional<OrderItem> findOrderItem = orderItemRepository.findById(id);
         OrderItem checkedOrderItem = new OrderItem();
         if (findOrderItem.isPresent()) {
@@ -165,6 +145,5 @@ public class MarketServiceImpl implements MarketService {
         checkedOrderItem.setPostCompany(postCompany);
         checkedOrderItem.setPostNumber(postNumber);
 
-        return checkedOrderItem.getId();
     }
 }

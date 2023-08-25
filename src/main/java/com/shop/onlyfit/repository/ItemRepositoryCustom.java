@@ -10,8 +10,6 @@ import java.util.List;
 
 public interface ItemRepositoryCustom {
 
-    Page<ItemDto> searchAllItem(Pageable pageable);
-
     Page<ItemDto> searchAllItemByCondition(String loginId, SearchItem searchItem, Pageable pageable);
 
     Page<ItemDto> findAllItem(Pageable pageable, String firstCategory, String secondCategory);

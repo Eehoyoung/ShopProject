@@ -31,40 +31,12 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
 
     @Override
     public Long getLatestItemIdx() {
-        Long latestItemIdx = queryFactory
+
+        return queryFactory
                 .select(QItem.item.itemIdx)
                 .from(QItem.item)
                 .orderBy(QItem.item.itemIdx.desc())
                 .fetchFirst();
-
-        return latestItemIdx;
-    }
-
-    @Override
-    public Page<ItemDto> searchAllItem(Pageable pageable) {
-        QueryResults<ItemDto> results = queryFactory
-                .select(new QItemDto(
-                        QItem.item.id,
-                        QItem.item.itemName,
-                        QItem.item.firstCategory,
-                        QItem.item.price,
-                        QItem.item.saleStatus,
-                        QItem.item.imgUrl,
-                        QItem.item.color,
-                        QItem.item.rep,
-                        QItem.item.itemIdx
-                ))
-                .from(QItem.item)
-                .where(QItem.item.rep.eq(true))
-                .orderBy(QItem.item.id.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetchResults();
-
-        List<ItemDto> content = results.getResults();
-        long total = results.getTotal();
-
-        return new PageImpl<>(content, pageable, total);
     }
 
     @Override
