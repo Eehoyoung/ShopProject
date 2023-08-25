@@ -22,6 +22,7 @@ public class MileageServiceImpl implements MileageService {
 
     private final UserRepository userRepository;
     private final MileageRepository mileageRepository;
+
     @Override
     @Transactional
     public Long joinMileage(Long userId) {

@@ -121,10 +121,13 @@
         </div>
     </div>
 
-    <button class="custom-sm-btn float-right" id="btn-write"
-            th:classappend="${principal == null ? 'isNotMine' : (principal.username == null ? 'isNotMine' : 'isMine')}">
-        글쓰기
-    </button>
+    <div class="write-button-container">
+        <button class="btn enlarged" id="btn-write"
+                th:classappend="${principal == null ? 'isNotMine' : (principal.username == null ? 'isNotMine' : 'isMine')}">
+            글쓰기
+        </button>
+    </div>
+
 
 </section>
 <nav th:replace="main/layout/nav :: main_navFragment">

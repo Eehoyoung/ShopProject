@@ -13,6 +13,15 @@ h2::after {
     border-color: #ddd;
 }
 
+.write-button-container {
+    display: flex;
+    justify-content: center;
+}
+
+.btn.enlarged {
+    transform: scale(1.2);
+}
+
 .btn-default {
     color: #838383;
     background-color: transparent;

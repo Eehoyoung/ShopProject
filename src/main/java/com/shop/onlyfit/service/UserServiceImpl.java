@@ -34,11 +34,19 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final MarketRepository marketRepository;
     private final BCryptPasswordEncoder encoder;
 
+    public String getUserName(String loginId) {
+        return userRepository.findUserNameByLoginId(loginId);
+    }
+
+    public String getUserNameByUserCode(Long userId) {
+        return userRepository.findUserNameByUserId(userId);
+    }
+
+
     @Override
     @Transactional
     public Long joinUser(UserInfoDto userInfoDto) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        userInfoDto.setPassword(passwordEncoder.encode(userInfoDto.getPassword()));
+        userInfoDto.setPassword(encoder.encode(userInfoDto.getPassword()));
         userInfoDto.setLoginType(LoginType.ORIGIN);
         return userRepository.save(userInfoDto.toEntity()).getId();
     }
@@ -175,7 +183,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Transactional
     @Override
     public void updateProfile(String loginId, ProfileDto profileDto) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
         User findUser = userRepository.findByLoginId(loginId).orElseThrow(
                 () -> new LoginIdNotFoundException("해당 유저를 찾을 수 없습니다.")
@@ -183,16 +190,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         String homePhoneNumberResult = profileDto.getHomePhoneNumber()[0] + "," + profileDto.getHomePhoneNumber()[1] + "," + profileDto.getHomePhoneNumber()[2];
         String phoneNumberResult = profileDto.getPhoneNumber()[0] + "," + profileDto.getPhoneNumber()[1] + "," + profileDto.getPhoneNumber()[2];
-        UserAddress memberAddress = new UserAddress(profileDto.getCity(), profileDto.getStreet(), profileDto.getZipcode());
+        UserAddress userAddress = new UserAddress(profileDto.getCity(), profileDto.getStreet(), profileDto.getZipcode());
 
         findUser.setName(profileDto.getName());
         findUser.setLoginId(profileDto.getLoginId());
-        findUser.setPassword(passwordEncoder.encode(profileDto.getPassword()));
+        findUser.setPassword(encoder.encode(profileDto.getPassword()));
 
         findUser.setHomePhoneNumber(homePhoneNumberResult);
         findUser.setPhoneNumber(phoneNumberResult);
         findUser.setEmail(profileDto.getEmail());
-        findUser.setUserAddress(memberAddress);
+        findUser.setUserAddress(userAddress);
     }
 
     @Override
@@ -229,8 +236,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public String findLoginId(String name, String phoneNum) {
-        String queryPhoneNum = phoneNum.substring(0, 3) + "," + phoneNum.substring(3, 7) + "," + phoneNum.substring(7, 11);
-        return userRepository.findByFindLoginId(name, queryPhoneNum);
+        return userRepository.findByFindLoginId(name, changePhoneNumFormat(phoneNum));
     }
 
     @Override
@@ -243,6 +249,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    @Transactional
+    public boolean userStatus(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        return user.isPresent();
     }
 
     private String changePhoneNumFormat(String phoneNum) {
@@ -276,5 +289,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         userEntity.setVisitCount(++visitCount);
 
         return new org.springframework.security.core.userdetails.User(userEntity.getLoginId(), userEntity.getPassword(), authorities);
+    }
+
+    @Override
+    public User validateVerifyUser(Long userId) {
+        return userRepository.findById(userId).orElseThrow(
+                () -> new UsernameNotFoundException("회원을 찾을 수 없습니다.")
+        );
+    }
+
+    @Override
+    public Long getUserId(String loginId) {
+        return userRepository.findUserId(loginId);
     }
 }

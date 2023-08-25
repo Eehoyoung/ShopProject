@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>채팅방</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <style>
+        .message {
+            margin: 10px;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .message.user1 {
+            background-color: #d0e5f2;
+            align-self: flex-start; /* 왼쪽 정렬 */
+        }
+
+        .message.user2 {
+            background-color: #f2d0d0;
+            align-self: flex-end; /* 오른쪽 정렬 */
+        }
+
+        #message-input input[type="text"] {
+            width: 80%; /* 너비 조절 */
+            height: 30px; /* 높이 조절 */
+            padding: 5px; /* 안쪽 여백 추가 */
+            font-size: 16px; /* 글자 크기 조절 */
+        }
+
+        /* 전송 버튼 스타일 */
+        #send-button {
+            width: 20%; /* 너비 조절 */
+            height: 40px; /* 높이 조절 */
+            font-size: 16px; /* 글자 크기 조절 */
+            margin-left: 10px;
+            background-color: rgba(242, 255, 138, 0.9);
+        }
+
+        #message-input {
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+<div id="chat-room">
+    <h2>채팅방</h2>
+
+    <!-- 이전 채팅 기록 보여주기 -->
+    <div id="previous-messages">
+        <ul id="messages"></ul>
+    </div>
+
+    <!-- 새로운 메시지 작성 -->
+    <div id="message-input">
+        <input id="roomId" th:value="${roomId}" type="hidden"/>
+        <input id="username" th:value="${username}" type="hidden"/>
+        <input id="userId" th:value="${userId}" type="hidden"/>
+        <label for="message"></label><input id="message" placeholder="메시지를 입력해주세요" type="text"/>
+        <button id="send-button"> 전송</button>
+    </div>
+</div>
+
+<script>
+
+    let roomId = $("#roomId").val();
+    let username = $("#username").val();
+
+    function renderMessage(message) {
+        const li = document.createElement("li");
+        const senderName = message.sender ? message.sender.nickName : message.nickName;
+
+        if (isCurrentUser(senderName)) {
+            li.className = "message user1";
+        } else {
+            li.className = "message user2";
+        }
+
+        li.innerHTML = `<strong>${senderName}</strong>(${message.sendTime}): ${message.content}`;
+        return li;
+    }
+
+    function isCurrentUser(senderName) {
+        return senderName === username;
+    }
+
+    function renderPreviousMessages(messages) {
+        const ul = document.getElementById("messages");
+        ul.innerHTML = "";
+        messages.forEach((message) => {
+            ul.appendChild(renderMessage(message));
+        });
+    }
+
+    fetch(`/room/${roomId}/messages`)
+        .then((response) => response.json())
+        .then((result) => {
+            if (result.success) {
+                renderPreviousMessages(result.data);
+            } else {
+                alert(result.message);
+            }
+        });
+
+    const sock = new SockJS("http://localhost:8080/ws"); // "/ws" 경로 사용
+
+    let stompClient = Stomp.over(sock);
+
+    stompClient.connect({}, function () {
+        stompClient.subscribe('/sub/chat/room/' + roomId, function (message) {
+            const messageElement = renderMessage(JSON.parse(message.body));
+            const ul = document.getElementById("messages");
+            ul.appendChild(messageElement);
+            ul.scrollTop = ul.scrollHeight;
+        });
+    });
+
+    const sendButton = document.getElementById("send-button");
+
+    sendButton.onclick = () => {
+        let userId = $("#userId").val();
+        const messageInput = document.getElementById("message");
+        const content = messageInput.value.trim();
+
+        if (!content) return;
+
+        const payload = {
+            roomId: Number(roomId),
+            senderId: Number(userId),
+            nickName: username,
+            content: content
+        };
+
+        stompClient.send("/pub/chat/" + roomId, {}, JSON.stringify(payload));
+
+        messageInput.value = "";
+        messageInput.focus();
+    };
+
+    const messageInput = document.getElementById("message");
+
+    messageInput.addEventListener("keypress", function (event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            sendButton.click();
+        }
+    });
+</script>
+</body>
+</html>
+

@@ -21,6 +21,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Page<User> findAllByOrderByCreatedAt(Pageable pageable);
 
+    @Query("select u.id FROM User u where u.loginId = :loginId")
+    Long findUserId(@Param("loginId") String LoginId);
+
     @Query("select sum(u.visitCount) from User u")
     int visitCountResult();
 
@@ -34,4 +37,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("select u.id from User u where u.loginId = :loginId and u.name = :name and u.phoneNumber = :phoneNum")
     Long checkUserInfo(@Param("loginId") String loginId, @Param("name") String name, @Param("phoneNum") String phoneNum);
+
+    @Query("select u from User u where u.userGrade = 'ADMIN'")
+    Optional<User> findAdmin();
+
+    @Query("select u.name from User u where u.loginId = :loginId")
+    String findUserNameByLoginId(@Param("loginId") String loginId);
+
+    @Query("select u.name from User u where u.id = :userId")
+    String findUserNameByUserId(@Param("userId") Long userId);
 }

@@ -233,7 +233,6 @@ public class LoginController {
     @ResponseBody
     public ResponseEntity<?> findId(@RequestBody FindIdReq findIdReq) {
         String loginId = userService.findLoginId(findIdReq.getName(), findIdReq.getPhoneNum());
-        System.out.println("못찾아?   " + loginId);
         if (loginId != null) {
             return ResponseEntity.ok(new FindIdRep(loginId));
         } else {
@@ -241,7 +240,7 @@ public class LoginController {
         }
     }
 
-    @PostMapping("/api/password-reset")
+    @PostMapping("/password-reset")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> passwordReset(@RequestBody Map<String, String> requestData) {
         String userId = requestData.get("userId");

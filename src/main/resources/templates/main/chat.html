@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <title>채팅방 생성하기</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+<h1>채팅 시작하기</h1>
+<form action="#" method="post" th:action="@{/room}">
+    <input th:field="*{userId}" th:value="${userId}" type="hidden"/>
+    <button type="submit">채팅 시작</button>
+</form>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    //폼 전송 처리
+    $("form").submit(function (event) {
+        event.preventDefault();
+        var form = $(this);
+        $.ajax({
+            type: "POST",
+            url: form.prop("action"),
+            data: JSON.stringify({"userId": ${userId}}),
+            contentType: "application/json; charset=UTF-8",
+            success: function (response) {
+                window.location.href = "/chat/room/" + response; // roomId를 반환받고, 채팅방 페이지로 리다이렉트합니다.
+            },
+            error: function (error) {
+                alert("채팅방 생성에 실패하였습니다.");
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

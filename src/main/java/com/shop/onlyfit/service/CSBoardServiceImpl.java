@@ -49,7 +49,7 @@ public class CSBoardServiceImpl implements CSBoardService {
     @Override
     @Transactional(readOnly = true)
     public CustomServiceBoard findCSboardByid(int id) {
-        return csBoardRepository.findById(id).orElseThrow(() -> new RuntimeException("해당 게시글를 찾을 수 없습니다."));
+        return getOrElseThrow(id);
     }
 
     @Override
@@ -61,9 +61,7 @@ public class CSBoardServiceImpl implements CSBoardService {
     @Override
     @Transactional
     public boolean updateCsBoard(CustomServiceBoard board) {
-        CustomServiceBoard oldBoard = csBoardRepository.findById(board.getId()).orElseThrow(
-                () -> new RuntimeException("해당 게시글를 찾을 수 없습니다.")
-        );
+        CustomServiceBoard oldBoard = getOrElseThrow(board.getId());
         oldBoard.setTitle(board.getTitle());
         oldBoard.setContent(board.getContent());
         oldBoard.setSecret(board.getSecret());
@@ -79,9 +77,7 @@ public class CSBoardServiceImpl implements CSBoardService {
     @Override
     @Transactional
     public CustomServiceReply saveReply(CustomServiceReply customServiceReply, int id) {
-        CustomServiceBoard targetBoard = csBoardRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("해당 게시글를 찾을 수 없습니다.")
-        );
+        CustomServiceBoard targetBoard = getOrElseThrow(id);
         customServiceReply.setCustomServiceBoard(targetBoard);
         csReplyRepository.save(customServiceReply);
         return customServiceReply;
@@ -91,5 +87,11 @@ public class CSBoardServiceImpl implements CSBoardService {
     @Transactional
     public void deleteReply(int id) {
         csReplyRepository.deleteById(id);
+    }
+
+    public CustomServiceBoard getOrElseThrow(int id) {
+        return csBoardRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("Not Fount bulletin")
+        );
     }
 }
