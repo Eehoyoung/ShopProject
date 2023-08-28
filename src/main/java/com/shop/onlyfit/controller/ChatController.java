@@ -1,5 +1,6 @@
 package com.shop.onlyfit.controller;
 
+import com.shop.onlyfit.domain.PublishMessage;
 import com.shop.onlyfit.dto.ChatDto;
 import com.shop.onlyfit.dto.MessageDto;
 import com.shop.onlyfit.dto.MultiResponseDto;
@@ -8,6 +9,8 @@ import com.shop.onlyfit.service.ChatServiceImpl;
 import com.shop.onlyfit.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -16,7 +19,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.security.Principal;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -28,6 +33,10 @@ public class ChatController {
     private final ChatServiceImpl chatRoomService;
     private final UserServiceImpl userService;
     private final SimpMessagingTemplate messagingTemplate;
+    private final ChannelTopic topic;
+
+    @Resource(name = "chatRedisTemplate")
+    private final RedisTemplate<String, MessageDto> chatRedisTemplate;
 
     @PostMapping("/room")
     @ResponseBody
@@ -48,7 +57,7 @@ public class ChatController {
     @GetMapping("/room/{roomId}/messages")
     @ResponseBody
     public MultiResponseDto<ChatDto.MessageResponse> getPreviousMessages(@PathVariable Long roomId) {
-        List<ChatDto.MessageResponse> messages = chatRoomService.getPreviousMessages(roomId);
+        List<ChatDto.MessageResponse> messages = chatRoomService.getPreviousMessagesFromRedis(roomId);  // Redis에서 메시지를 가져옴
 
         boolean success = true;
 
@@ -61,17 +70,30 @@ public class ChatController {
         return response;
     }
 
-    // 클라이언트로부터 메시지 받아서 다시 브로드캐스트하는 메소드
+
     @MessageMapping("/chat/{roomId}")
     @ResponseBody
     public void broadcastMessage(@DestinationVariable("roomId") Long roomId, @RequestBody MessageDto messageDto) {
-        chatRoomService.saveMessage(messageDto);  // 메시지를 DB에 저장
+        PublishMessage publishMessage =
+                new PublishMessage(messageDto.getRoomId(), messageDto.getSenderId(), messageDto.getContent(), LocalDateTime.now());
+
+        chatRedisTemplate.convertAndSend(topic.getTopic(), publishMessage);
 
         String nickName = userService.getUserNameByUserCode(messageDto.getSenderId());
+
         messageDto.setNickName(nickName);
+
         messageDto.setSendTime(LocalDateTime.now());
 
-        messagingTemplate.convertAndSend("/sub/chat/room/" + messageDto.getRoomId(), messageDto);  // 저장된 메시지를 다른 클라이언트에게 전송
+        String redisKey = "chatroom:" + roomId;
+
+        // Redis에 데이터 저장 (List 사용)
+        chatRedisTemplate.opsForList().rightPush(redisKey, messageDto);
+
+        // TTL 설정 (72 hours)
+        chatRedisTemplate.expire(redisKey, Duration.ofHours(72));
+
+        messagingTemplate.convertAndSend("/sub/chat/room/" + messageDto.getRoomId(), messageDto);
     }
 
 }

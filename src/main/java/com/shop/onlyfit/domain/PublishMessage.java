@@ -1,9 +1,12 @@
-package com.shop.onlyfit.dto;
+package com.shop.onlyfit.domain;
 
-
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -12,12 +15,9 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter
-@Setter
-@Builder
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class MessageDto implements Serializable {
+public class PublishMessage implements Serializable {
     @Serial
     private static final long serialVersionUID = 2082503192322391880L;
     @NotNull
@@ -25,12 +25,9 @@ public class MessageDto implements Serializable {
     @NotNull
     private Long senderId;
     @NotBlank
-    private String nickName;  // Add this line to include the nickname in the message.
-    @NotBlank
     private String content;
-
     @JsonSerialize(using = LocalDateTimeSerializer.class)
-    private LocalDateTime sendTime;
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    private LocalDateTime createdAt;
 
 }
-

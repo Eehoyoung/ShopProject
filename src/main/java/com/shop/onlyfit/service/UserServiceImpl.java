@@ -321,4 +321,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public void deleteById(Long id) {
         userRepository.deleteById(id);
     }
+
+    @Override
+    public User getUserById(Long senderId) {
+        return userRepository.findById(senderId).orElseThrow(
+                () -> new RuntimeException("회원을 찾을 수 없습니다.")
+        );
+    }
 }

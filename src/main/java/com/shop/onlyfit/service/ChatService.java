@@ -1,6 +1,7 @@
 package com.shop.onlyfit.service;
 
 import com.shop.onlyfit.domain.SearchChat;
+import com.shop.onlyfit.domain.chat.ChatRoom;
 import com.shop.onlyfit.dto.ChatDslDto;
 import com.shop.onlyfit.dto.ChatDto;
 import com.shop.onlyfit.dto.ChatPageDto;
@@ -28,4 +29,9 @@ public interface ChatService {
     ChatPageDto findAllChatByConditionByPaging(SearchChat searchChat, Pageable pageable);
 
     void deleteById(Long id);
+
+    List<ChatDto.MessageResponse> getPreviousMessagesFromRedis(Long roomId);
+
+    ChatRoom getChatRoomById(Long roomId);
+
 }
