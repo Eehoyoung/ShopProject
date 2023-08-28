@@ -37,4 +37,16 @@ public class OrderDto {
         this.postCompany = postCompany;
         this.postNumber = postNumber;
     }
+
+    @QueryProjection
+    public OrderDto(Long id, Long orderItemId, String name, String itemName, LocalDate orderedAt, String payment, int orderPrice, OrderStatus orderStatus) {
+        this.id = id;
+        this.orderItemId = orderItemId;
+        this.name = name;
+        this.itemName = itemName;
+        this.orderedAt = orderedAt;
+        this.payment = payment;
+        this.orderPrice = orderPrice;
+        this.orderStatus = orderStatus;
+    }
 }

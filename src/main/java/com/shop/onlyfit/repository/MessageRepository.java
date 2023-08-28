@@ -12,4 +12,5 @@ public interface MessageRepository extends JpaRepository<ChatMessage, Long> {
     @Query("select c from ChatMessage c where c.chatRoom.roomId = :roomId")
     List<ChatMessage> findByChatRoomid(@Param("roomId") Long roomId);
 
+    void deleteByChatRoom_RoomId(Long id);
 }

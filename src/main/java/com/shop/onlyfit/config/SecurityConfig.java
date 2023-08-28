@@ -56,7 +56,6 @@ public class SecurityConfig {
                 .authenticated()
                 .antMatchers("/main/index", "/main/category/**", "/main/product/**", "/auth/**", "/ws/*", "/pub/chat/**", "/sub/chat/**")
                 .permitAll()
-
                 // update this line to permit all for /ws/*, /pub/chat and /sub/chat/*
                 .and()
                 .exceptionHandling().accessDeniedPage("/main/restrict")

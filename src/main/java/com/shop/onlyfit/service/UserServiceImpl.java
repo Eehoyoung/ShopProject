@@ -1,6 +1,7 @@
 package com.shop.onlyfit.service;
 
 import com.shop.onlyfit.domain.Market;
+import com.shop.onlyfit.domain.SearchUser;
 import com.shop.onlyfit.domain.User;
 import com.shop.onlyfit.domain.UserAddress;
 import com.shop.onlyfit.domain.type.LoginType;
@@ -8,11 +9,15 @@ import com.shop.onlyfit.domain.type.UserGrade;
 import com.shop.onlyfit.dto.MarketInfoDto;
 import com.shop.onlyfit.dto.MyPageDto;
 import com.shop.onlyfit.dto.ProfileDto;
+import com.shop.onlyfit.dto.user.UserDto;
 import com.shop.onlyfit.dto.user.UserInfoDto;
+import com.shop.onlyfit.dto.user.UserPageDto;
 import com.shop.onlyfit.exception.LoginIdNotFoundException;
 import com.shop.onlyfit.repository.MarketRepository;
 import com.shop.onlyfit.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -42,6 +47,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userRepository.findUserNameByUserId(userId);
     }
 
+    @Transactional
+    @Override
+    public void changePassword(Long id, String password) {
+        User user = findByUserId(id);
+        user.setPassword(password);
+    }
 
     @Override
     @Transactional
@@ -262,5 +273,52 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public Long getUserId(String loginId) {
         return userRepository.findUserId(loginId);
+    }
+
+    @Override
+    public int getVisitCount() {
+        return userRepository.visitCountResult();
+    }
+
+    @Override
+    public UserPageDto findAllUserByPaging(Pageable pageable) {
+        UserPageDto userPageDto = new UserPageDto();
+        Page<UserDto> userBoards = userRepository.searchAll(pageable);
+        int homeStartPage = Math.max(1, userBoards.getPageable().getPageNumber());
+        int homeEndPage = Math.min(userBoards.getTotalPages(), userBoards.getPageable().getPageNumber() + 5);
+
+        userPageDto.setUserPage(userBoards);
+        userPageDto.setStartPage(homeStartPage);
+        userPageDto.setEndPage(homeEndPage);
+
+        return userPageDto;
+    }
+
+    @Override
+    public UserPageDto findAllUserByConditionByPaging(SearchUser searchUser, Pageable pageable) {
+        UserPageDto userPageDto = new UserPageDto();
+        Page<UserDto> memberBoards = userRepository.searchByCondition(searchUser, pageable);
+
+        int startPage = Math.max(1, memberBoards.getPageable().getPageNumber() - 2);
+        int endPage = Math.min(memberBoards.getTotalPages(), startPage + 4);
+
+        userPageDto.setUserPage(memberBoards);
+        userPageDto.setStartPage(startPage);
+        userPageDto.setEndPage(endPage);
+
+        return userPageDto;
+    }
+
+    @Override
+    public User findUserById(Long id) {
+        return userRepository.findById(id).orElseThrow(
+                () -> new LoginIdNotFoundException("해당하는 회원이 존재하지 않습니다")
+        );
+    }
+
+    @Override
+    @Transactional
+    public void deleteById(Long id) {
+        userRepository.deleteById(id);
     }
 }

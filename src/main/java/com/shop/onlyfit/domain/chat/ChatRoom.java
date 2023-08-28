@@ -1,6 +1,6 @@
 package com.shop.onlyfit.domain.chat;
 
-import com.shop.onlyfit.config.Auditable;
+import com.shop.onlyfit.domain.Auditable;
 import com.shop.onlyfit.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

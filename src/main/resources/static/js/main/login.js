@@ -15,7 +15,6 @@ function sendit() {
 
 $(function () {
     $("#loginForm").on("submit", function (event) {
-        alert("설마?")
         event.preventDefault();
 
         const token = $("meta[name='_csrf']").attr("content");
@@ -36,7 +35,6 @@ $(function () {
                 xhr.setRequestHeader(header, token);
             },
             success: function (cookie) {
-                alert(cookie)
                 document.cookie = `Authorization=${cookie.value};path=/;max-age=${cookie.maxAge};HttpOnly`;
                 window.location.href = "/main/index";
             },

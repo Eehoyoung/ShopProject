@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface ItemRepositoryCustom {
 
-    Page<ItemDto> searchAllItemByCondition(String loginId, SearchItem searchItem, Pageable pageable);
+    Page<ItemDto> searchAllItemByConditionMaket(String loginId, SearchItem searchItem, Pageable pageable);
 
     Page<ItemDto> findAllItem(Pageable pageable, String firstCategory, String secondCategory);
 
@@ -30,4 +30,7 @@ public interface ItemRepositoryCustom {
 
     Long getLatestItemIdx();
 
+    Page<ItemDto> searchAllItem(Pageable pageable);
+
+    Page<ItemDto> searchAllItemByCondition(SearchItem searchItem, Pageable pageable);
 }

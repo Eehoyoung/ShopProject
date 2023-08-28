@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title>admin chatList</title>
+    <script crossorigin="anonymous" src="https://kit.fontawesome.com/e6f78261b2.js"></script>
+    <script src="/js/jquery.js"></script>
+    <link href="/css/admin/admin_userlist.css" rel="stylesheet">
+    <link href="/css/admin/admin_nav.css" rel="stylesheet">
+</head>
+<body>
+<nav th:replace="admin/admin_nav :: navFragment"></nav>
+<section>
+    <form class="search-form" id="search-form" method="GET" th:action="@{/admin/chatList}">
+        <select class="search-mode search-item" form="search-form" name="searchCondition">
+            <option value="userid">아이디</option>
+            <option value="username">이름</option>
+            <!--            <option value="phone">휴대전화</option>-->
+            <!--            <option value="visit">방문횟수</option>-->
+            <!--            <option value="order">주문횟수</option>-->
+        </select>
+        <input class="search-input search-item" name="searchKeyword" type="text">
+        <input class="search-submit search-item" type="submit" value="검색">
+    </form>
+    <div class="user-box">
+        <div class="num-searched-box">
+            총 <b class="num-searched"><span th:text="${chatList.totalElements}"></span></b> 명의 회원이 검색되었습니다
+        </div>
+        <table class="user-table">
+            <thead>
+            <tr>
+                <th><input class="checkbox-selectall" type="checkbox"></th>
+                <th>회원정보</th>
+                <th>휴대전화</th>
+                <th>최초 상담 일자</th>
+                <th>최종 상담 일자</th>
+                <th>채팅 바로가기</th>
+                <th>회원 정보</th>
+                <th>채팅방 나가기</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="chat : ${chatList}">
+                <td><input class="checkbox-select" type="checkbox"></td>
+                <td th:text="${chat.sender.name} + '(' + ${chat.sender.loginId}+ ')'">이호영(test01)</td>
+                <td th:text="${#strings.replace(chat.sender.phoneNumber, ',', '-')}">010-1234-5678</td>
+                <td th:text="${#temporals.format(chat.createdAt, 'yyyy-MM-dd HH:mm')}">2023-06-07 15:30</td>
+                <td th:text="${#temporals.format(chat.modifiedAt, 'yyyy-MM-dd HH:mm')}">2023-06-07 15:30</td>
+                <td><a class="btn" th:href="@{'/chat/room/' + ${chat.roomId}}">Chat Link</a></td>
+                <td><input class="userdetailbtn table-btn" th:onclick="|openUserDetail('${chat.sender.id}')|"
+                           type="button"
+                           value="보기"></td>
+                <td><input class="deletebtn table-btn" th:onclick="|deleteChat('${chat.sender.id}')|" type="button"
+                           value="삭제">
+                </td>
+                <input th:value="${chat.sender.id}" type="hidden">
+            </tr>
+            </tbody>
+
+
+        </table>
+
+        <div class="bottombtn-box">
+            <input class="selectallbtn bottombtn" th:onclick="|checkall()|" type="button" value="전체선택">
+            <input class="bottom-deletebtn bottombtn" th:onclick="|deleteCheckedChats()|" type="button" value="선택삭제">
+
+        </div>
+        <!-- 여기 수정 -->
+        <div class="paginate">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${1 == chatList.pageable.pageNumber + 1} ? 'disabled'">
+                    <a aria-disabled="true" class="page-link"
+                       href="#"
+                       tabindex="-1"
+                       th:href="@{/admin/chatList(page=${chatList.pageable.pageNumber - 1},searchCondition=${searchCondition},searchKeyword=${searchKeyword})}">Previous</a>
+                </li>
+
+                <li class="page-item" th:classappend="${i == chatList.pageable.pageNumber + 1} ? 'disabled'"
+                    th:each="i : ${#numbers.sequence(startPage, endPage)}">
+                    <a class="page-link" href="#"
+                       th:href="@{/admin/chatList(page=${i - 1},searchCondition=${searchCondition},searchKeyword=${searchKeyword})}"
+                       th:text="${i}">1</a></li>
+
+                <li class="page-item"
+                    th:classappend="${chatList.totalPages == chatList.pageable.pageNumber + 1} ? 'disabled'">
+                    <a class="page-link" href="#"
+                       th:href="@{/admin/chatList(page=${chatList.pageable.pageNumber + 1},searchCondition=${searchCondition},searchKeyword=${searchKeyword})}">Next</a>
+                </li>
+            </ul>
+        </div>
+        <!-- 여기까지 -->
+    </div>
+</section>
+<script src="/js/admin/admin_nav.js"></script>
+<script src="/js/admin/admin_chatlist.js"></script>
+
+</body>
+</html>

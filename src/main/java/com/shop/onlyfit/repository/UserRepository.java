@@ -1,6 +1,8 @@
 package com.shop.onlyfit.repository;
 
 import com.shop.onlyfit.domain.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -9,7 +11,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, Long>, UserRepositoryCustom {
     @Query("select u from User u where u.name = :username OR u.loginId = :loginId")
     Optional<User> findByUsernameOrLoginId(@Param("username") String username, @Param("loginId") String loginId);
 
@@ -39,4 +41,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("select u.name from User u where u.id = :userId")
     String findUserNameByUserId(@Param("userId") Long userId);
+
+    Page<User> findAllByOrderByCreatedAt(Pageable pageable);
+
+    @Query("select sum(u.visitCount) from User u")
+    int visitCountResult();
+
 }

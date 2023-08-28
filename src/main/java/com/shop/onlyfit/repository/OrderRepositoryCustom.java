@@ -15,4 +15,10 @@ public interface OrderRepositoryCustom {
     Page<OrderDto> searchAllOrderByMarketId(Long marketId, Pageable pageable);
 
     Page<OrderDto> searchAllOrderByConditionAndMarketId(Long marketId, SearchOrder searchOrder, Pageable pageable);
+
+    Page<OrderDto> searchAllOrder(Pageable pageable);
+
+    Page<OrderDto> searchAllOrderFromAdmin(Pageable pageable);
+
+    Page<OrderDto> searchAllOrderByCondition(SearchOrder searchOrder, Pageable pageable);
 }

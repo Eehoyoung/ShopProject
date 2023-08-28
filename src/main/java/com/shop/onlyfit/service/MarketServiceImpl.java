@@ -18,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+import static com.shop.onlyfit.service.ItemServiceImpl.getItemPageDto;
+
 @Service
 @RequiredArgsConstructor
 public class MarketServiceImpl implements MarketService {
@@ -51,21 +53,14 @@ public class MarketServiceImpl implements MarketService {
     @Override
     public ItemPageDto findAllItemByConditionByPaging(String userId, SearchItem searchItem, Pageable pageable) {
         ItemPageDto itemPageDto = new ItemPageDto();
-        Page<ItemDto> itemBoards = itemRepository.searchAllItemByCondition(userId, searchItem, pageable);
+        Page<ItemDto> itemBoards = itemRepository.searchAllItemByConditionMaket(userId, searchItem, pageable);
 
         return getPage(itemPageDto, itemBoards);
     }
 
     @NotNull
     private ItemPageDto getPage(ItemPageDto itemPageDto, Page<ItemDto> itemBoards) {
-        int homeStartPage = Math.max(1, itemBoards.getPageable().getPageNumber() - 1);
-        int homeEndPage = Math.min(itemBoards.getTotalPages(), itemBoards.getPageable().getPageNumber() + 3);
-
-        itemPageDto.setItemPage(itemBoards);
-        itemPageDto.setHomeStartPage(homeStartPage);
-        itemPageDto.setHomeEndPage(homeEndPage);
-
-        return itemPageDto;
+        return getItemPageDto(itemPageDto, itemBoards);
     }
 
     @Override

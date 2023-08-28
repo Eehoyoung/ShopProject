@@ -128,4 +128,39 @@ public class OrderServiceImpl implements OrderService {
         mileageRepository.save(mileage);
         orderRepository.save(order);
     }// 주문 생성
+
+    @Override
+    public Page<OrderDto> findAllOrder(Pageable pageable) {
+        return orderRepository.searchAllOrderFromAdmin(pageable);
+    }
+
+    @Override
+    public OrderPageDto findAllOrderByPaging(Pageable pageable) {
+        OrderPageDto orderPageDto = new OrderPageDto();
+
+        Page<OrderDto> orderBoards = orderRepository.searchAllOrderFromAdmin(pageable);
+        int homeStartPage = Math.max(1, orderBoards.getPageable().getPageNumber() - 4);
+        int homeEndPage = Math.min(orderBoards.getTotalPages(), orderBoards.getPageable().getPageNumber() + 4);
+
+        orderPageDto.setOrderBoards(orderBoards);
+        orderPageDto.setHomeStartPage(homeStartPage);
+        orderPageDto.setHomeEndPage(homeEndPage);
+
+        return orderPageDto;
+    }
+
+    @Override
+    public OrderPageDto findAllOrderByConditionByPaging(SearchOrder searchOrder, Pageable pageable) {
+        OrderPageDto orderPageDto = new OrderPageDto();
+
+        Page<OrderDto> orderBoards = orderRepository.searchAllOrderByCondition(searchOrder, pageable);
+        int startPage = Math.max(1, orderBoards.getPageable().getPageNumber() - 4);
+        int endPage = Math.min(orderBoards.getTotalPages(), orderBoards.getPageable().getPageNumber() + 4);
+
+        orderPageDto.setOrderBoards(orderBoards);
+        orderPageDto.setHomeStartPage(startPage);
+        orderPageDto.setHomeEndPage(endPage);
+
+        return orderPageDto;
+    }
 }

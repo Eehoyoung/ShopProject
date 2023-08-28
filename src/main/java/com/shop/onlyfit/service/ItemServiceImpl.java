@@ -5,6 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.shop.onlyfit.domain.Cart;
 import com.shop.onlyfit.domain.Item;
+import com.shop.onlyfit.domain.SearchItem;
 import com.shop.onlyfit.domain.User;
 import com.shop.onlyfit.dto.WeeklyBestDto;
 import com.shop.onlyfit.dto.item.ItemDetailDto;
@@ -16,9 +17,11 @@ import com.shop.onlyfit.repository.CartRepository;
 import com.shop.onlyfit.repository.ItemRepository;
 import com.shop.onlyfit.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +33,18 @@ public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
     private final CartRepository cartRepository;
+
+    @NotNull
+    static ItemPageDto getItemPageDto(ItemPageDto itemPageDto, Page<ItemDto> itemBoards) {
+        int homeStartPage = Math.max(1, itemBoards.getPageable().getPageNumber() - 1);
+        int homeEndPage = Math.min(itemBoards.getTotalPages(), itemBoards.getPageable().getPageNumber() + 3);
+
+        itemPageDto.setItemPage(itemBoards);
+        itemPageDto.setHomeStartPage(homeStartPage);
+        itemPageDto.setHomeEndPage(homeEndPage);
+
+        return itemPageDto;
+    }
 
     @Override
     public List<Item> MainCarouselItemList() {
@@ -245,5 +260,56 @@ public class ItemServiceImpl implements ItemService {
         itemListToOrderDto.setItemCountList(itemCountList);
 
         return itemListToOrderDto;
+    }
+
+    @Transactional
+    @Override
+    public void changeItemStatusSoldOut(String idx, String itemColor) {
+        Long itemIdx = Long.parseLong(idx);
+        List<Item> findItem = itemRepository.findAllByItemIdxAndColor(itemIdx, itemColor);
+        for (Item changeItem : findItem) {
+            changeItem.setSaleStatus("soldout");
+        }
+    }
+
+    @Override
+    public Page<ItemDto> findAllItem(Pageable pageable) {
+        return itemRepository.searchAllItem(pageable);
+    }
+
+    @Override
+    public ItemPageDto findAllItemByPaging(Pageable pageable) {
+        ItemPageDto itemPageDto = new ItemPageDto();
+        Page<ItemDto> itemBoards = itemRepository.searchAllItem(pageable);
+
+        return getItemPageDto(itemPageDto, itemBoards);
+    }
+
+    @Override
+    public ItemPageDto findAllItemByConditionByPaging(SearchItem searchItem, Pageable pageable) {
+        ItemPageDto itemPageDto = new ItemPageDto();
+        Page<ItemDto> itemBoards = itemRepository.searchAllItemByCondition(searchItem, pageable);
+
+        return getItemPageDto(itemPageDto, itemBoards);
+    }
+
+    @Transactional
+    @Override
+    public void changeItemStatusOnSale(String itemIdx, String itemColor) {
+        Long idx = Long.parseLong(itemIdx);
+        List<Item> findItem = itemRepository.findAllByItemIdxAndColor(idx, itemColor);
+        for (Item changeItem : findItem) {
+            changeItem.setSaleStatus("onsale");
+        }
+    }
+
+    @Transactional
+    @Override
+    public void deleteItemById(String itemIdx, String itemColor) {
+        Long idx = Long.parseLong(itemIdx);
+        List<Item> findItem = itemRepository.findAllByItemIdxAndColor(idx, itemColor);
+        for (Item changeItem : findItem) {
+            itemRepository.deleteById(changeItem.getId());
+        }
     }
 }

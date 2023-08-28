@@ -27,36 +27,6 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
     }
 
     @Override
-    public Page<OrderDto> searchAllOrder(Pageable pageable) {
-        QueryResults<OrderDto> results = queryFactory
-                .select(new QOrderDto(
-                        QOrder.order.id,
-                        QOrderItem.orderItem.id,
-                        QUser.user.name,
-                        QOrderItem.orderItem.item.itemName,
-                        QOrder.order.orderedAt,
-                        QOrder.order.payment,
-                        QOrderItem.orderItem.orderPrice,
-                        QOrderItem.orderItem.orderStatus,
-                        QOrder.order.user.market.marketId,
-                        QOrderItem.orderItem.postCompany,
-                        QOrderItem.orderItem.postNumber
-                ))
-                .from(QOrder.order)
-                .leftJoin(QOrderItem.orderItem).on(QOrderItem.orderItem.eq(QOrder.order.orderItemList.any()))
-                .leftJoin(QUser.user).on(QUser.user.eq(QOrder.order.user))
-                .orderBy(QOrderItem.orderItem.id.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetchResults();
-
-        List<OrderDto> content = results.getResults();
-        long total = results.getTotal();
-
-        return new PageImpl<>(content, pageable, total);
-    }
-
-    @Override
     public Page<MainPageOrderDto> mainPageSearchAllOrder(Pageable pageable, String loginId) {
         QueryResults<MainPageOrderDto> results = queryFactory
                 .select(new QMainPageOrderDto(
@@ -182,6 +152,94 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
                         buyerEq(searchOrder.getSinput()),
                         betweenDate(searchOrder.getFirstdate(), searchOrder.getLastdate()),
                         QOrderItem.orderItem.item.market.marketId.eq(marketId)
+                )
+                .orderBy(QOrderItem.orderItem.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+
+        List<OrderDto> content = results.getResults();
+        long total = results.getTotal();
+
+        return new PageImpl<>(content, pageable, total);
+    }
+
+    @Override
+    public Page<OrderDto> searchAllOrder(Pageable pageable) {
+        QueryResults<OrderDto> results = queryFactory
+                .select(new QOrderDto(
+                        QOrder.order.id,
+                        QOrderItem.orderItem.id,
+                        QUser.user.name,
+                        QOrderItem.orderItem.item.itemName,
+                        QOrder.order.orderedAt,
+                        QOrder.order.payment,
+                        QOrderItem.orderItem.orderPrice,
+                        QOrderItem.orderItem.orderStatus,
+                        QMarket.market.marketId,
+                        QOrderItem.orderItem.postCompany,
+                        QOrderItem.orderItem.postNumber
+                ))
+                .from(QOrder.order)
+                .leftJoin(QOrderItem.orderItem).on(QOrderItem.orderItem.eq(QOrder.order.orderItemList.any()))
+                .leftJoin(QUser.user).on(QUser.user.eq(QOrder.order.user))
+                .orderBy(QOrderItem.orderItem.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+
+        List<OrderDto> content = results.getResults();
+        long total = results.getTotal();
+
+        return new PageImpl<>(content, pageable, total);
+    }
+
+    @Override
+    public Page<OrderDto> searchAllOrderFromAdmin(Pageable pageable) {
+        QueryResults<OrderDto> results = queryFactory
+                .select(new QOrderDto(
+                        QOrder.order.id,
+                        QOrderItem.orderItem.id,
+                        QUser.user.name,
+                        QOrderItem.orderItem.item.itemName,
+                        QOrder.order.orderedAt,
+                        QOrder.order.payment,
+                        QOrderItem.orderItem.orderPrice,
+                        QOrderItem.orderItem.orderStatus
+                ))
+                .from(QOrder.order)
+                .leftJoin(QOrderItem.orderItem).on(QOrderItem.orderItem.eq(QOrder.order.orderItemList.any()))
+                .leftJoin(QUser.user).on(QUser.user.eq(QOrder.order.user))
+                .orderBy(QOrderItem.orderItem.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+
+        List<OrderDto> content = results.getResults();
+        long total = results.getTotal();
+
+        return new PageImpl<>(content, pageable, total);
+    }
+
+    @Override
+    public Page<OrderDto> searchAllOrderByCondition(SearchOrder searchOrder, Pageable pageable) {
+        QueryResults<OrderDto> results = queryFactory
+                .select(new QOrderDto(
+                        QOrder.order.id,
+                        QOrderItem.orderItem.id,
+                        QUser.user.name,
+                        QOrderItem.orderItem.item.itemName,
+                        QOrder.order.orderedAt,
+                        QOrder.order.payment,
+                        QOrderItem.orderItem.orderPrice,
+                        QOrderItem.orderItem.orderStatus
+                ))
+                .from(QOrder.order)
+                .leftJoin(QOrderItem.orderItem).on(QOrderItem.orderItem.eq(QOrder.order.orderItemList.any()))
+                .leftJoin(QUser.user).on(QUser.user.eq(QOrder.order.user))
+                .where(orderStatusEq(searchOrder.getOmode()),
+                        buyerEq(searchOrder.getSinput()),
+                        betweenDate(searchOrder.getFirstdate(), searchOrder.getLastdate())
                 )
                 .orderBy(QOrderItem.orderItem.id.desc())
                 .offset(pageable.getOffset())

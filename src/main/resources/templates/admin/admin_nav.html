@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+<nav th:fragment="navFragment">
+    <div class="side-title"><a href="#">관리자 모드</a></div>
+    <ul class="side-menu">
+        <li><a href="#" th:href="@{/admin/main}">HOME</a></li>
+        <li><a href="#" th:href="@{/admin/userList}">회원관리</a></li>
+        <li class="menu-dropdown">
+        <li><a href="#" th:href="@{/admin/itemList}">상품 목록</a></li>
+        <li><a href="#" th:href="@{/admin/chatList}">채팅 목록</a></li>
+        <li><a href='#' th:href="@{/admin/orderList}">주문관리</a></li>
+        <li><a href='#' th:href="@{/admin/changepassword}">관리자 정보수정</a></li>
+        <li><a href='#' th:href="@{/logout}">LOGOUT</a></li>
+    </ul>
+</nav>
+</html>

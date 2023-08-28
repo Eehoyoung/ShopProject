@@ -19,7 +19,7 @@ public class MarketInfoDto {
 
     private String businessNumber;
 
-    private String storeNumber;
+    private String phoneNumber;
 
     private User user;
 
@@ -30,7 +30,7 @@ public class MarketInfoDto {
                 .marketId(marketId)
                 .name(name)
                 .businessNumber(businessNumber)
-                .storeNumber(storeNumber)
+                .storeNumber(phoneNumber)
                 .seller(user)
                 .visitCount(visitCount)
                 .build();

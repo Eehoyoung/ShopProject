@@ -40,7 +40,87 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
     }
 
     @Override
-    public Page<ItemDto> searchAllItemByCondition(String loginId, SearchItem search, Pageable pageable) {
+    public Page<ItemDto> searchAllItem(Pageable pageable) {
+        QueryResults<ItemDto> results = queryFactory
+                .select(new QItemDto(
+                        QItem.item.id,
+                        QItem.item.itemName,
+                        QItem.item.firstCategory,
+                        QItem.item.price,
+                        QItem.item.saleStatus,
+                        QItem.item.imgUrl,
+                        QItem.item.color,
+                        QItem.item.rep,
+                        QItem.item.itemIdx
+                ))
+                .from(QItem.item)
+                .where(QItem.item.rep.eq(true))
+                .orderBy(QItem.item.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+
+        List<ItemDto> content = results.getResults();
+        long total = results.getTotal();
+
+        return new PageImpl<>(content, pageable, total);
+    }
+
+    @Override
+    public Page<ItemDto> searchAllItemByCondition(SearchItem search, Pageable pageable) {
+
+        if (search.getCmode().equals("whole")) {
+            QueryResults results = queryFactory
+                    .select(new QItemDto(
+                            QItem.item.id,
+                            QItem.item.itemName,
+                            QItem.item.firstCategory,
+                            QItem.item.price,
+                            QItem.item.saleStatus,
+                            QItem.item.imgUrl,
+                            QItem.item.color,
+                            QItem.item.rep,
+                            QItem.item.itemIdx
+                    ))
+                    .from(QItem.item)
+                    .where(QItem.item.rep.eq(true), saleStatusEq(search.getSalestatus()), itemNameEq(search.getItem_name()))
+                    .orderBy(QItem.item.id.desc())
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .fetchResults();
+
+            List<ItemDto> content = results.getResults();
+            long total = results.getTotal();
+
+            return new PageImpl<>(content, pageable, total);
+        } else {
+            QueryResults results = queryFactory
+                    .select(new QItemDto(
+                            QItem.item.id,
+                            QItem.item.itemName,
+                            QItem.item.firstCategory,
+                            QItem.item.price,
+                            QItem.item.saleStatus,
+                            QItem.item.imgUrl,
+                            QItem.item.color,
+                            QItem.item.rep,
+                            QItem.item.itemIdx
+                    ))
+                    .from(QItem.item)
+                    .where(QItem.item.rep.eq(true), saleStatusEq(search.getSalestatus()), cmodeEq(search.getCmode()), itemNameEq(search.getItem_name()))
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .fetchResults();
+
+            List<ItemDto> content = results.getResults();
+            long total = results.getTotal();
+
+            return new PageImpl<>(content, pageable, total);
+        }
+    }
+
+    @Override
+    public Page<ItemDto> searchAllItemByConditionMaket(String loginId, SearchItem search, Pageable pageable) {
 
         if (search.getCmode().equals("whole")) {
             QueryResults results = queryFactory

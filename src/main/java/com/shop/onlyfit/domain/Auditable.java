@@ -1,4 +1,4 @@
-package com.shop.onlyfit.config;
+package com.shop.onlyfit.domain;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;

@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -206,5 +207,23 @@ public class MarketController {
     ) {
         marketService.changeOrderStatus(id, status, postCompany, postNumber);
         return "주문 상품 상태 변경완료";
+    }
+
+    @ResponseBody
+    @PatchMapping("/market/itemList/soldout")
+    public String itemStatusSoldOutPage(@RequestBody List<Map<String, String>> allData) {
+        for (Map<String, String> temp : allData) {
+            itemService.changeItemStatusSoldOut(temp.get("itemIdx"), temp.get("itemColor"));
+        }
+        return "상품 상태 품절로 변경완료";
+    }
+
+    @ResponseBody
+    @PatchMapping("/market/itemList/onsale")
+    public String itemStatusOnSalePage(@RequestBody List<Map<String, String>> allData) {
+        for (Map<String, String> temp : allData) {
+            itemService.changeItemStatusOnSale(temp.get("itemIdx"), temp.get("itemColor"));
+        }
+        return "상품 상태 판매로 변경완료";
     }
 }
