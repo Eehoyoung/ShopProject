@@ -33,8 +33,9 @@ public class TokenService {
 
         Base64.Decoder decoder = Base64.getDecoder();
         final String[] splitJwt = Objects.requireNonNull(token).split("\\.");
-        final String payloadStr = new String(decoder.decode(splitJwt[1].getBytes()));
-
+        final String payloadStr = new String(decoder.decode(splitJwt[1].replace('-', '+' )
+                .replace('_', '/' ).getBytes()));
+        //base 64의 경우 "-"와 "_"가 없기 때문에 illegal base64 character 5f 에러 발생
         Long userId = getUserIdFromToken(payloadStr);
         Date expirationDate = getDateExpFromToken(payloadStr);
         redisService.saveToken(token, userId, expirationDate);
