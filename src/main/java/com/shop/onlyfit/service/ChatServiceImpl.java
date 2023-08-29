@@ -10,7 +10,6 @@ import com.shop.onlyfit.repository.RoomRepository;
 import com.shop.onlyfit.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,10 +31,8 @@ public class ChatServiceImpl implements ChatService {
     private final RoomRepository roomRepository;
     private final UserRepository userRepository;
     private final MessageRepository chatMessageRepository;
-
-    @Autowired
     @Qualifier("chatRedisTemplate")
-    private RedisTemplate<String, MessageDto> chatRedisTemplate;
+    private final RedisTemplate<String, MessageDto> chatRedisTemplate;
 
     @Transactional
     @Override

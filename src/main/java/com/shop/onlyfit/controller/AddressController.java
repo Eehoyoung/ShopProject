@@ -42,16 +42,6 @@ public class AddressController {
         return "redirect:/main/address";
     }
 
-    @ResponseBody
-    @DeleteMapping("/main/address/delete")
-    public String deleteAddressPage(@RequestParam(value = "addressIdList", required = false) List<Long> addressIdList) {
-        for (Long addressId : addressIdList) {
-            deliveryAddressService.deleteAddressById(addressId);
-        }
-
-        return "주소 삭제 완료";
-    }
-
     @GetMapping("/main/address/change/{id}")
     public String getChangeAddressPage(@PathVariable Long id, Model model) {
         AddressChangeDto addressChangeDto = deliveryAddressService.showAddressToChange(id);

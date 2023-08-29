@@ -148,17 +148,7 @@ public class MarketController {
         } else {
             itemPageDto = marketService.findAllItemByConditionByPaging(userId, searchItem, pageable);
         }
-        Page<ItemDto> itemBoards = itemPageDto.getItemPage();
-        int homeStartPage = itemPageDto.getHomeStartPage();
-        int homeEndPage = itemPageDto.getHomeEndPage();
-
-        model.addAttribute("productList", itemBoards);
-        model.addAttribute("startPage", homeStartPage);
-        model.addAttribute("endPage", homeEndPage);
-
-        model.addAttribute("saleStatus", searchItem.getSalestatus());
-        model.addAttribute("firstCategory", searchItem.getCmode());
-        model.addAttribute("itemName", searchItem.getItem_name());
+        AdminController.getItemBoard(model, searchItem, itemPageDto);
 
         return "market/market_item_list";
     }
@@ -178,20 +168,7 @@ public class MarketController {
             orderPageDto = marketService.findAllOrderByConditionByPaging(marketId, searchOrder, pageable);
         }
 
-        Page<OrderDto> orderBoards = orderPageDto.getOrderBoards();
-        int homeStartPage = orderPageDto.getHomeStartPage();
-        int homeEndPage = orderPageDto.getHomeEndPage();
-
-        model.addAttribute("orderList", orderBoards);
-        model.addAttribute("startPage", homeStartPage);
-        model.addAttribute("endPage", homeEndPage);
-
-        model.addAttribute("firstDate", searchOrder.getFirstdate());
-        model.addAttribute("lastDate", searchOrder.getLastdate());
-        model.addAttribute("oMode", searchOrder.getOmode());
-        model.addAttribute("sMode", "buyer");
-        model.addAttribute("sInput", searchOrder.getSinput());
-        model.addAttribute("oModeStatus", searchOrder.getOmode());
+        AdminController.getOrderboard(model, searchOrder, orderPageDto);
 
         return "market/market_order";
 

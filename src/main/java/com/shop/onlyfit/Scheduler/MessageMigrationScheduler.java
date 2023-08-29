@@ -1,4 +1,4 @@
-package com.shop.onlyfit.config;
+package com.shop.onlyfit.Scheduler;
 
 import com.shop.onlyfit.domain.chat.ChatMessage;
 import com.shop.onlyfit.dto.MessageDto;
@@ -6,7 +6,6 @@ import com.shop.onlyfit.repository.MessageRepository;
 import com.shop.onlyfit.service.ChatServiceImpl;
 import com.shop.onlyfit.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -24,10 +23,8 @@ public class MessageMigrationScheduler {
     private final MessageRepository messageRepository;
     private final UserServiceImpl userService;
     private final ChatServiceImpl chatService;
-
-    @Autowired
     @Qualifier("chatRedisTemplate")
-    private RedisTemplate<String, MessageDto> chatRedisTemplate;
+    private final RedisTemplate<String, MessageDto> chatRedisTemplate;
 
     @Scheduled(fixedRate = 300000)
     public void migrateMessages() {

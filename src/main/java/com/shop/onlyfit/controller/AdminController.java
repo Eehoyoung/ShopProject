@@ -15,14 +15,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
-import java.security.Principal;
-import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -37,18 +34,6 @@ public class AdminController {
     @GetMapping("/admin/changepassword")
     public String adminChangePassword() {
         return "admin/admin_changePassword";
-    }
-
-    @PutMapping("/admin/changepassword_ok")
-    @ResponseBody
-    public String changeAdminPasswordPage(Principal principal, @RequestParam("password") String newPassword) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        User findUser = userService.findUserByLoginId(principal.getName());
-
-        findUser.setPassword(newPassword);
-        userService.changePassword(findUser.getId(), passwordEncoder.encode(newPassword));
-
-        return "관리자 비밀번호 수정 완료";
     }
 
     @GetMapping("/admin/main")
@@ -68,14 +53,7 @@ public class AdminController {
         return "admin/admin_main";
     }
 
-    @GetMapping("/admin/itemList")
-    public String itemListPage(Model model, @PageableDefault(size = 5) Pageable pageable, SearchItem searchItem) {
-        ItemPageDto itemPageDto = new ItemPageDto();
-        if (searchItem.getItem_name() == null) {
-            itemPageDto = itemService.findAllItemByPaging(pageable);
-        } else {
-            itemPageDto = itemService.findAllItemByConditionByPaging(searchItem, pageable);
-        }
+    static void getItemBoard(Model model, SearchItem searchItem, ItemPageDto itemPageDto) {
         Page<ItemDto> itemBoards = itemPageDto.getItemPage();
         int homeStartPage = itemPageDto.getHomeStartPage();
         int homeEndPage = itemPageDto.getHomeEndPage();
@@ -87,35 +65,23 @@ public class AdminController {
         model.addAttribute("saleStatus", searchItem.getSalestatus());
         model.addAttribute("firstCategory", searchItem.getCmode());
         model.addAttribute("itemName", searchItem.getItem_name());
-
-        return "admin/admin_Goodslist";
     }
 
-    @ResponseBody
-    @PatchMapping("/admin/itemList/onsale")
-    public String itemStatusOnSalePage(@RequestBody List<Map<String, String>> allData) {
-        for (Map<String, String> temp : allData) {
-            itemService.changeItemStatusOnSale(temp.get("itemIdx"), temp.get("itemColor"));
-        }
-        return "상품 상태 판매로 변경완료";
-    }
+    static void getOrderboard(Model model, SearchOrder searchOrder, OrderPageDto orderPageDto) {
+        Page<OrderDto> orderBoards = orderPageDto.getOrderBoards();
+        int homeStartPage = orderPageDto.getHomeStartPage();
+        int homeEndPage = orderPageDto.getHomeEndPage();
 
-    @ResponseBody
-    @PatchMapping("/admin/itemList/soldout")
-    public String itemStatusSoldOutPage(@RequestBody List<Map<String, String>> allData) {
-        for (Map<String, String> temp : allData) {
-            itemService.changeItemStatusSoldOut(temp.get("itemIdx"), temp.get("itemColor"));
-        }
-        return "상품 상태 품절로 변경완료";
-    }
+        model.addAttribute("orderList", orderBoards);
+        model.addAttribute("startPage", homeStartPage);
+        model.addAttribute("endPage", homeEndPage);
 
-    @ResponseBody
-    @DeleteMapping("/admin/itemList/remove")
-    public String itemdeletePage(@RequestBody List<Map<String, String>> allData) {
-        for (Map<String, String> temp : allData) {
-            itemService.deleteItemById(temp.get("itemIdx"), temp.get("itemColor"));
-        }
-        return "상품 삭제 완료";
+        model.addAttribute("firstDate", searchOrder.getFirstdate());
+        model.addAttribute("lastDate", searchOrder.getLastdate());
+        model.addAttribute("oMode", searchOrder.getOmode());
+        model.addAttribute("sMode", "buyer");
+        model.addAttribute("sInput", searchOrder.getSinput());
+        model.addAttribute("oModeStatus", searchOrder.getOmode());
     }
 
     @GetMapping("/admin/userList")
@@ -164,24 +130,6 @@ public class AdminController {
         return "admin/admin_chatlist";
     }
 
-    @ResponseBody
-    @DeleteMapping("/admin/chatList/{id}")
-    public String deleteChat(@PathVariable Long id) {
-        chatService.deleteById(id);
-
-        return "채팅 삭제 완료";
-    }
-
-    @ResponseBody
-    @DeleteMapping("/admin/chatList")
-    public String deleteChatChecked(@RequestParam(value = "idList", required = false) List<Long> idList) {
-
-        for (Long aLong : idList) {
-            chatService.deleteById(aLong);
-        }
-        return "선택된 채팅 삭제 완료";
-    }
-
     @GetMapping("/admin/userList/user/{id}")
     public String pageUser(@PathVariable Long id, Model model) {
         model.addAttribute("user", userService.findUserById(id));
@@ -189,23 +137,17 @@ public class AdminController {
         return "admin/admin_user";
     }
 
-
-    @ResponseBody
-    @DeleteMapping("/admin/userList/{id}")
-    public String deleteUser(@PathVariable Long id) {
-        userService.deleteById(id);
-
-        return "회원 삭제 완료";
-    }
-
-    @ResponseBody
-    @DeleteMapping("/admin/userList")
-    public String deleteChecked(@RequestParam(value = "idList", required = false) List<Long> idList) {
-
-        for (Long aLong : idList) {
-            userService.deleteById(aLong);
+    @GetMapping("/admin/itemList")
+    public String itemListPage(Model model, @PageableDefault(size = 5) Pageable pageable, SearchItem searchItem) {
+        ItemPageDto itemPageDto = new ItemPageDto();
+        if (searchItem.getItem_name() == null) {
+            itemPageDto = itemService.findAllItemByPaging(pageable);
+        } else {
+            itemPageDto = itemService.findAllItemByConditionByPaging(searchItem, pageable);
         }
-        return "선택된 회원 삭제 완료";
+        getItemBoard(model, searchItem, itemPageDto);
+
+        return "admin/admin_Goodslist";
     }
 
     @GetMapping("/admin/orderList")
@@ -219,20 +161,7 @@ public class AdminController {
             orderPageDto = orderService.findAllOrderByConditionByPaging(searchOrder, pageable);
         }
 
-        Page<OrderDto> orderBoards = orderPageDto.getOrderBoards();
-        int homeStartPage = orderPageDto.getHomeStartPage();
-        int homeEndPage = orderPageDto.getHomeEndPage();
-
-        model.addAttribute("orderList", orderBoards);
-        model.addAttribute("startPage", homeStartPage);
-        model.addAttribute("endPage", homeEndPage);
-
-        model.addAttribute("firstDate", searchOrder.getFirstdate());
-        model.addAttribute("lastDate", searchOrder.getLastdate());
-        model.addAttribute("oMode", searchOrder.getOmode());
-        model.addAttribute("sMode", "buyer");
-        model.addAttribute("sInput", searchOrder.getSinput());
-        model.addAttribute("oModeStatus", searchOrder.getOmode());
+        getOrderboard(model, searchOrder, orderPageDto);
 
         return "admin/admin_order";
 

@@ -154,7 +154,6 @@ public class MainController {
     @PatchMapping("/main/orderStatusChange/{id}")
     public String mainOrderStatusChangePage(@PathVariable Long id, @RequestParam OrderStatus status) {
         orderItemService.changeOrderStatus(id, status);
-
         return "주문상태 변경완료";
     }
 }

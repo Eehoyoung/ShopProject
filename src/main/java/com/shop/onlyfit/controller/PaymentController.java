@@ -33,8 +33,6 @@ public class PaymentController {
 
     @PostMapping("/main/payment")
     public String getPaymentDataPage(Principal principal, Model model, @RequestParam(value = "itemlist") String itemlist, @RequestParam(value = "where") String where) {
-
-        System.out.println("있어?" + principal.getName());
         if (principal.getName() == null) {
             return "redirect:/main/index";
         }
