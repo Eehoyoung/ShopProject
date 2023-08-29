@@ -4,7 +4,6 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.shop.onlyfit.service.RedisService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -18,7 +17,6 @@ import java.util.Arrays;
 
 @RequiredArgsConstructor
 @Component
-@Slf4j
 public class JwtRequestFilter extends OncePerRequestFilter {
 
     private final RedisService redisService;

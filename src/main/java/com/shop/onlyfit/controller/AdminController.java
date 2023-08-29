@@ -31,28 +31,6 @@ public class AdminController {
     private final OrderServiceImpl orderService;
     private final ChatServiceImpl chatService;
 
-    @GetMapping("/admin/changepassword")
-    public String adminChangePassword() {
-        return "admin/admin_changePassword";
-    }
-
-    @GetMapping("/admin/main")
-    public String getUserMainPage(Model model, @PageableDefault(size = 4) Pageable pageable) {
-        Page<User> userBoards = adminService.findAllUserByOrderByCreateAt(pageable);
-        Page<ItemDto> itemBoards = itemService.findAllItem(pageable);
-        Page<OrderDto> orderBoards = orderService.findAllOrder(pageable);
-        Page<ChatDslDto> chatBoards = chatService.findAllChat(pageable);
-        int allVisitCount = userService.getVisitCount();
-
-        model.addAttribute("userList", userBoards);
-        model.addAttribute("itemList", itemBoards);
-        model.addAttribute("orderList", orderBoards);
-        model.addAttribute("numVisitors", allVisitCount);
-        model.addAttribute("chatList", chatBoards);
-
-        return "admin/admin_main";
-    }
-
     static void getItemBoard(Model model, SearchItem searchItem, ItemPageDto itemPageDto) {
         Page<ItemDto> itemBoards = itemPageDto.getItemPage();
         int homeStartPage = itemPageDto.getHomeStartPage();
@@ -82,6 +60,28 @@ public class AdminController {
         model.addAttribute("sMode", "buyer");
         model.addAttribute("sInput", searchOrder.getSinput());
         model.addAttribute("oModeStatus", searchOrder.getOmode());
+    }
+
+    @GetMapping("/admin/changepassword")
+    public String adminChangePassword() {
+        return "admin/admin_changePassword";
+    }
+
+    @GetMapping("/admin/main")
+    public String getUserMainPage(Model model, @PageableDefault(size = 4) Pageable pageable) {
+        Page<User> userBoards = adminService.findAllUserByOrderByCreateAt(pageable);
+        Page<ItemDto> itemBoards = itemService.findAllItem(pageable);
+        Page<OrderDto> orderBoards = orderService.findAllOrder(pageable);
+        Page<ChatDslDto> chatBoards = chatService.findAllChat(pageable);
+        int allVisitCount = userService.getVisitCount();
+
+        model.addAttribute("userList", userBoards);
+        model.addAttribute("itemList", itemBoards);
+        model.addAttribute("orderList", orderBoards);
+        model.addAttribute("numVisitors", allVisitCount);
+        model.addAttribute("chatList", chatBoards);
+
+        return "admin/admin_main";
     }
 
     @GetMapping("/admin/userList")

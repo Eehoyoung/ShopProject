@@ -88,6 +88,8 @@ public class RedisConfig {
         // 연결 팩토리를 설정합니다.
         chatRedisTemplate.setConnectionFactory(connectionFactory);
 
+        chatRedisTemplate.setKeySerializer(new StringRedisSerializer());
+
         // 키의 시리얼라이저로 StringRedisSerializer를 사용합니다.
         chatRedisTemplate.setValueSerializer(serializer);
         chatRedisTemplate.setHashValueSerializer(serializer);

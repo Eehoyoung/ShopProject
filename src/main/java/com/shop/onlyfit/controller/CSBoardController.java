@@ -29,19 +29,25 @@ public class CSBoardController {
     private final UserServiceImpl userService;
 
     @GetMapping("/main/cs")
-    public String intoCustomerService(
-            @PageableDefault(size = 10, direction = Sort.Direction.DESC, page = 0, sort = "id") Pageable pageable, @RequestParam(required = false, defaultValue = "") String q,
-            Model model) {
-        String st = (q.isEmpty()) ? "" : q;
-        Page<CustomServiceBoard> boards = csBoardService.findByTitle(st, pageable);
-        List<CustomServiceBoard> noticeBoards = csBoardService.loadNoticeBoards();
-        ArrayList<Integer> list;
-        list = csBoardService.makePageNumbers(boards);
-        model.addAttribute("notices", noticeBoards);
-        model.addAttribute("boards", boards);
-        System.out.println("보드" + boards);
-        model.addAttribute("pageNums", list);
-        return "/main/custom_service";
+    public String intoCustomerService(@AuthenticationPrincipal UserDetails userDetails,
+                                      @PageableDefault(size = 10, direction = Sort.Direction.DESC, page = 0, sort = "id") Pageable pageable, @RequestParam(required = false, defaultValue = "") String q,
+                                      Model model) {
+        try {
+            String st = (q.isEmpty()) ? "" : q;
+            String loginId = userDetails.getUsername();
+            Long userId = userService.getUserId(loginId);
+            Page<CustomServiceBoard> boards = csBoardService.findByTitle(st, pageable);
+            List<CustomServiceBoard> noticeBoards = csBoardService.loadNoticeBoards();
+            ArrayList<Integer> list;
+            list = csBoardService.makePageNumbers(boards);
+            model.addAttribute("notices", noticeBoards);
+            model.addAttribute("user", userId);
+            model.addAttribute("boards", boards);
+            model.addAttribute("pageNums", list);
+            return "/main/custom_service";
+        } catch (Exception e) {
+            return "redirect:/main/login";
+        }
     }
 
     @GetMapping("/main/cs-write")

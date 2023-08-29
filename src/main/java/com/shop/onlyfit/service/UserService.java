@@ -58,4 +58,6 @@ public interface UserService {
     void deleteById(Long id);
 
     User getUserById(Long senderId);
+
+    String findLoginIdByRoomId(String roomId);
 }

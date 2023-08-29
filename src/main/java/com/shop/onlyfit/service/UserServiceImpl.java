@@ -328,4 +328,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 () -> new RuntimeException("회원을 찾을 수 없습니다.")
         );
     }
+
+    @Override
+    public String findLoginIdByRoomId(String roomId) {
+        return userRepository.findLoginIdByRoom(Long.parseLong(roomId));
+    }
 }

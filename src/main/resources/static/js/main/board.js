@@ -161,3 +161,25 @@ function deleteReply(id) {
         alert("게시글 삭제 실패");
     })
 }
+
+$(document).ready(function () {
+    $('#btn-chat').click(function () {
+        var userId = $(this).attr('data-userId');
+        $.ajax({
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader(header, token)
+            },
+            url: '/room',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({"userId": userId}),
+            success: function (roomId) {
+                window.location.href = '/chat/room/' + roomId;
+            },
+            error: function (error) {
+                console.log(error);
+                alert("채팅 문의 실패");
+            }
+        });
+    });
+});

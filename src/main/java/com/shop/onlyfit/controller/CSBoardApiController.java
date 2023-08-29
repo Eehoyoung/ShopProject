@@ -38,7 +38,6 @@ public class CSBoardApiController {
 
     @PutMapping("/main/cs-update")
     public ResponseDto<String> updateBoard(@AuthenticationPrincipal UserDetails userDetails, @RequestBody CustomServiceBoard board) {
-        System.out.println(board);
         CustomServiceBoard tempBoard = csBoardService.findCSboardByid(board.getId());
         User findUser = userService.findUserByLoginId(userDetails.getUsername());
         if (!Objects.equals(tempBoard.getUser().getId(), findUser.getId())) {
@@ -67,14 +66,12 @@ public class CSBoardApiController {
     public ResponseDto<CustomServiceReply> writeReply(@AuthenticationPrincipal UserDetails userDetails,
                                                       @RequestBody CustomServiceReply customServiceReply,
                                                       @RequestParam(value = "boardId") int id) {
-        System.out.println(customServiceReply);
         User findUser = userService.findUserByLoginId(userDetails.getUsername());
         if (!findUser.getUserGrade().equals(UserGrade.ADMIN)) {
             return new ResponseDto<>(HttpStatus.FORBIDDEN.value(), null);
         }
 
         CustomServiceReply csReply = csBoardService.saveReply(customServiceReply, id);
-        System.out.println(csReply);
         return new ResponseDto<>(HttpStatus.OK.value(), customServiceReply);
     }
 

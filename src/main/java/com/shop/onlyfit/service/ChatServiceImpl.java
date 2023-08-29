@@ -9,7 +9,6 @@ import com.shop.onlyfit.repository.MessageRepository;
 import com.shop.onlyfit.repository.RoomRepository;
 import com.shop.onlyfit.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,7 +24,6 @@ import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class ChatServiceImpl implements ChatService {
 
     private final RoomRepository roomRepository;
