@@ -26,7 +26,7 @@ public class MessageMigrationScheduler {
     @Qualifier("chatRedisTemplate")
     private final RedisTemplate<String, MessageDto> chatRedisTemplate;
 
-    @Scheduled(fixedRate = 300000)
+    @Scheduled(fixedRate = 259200000)
     public void migrateMessages() {
         // Redis의 모든 키를 스캔하기 위한 커서 생성. 여기에서는 chatroom:* 패턴에 매칭되는 키만 스캔함.
         Cursor<byte[]> cursor = Objects.requireNonNull(chatRedisTemplate.getConnectionFactory())

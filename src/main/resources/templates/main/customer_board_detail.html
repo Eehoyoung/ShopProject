@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="_csrf" th:content="${_csrf.token}"/>
@@ -30,7 +30,7 @@
     <div id="board-list">
         <div class="container justify-content-center">
             <div class="detail-table">
-                <div class="csdetail-content container" th:text="${board.content}"></div>
+                <div class="csdetail-content container" th:utext="${board.content}"></div>
                 <div class="btn-groub">
                     <a class="detail-a" href="/main/cs">[목록으로]</a>
                     <div th:if="${#authorization.expression('isAuthenticated() and #oauth2.hasScope(''write'') and #oauth2.clientHasRole(''ADMIN'')')}">
@@ -40,7 +40,7 @@
                 </div>
                 <br/>
 
-                <div class="reply_view" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+                <div class="reply_view" sec:authorize="hasRole('ROLE_ADMIN')">
                     <h5>댓글</h5>
                     <div class="dap_lo">
                         <div class="dap_to comt_edit"></div>

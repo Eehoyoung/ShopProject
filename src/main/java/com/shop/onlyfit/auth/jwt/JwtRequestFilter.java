@@ -75,7 +75,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 "/v3/api-docs/**",
                 "/v2/api-docs/**",
                 "/webjars/**",
-                "/main/login"
         };
 
         return Arrays.stream(swaggerPaths).anyMatch(path::startsWith);
