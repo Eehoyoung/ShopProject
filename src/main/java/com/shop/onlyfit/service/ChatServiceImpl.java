@@ -14,16 +14,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
@@ -37,16 +36,6 @@ public class ChatServiceImpl implements ChatService {
     @Autowired
     @Qualifier("chatRedisTemplate")
     private RedisTemplate<String, MessageDto> chatRedisTemplate;
-
-    @Autowired
-    @Qualifier("chatHashOps")
-    private HashOperations<String, String, ChatDto.MessageResponse> chatHashOps;
-
-
-    @PostConstruct  // 객체 생성 후 초기화 로직을 담당하는 메소드
-    public void init() {
-        this.chatHashOps = chatRedisTemplate.opsForHash();
-    }
 
     @Transactional
     @Override
@@ -134,20 +123,24 @@ public class ChatServiceImpl implements ChatService {
     @Transactional(readOnly = true)
     @Override
     public List<ChatDto.MessageResponse> getPreviousMessagesFromRedis(Long roomId) {
-        Map<String, ChatDto.MessageResponse> chatMessages = chatHashOps.entries("chatroom:" + roomId);
+        List<MessageDto> messageDtoList = chatRedisTemplate.opsForList().range("chatroom:" + roomId, 0, -1);
 
-        return chatMessages.values().stream()
-                .map(chatMessage -> ChatDto.MessageResponse.builder()
-                        .messageId(chatMessage.getMessageId())
-                        .sender(ChatUserDto.ResponseOnlyUserName.builder()
-                                .userId(chatMessage.getSender().getUserId())
-                                .nickName(chatMessage.getSender().getNickName())
-                                .build())
-                        .content(chatMessage.getContent())
-                        .sendTime(chatMessage.getSendTime())
-                        .build())
+        return IntStream.range(0, Objects.requireNonNull(messageDtoList).size())
+                .mapToObj(index -> {
+                    MessageDto messageDto = messageDtoList.get(index);
+                    return ChatDto.MessageResponse.builder()
+                            .messageId(index) // Use the index as the messageId
+                            .sender(ChatUserDto.ResponseOnlyUserName.builder()
+                                    .userId(messageDto.getSenderId())
+                                    .nickName(messageDto.getNickName())
+                                    .build())
+                            .content(messageDto.getContent())
+                            .sendTime(messageDto.getSendTime())
+                            .build();
+                })
                 .collect(Collectors.toList());
     }
+
 
     @Override
     public ChatRoom getChatRoomById(Long roomId) {
