@@ -19,7 +19,8 @@ public class ChatController {
     @GetMapping("/chat/room/{roomId}")
     public String chatRoom(@PathVariable String roomId, Model model, Principal principal) {
         String loginId = userService.findLoginIdByRoomId(roomId);
-        if (!Objects.equals(principal.getName(), loginId)) {
+        String role = userService.getUserRole(principal.getName());
+        if (!Objects.equals(principal.getName(), loginId) && !role.equals("ADMIN")) {
             return "redirect:/main/cs";
         }
         model.addAttribute("roomId", roomId);

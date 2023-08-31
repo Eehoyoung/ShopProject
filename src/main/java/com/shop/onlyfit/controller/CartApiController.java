@@ -5,6 +5,7 @@ import com.shop.onlyfit.domain.User;
 import com.shop.onlyfit.exception.MaxQuantityExceededException;
 import com.shop.onlyfit.service.CartServiceImpl;
 import com.shop.onlyfit.service.UserServiceImpl;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +19,7 @@ public class CartApiController {
     private final CartServiceImpl cartService;
     private final UserServiceImpl userService;
 
+    @ApiOperation("Update Quantity")
     @PatchMapping("/main/cart/changequantity/{cartId}/{itemQuantity}")
     public String changeQuantityInCartPage(@PathVariable Long cartId, @PathVariable int itemQuantity) {
         try {
@@ -31,6 +33,7 @@ public class CartApiController {
         return "수량 변경 완료";
     }
 
+    @ApiOperation("Delete One Item In Cart ")
     @DeleteMapping("/main/cart/remove/{cartId}")
     public String deleteItemInCartPage(@PathVariable Long cartId) {
         cartService.deleteCartById(cartId);
@@ -38,8 +41,9 @@ public class CartApiController {
         return "장바구니 상품 삭제 완료";
     }
 
+    @ApiOperation("Delete Any Item in Cart")
     @DeleteMapping("/main/cart/removeitems")
-    public String deleteItemsInBaketPage(@RequestParam(value = "itemList", required = false) List<Long> itemList) {
+    public String deleteItemsInCartPage(@RequestParam(value = "itemList", required = false) List<Long> itemList) {
         for (Long aLong : itemList) {
             cartService.deleteCartById(aLong);
         }
@@ -47,6 +51,7 @@ public class CartApiController {
         return "장바구니 상품 삭제 완료";
     }
 
+    @ApiOperation("Delete All Items in Cart")
     @DeleteMapping("/main/cart/removeall")
     public String deleteAllItemsInCartPage(Principal principal) {
         User user = userService.findUserByLoginId(principal.getName());

@@ -343,4 +343,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userRepository.findLoginIdByRoom(Long.parseLong(roomId));
     }
 
+    @Override
+    public String getUserRole(String loginId) {
+        return userRepository.findRoleByloginId(loginId);
+    }
+
 }

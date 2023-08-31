@@ -7,6 +7,7 @@ import com.shop.onlyfit.dto.item.ItemDto;
 import com.shop.onlyfit.service.CartServiceImpl;
 import com.shop.onlyfit.service.ItemServiceImpl;
 import com.shop.onlyfit.service.UserServiceImpl;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +24,7 @@ public class CartController {
     private final CartServiceImpl cartService;
     private final ItemServiceImpl itemService;
 
+    @ApiOperation("Load Cart Page")
     @GetMapping("/main/cart")
     public String getCartPage(Principal principal, Model model) {
         String loginId = principal.getName();

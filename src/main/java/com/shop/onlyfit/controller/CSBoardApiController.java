@@ -8,6 +8,7 @@ import com.shop.onlyfit.domain.type.UserGrade;
 import com.shop.onlyfit.dto.ResponseDto;
 import com.shop.onlyfit.service.CSBoardServiceImpl;
 import com.shop.onlyfit.service.UserServiceImpl;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,6 +24,7 @@ public class CSBoardApiController {
     private final UserServiceImpl userService;
     private final CSBoardServiceImpl csBoardService;
 
+    @ApiOperation("Create Board")
     @PostMapping("/main/cs-write")
     public ResponseDto<Integer> writeBoard(@AuthenticationPrincipal UserDetails userDetails, @RequestBody CustomServiceBoard serviceBoard) {
         User findUser = userService.findUserByLoginId(userDetails.getUsername());
@@ -36,6 +38,7 @@ public class CSBoardApiController {
         return new ResponseDto<>(HttpStatus.OK.value(), 1);
     }
 
+    @ApiOperation("Update Board")
     @PutMapping("/main/cs-update")
     public ResponseDto<String> updateBoard(@AuthenticationPrincipal UserDetails userDetails, @RequestBody CustomServiceBoard board) {
         CustomServiceBoard tempBoard = csBoardService.findCSboardByid(board.getId());
@@ -51,6 +54,7 @@ public class CSBoardApiController {
         }
     }
 
+    @ApiOperation("Delete Board")
     @DeleteMapping("/main/cs-delete")
     public ResponseDto<String> deleteBoard(@RequestParam(value = "boardId") int id, @AuthenticationPrincipal UserDetails userDetails) {
         CustomServiceBoard tempBoard = csBoardService.findCSboardByid(id);
@@ -62,6 +66,7 @@ public class CSBoardApiController {
         return new ResponseDto<>(HttpStatus.OK.value(), "OK");
     }
 
+    @ApiOperation("Write reply")
     @PostMapping("/main/cs-write/reply")
     public ResponseDto<CustomServiceReply> writeReply(@AuthenticationPrincipal UserDetails userDetails,
                                                       @RequestBody CustomServiceReply customServiceReply,
@@ -75,6 +80,7 @@ public class CSBoardApiController {
         return new ResponseDto<>(HttpStatus.OK.value(), customServiceReply);
     }
 
+    @ApiOperation("Delete reply")
     @DeleteMapping("/main/cs-delete/reply")
     public ResponseDto<Integer> deleteReply(@AuthenticationPrincipal UserDetails userDetails, @RequestParam(value = "replyId") int id) {
         User findUser = userService.findUserByLoginId(userDetails.getUsername());

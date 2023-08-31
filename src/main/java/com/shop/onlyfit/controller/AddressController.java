@@ -4,6 +4,7 @@ import com.shop.onlyfit.domain.DeliveryAddress;
 import com.shop.onlyfit.dto.AddressChangeDto;
 import com.shop.onlyfit.dto.AddressDto;
 import com.shop.onlyfit.service.DeliveryAddressServiceImpl;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +19,7 @@ public class AddressController {
 
     private final DeliveryAddressServiceImpl deliveryAddressService;
 
+    @ApiOperation("Read address")
     @GetMapping("/main/address")
     public String getAddressPage(Principal principal, Model model) {
         String loginId = principal.getName();
@@ -28,11 +30,13 @@ public class AddressController {
         return "main/address";
     }
 
+    @ApiOperation("Create address")
     @GetMapping("/main/address/register")
     public String getRegisterPage() {
         return "main/register_address";
     }
 
+    @ApiOperation("Create address")
     @PostMapping("/main/address/register_ok")
     public String registerAddressPage(Principal principal, @ModelAttribute AddressDto addressDto) {
         String loginId = principal.getName();
@@ -42,6 +46,7 @@ public class AddressController {
         return "redirect:/main/address";
     }
 
+    @ApiOperation("Update address")
     @GetMapping("/main/address/change/{id}")
     public String getChangeAddressPage(@PathVariable Long id, Model model) {
         AddressChangeDto addressChangeDto = deliveryAddressService.showAddressToChange(id);
@@ -51,6 +56,7 @@ public class AddressController {
         return "main/change_address";
     }
 
+    @ApiOperation("Update address")
     @PutMapping("/main/changeaddress_ok")
     public String changeAddressStatus(@ModelAttribute AddressChangeDto addressChangeDto) {
 

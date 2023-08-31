@@ -7,6 +7,7 @@ import com.shop.onlyfit.dto.MultiResponseDto;
 import com.shop.onlyfit.dto.PageInfo;
 import com.shop.onlyfit.service.ChatServiceImpl;
 import com.shop.onlyfit.service.UserServiceImpl;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
@@ -34,12 +35,14 @@ public class ChatApiController {
     private final RedisTemplate<String, MessageDto> chatRedisTemplate;
 
 
+    @ApiOperation("Create ChatRoom")
     @PostMapping("/room")
     public ResponseEntity<Long> createChatRoom(@RequestBody ChatDto.Post request) {
         Long roomId = chatRoomService.createChatRoom(request);
         return ResponseEntity.ok(roomId);
     }
 
+    @ApiOperation("Get Messages In Redis")
     @GetMapping("/room/{roomId}/messages")
     public MultiResponseDto<ChatDto.MessageResponse> getPreviousMessages(@PathVariable Long roomId) {
         List<ChatDto.MessageResponse> messages = chatRoomService.getPreviousMessagesFromRedis(roomId);  // Redis에서 메시지를 가져옴
@@ -55,7 +58,7 @@ public class ChatApiController {
         return response;
     }
 
-
+    @ApiOperation("Send Message Pub/Sub patter")
     @MessageMapping("/chat/{roomId}")
     public void broadcastMessage(@DestinationVariable("roomId") Long roomId, @RequestBody MessageDto messageDto) {
         PublishMessage publishMessage =

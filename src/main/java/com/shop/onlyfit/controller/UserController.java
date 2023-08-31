@@ -8,6 +8,7 @@ import com.shop.onlyfit.dto.ProfileDto;
 import com.shop.onlyfit.service.KakaoAuthService;
 import com.shop.onlyfit.service.OrderServiceImpl;
 import com.shop.onlyfit.service.UserServiceImpl;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -63,6 +64,7 @@ public class UserController {
         return "redirect:/main/mypage";
     }
 
+    @ApiOperation("User Withdrawal")
     @ResponseBody
     @DeleteMapping("/main/withdrawal")
     public String withdrawalMember(HttpServletRequest request, HttpServletResponse response, Principal principal, @RequestParam(value = "user_pw") String password) {

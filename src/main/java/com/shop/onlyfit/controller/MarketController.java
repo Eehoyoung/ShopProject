@@ -14,6 +14,7 @@ import com.shop.onlyfit.dto.item.ItemPageDto;
 import com.shop.onlyfit.service.ItemServiceImpl;
 import com.shop.onlyfit.service.MarketServiceImpl;
 import com.shop.onlyfit.service.UserServiceImpl;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -52,6 +53,7 @@ public class MarketController {
         return marketService.findMarketId(userName);
     }
 
+    @ApiOperation("Show Market Sale Page")
     @GetMapping("/main/category/{marketId}")
     public String getCategoryPageMarket(@PathVariable Long marketId, @PageableDefault(size = 12) Pageable pageable, Model model) {
         ItemPageDto itemPagingDto = itemService.getItemPagingDtoByCategoryAndMarket(pageable, marketId);
@@ -66,7 +68,7 @@ public class MarketController {
         return "market/market_category";
     }
 
-
+    @ApiOperation("Load Market Management Page")
     @GetMapping("/market/main/{marketId}")
     public String getMemberMainPage(@PathVariable Long marketId, Model model, @PageableDefault(size = 4) Pageable pageable) {
         Page<ItemDto> itemBoards = marketService.findAllItemByMarketId(marketId, pageable);
@@ -85,8 +87,10 @@ public class MarketController {
         return "market/market_register_item";
     }
 
+    @ApiOperation("Create Item")
     @PostMapping("/market/register")
-    public String requestupload2(@AuthenticationPrincipal UserDetails userDetails, MultipartHttpServletRequest mtfRequest, @RequestParam("cmode1") String firstCategory
+    @ResponseBody
+    public String createItem(@AuthenticationPrincipal UserDetails userDetails, MultipartHttpServletRequest mtfRequest, @RequestParam("cmode1") String firstCategory
             , @RequestParam("cmode2") String secondCategory
             , @RequestParam("cmode3") String thirdCategory
             , @RequestParam("item_name") String itemName
@@ -132,6 +136,7 @@ public class MarketController {
         return "redirect:/market/itemList";
     }
 
+    @ApiOperation("My Market ItemList")
     @GetMapping("/market/itemList")
     public String itemListPage(@AuthenticationPrincipal UserDetails userDetails, Model model,
                                @PageableDefault(size = 5) Pageable pageable, SearchItem searchItem) {
@@ -153,6 +158,7 @@ public class MarketController {
         return "market/market_item_list";
     }
 
+    @ApiOperation("My Market orderList")
     @GetMapping("/market/orderList")
     public String getOrderPage(@AuthenticationPrincipal UserDetails userDetails, Model model,
                                @PageableDefault(size = 4) Pageable pageable, SearchOrder searchOrder) {
@@ -168,7 +174,7 @@ public class MarketController {
             orderPageDto = marketService.findAllOrderByConditionByPaging(marketId, searchOrder, pageable);
         }
 
-        AdminController.getOrderboard(model, searchOrder, orderPageDto);
+        AdminController.getOrderBoard(model, searchOrder, orderPageDto);
 
         return "market/market_order";
 
@@ -186,6 +192,7 @@ public class MarketController {
         return "주문 상품 상태 변경완료";
     }
 
+    @ApiOperation("Update Item status soldOut")
     @ResponseBody
     @PatchMapping("/market/itemList/soldout")
     public String itemStatusSoldOutPage(@RequestBody List<Map<String, String>> allData) {
@@ -195,6 +202,7 @@ public class MarketController {
         return "상품 상태 품절로 변경완료";
     }
 
+    @ApiOperation("Update Item status sale")
     @ResponseBody
     @PatchMapping("/market/itemList/onsale")
     public String itemStatusOnSalePage(@RequestBody List<Map<String, String>> allData) {

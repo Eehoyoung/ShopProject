@@ -4,6 +4,7 @@ import com.shop.onlyfit.domain.User;
 import com.shop.onlyfit.service.ChatServiceImpl;
 import com.shop.onlyfit.service.ItemServiceImpl;
 import com.shop.onlyfit.service.UserServiceImpl;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,7 @@ public class AdminApiController {
     private final ChatServiceImpl chatService;
     private final ItemServiceImpl itemService;
 
+    @ApiOperation("Update Password")
     @PutMapping("/admin/changepassword_ok")
     public String changeAdminPasswordPage(Principal principal, @RequestParam("password") String newPassword) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -31,6 +33,7 @@ public class AdminApiController {
         return "관리자 비밀번호 수정 완료";
     }
 
+    @ApiOperation("Update Item Status sale")
     @PatchMapping("/admin/itemList/onsale")
     public String itemStatusOnSalePage(@RequestBody List<Map<String, String>> allData) {
         for (Map<String, String> temp : allData) {
@@ -39,6 +42,7 @@ public class AdminApiController {
         return "상품 상태 판매로 변경완료";
     }
 
+    @ApiOperation("Update Item Status SoldOut")
     @PatchMapping("/admin/itemList/soldout")
     public String itemStatusSoldOutPage(@RequestBody List<Map<String, String>> allData) {
         for (Map<String, String> temp : allData) {
@@ -47,6 +51,7 @@ public class AdminApiController {
         return "상품 상태 품절로 변경완료";
     }
 
+    @ApiOperation("Delete Item")
     @DeleteMapping("/admin/itemList/remove")
     public String itemdeletePage(@RequestBody List<Map<String, String>> allData) {
         for (Map<String, String> temp : allData) {
@@ -55,6 +60,7 @@ public class AdminApiController {
         return "상품 삭제 완료";
     }
 
+    @ApiOperation("Delete Chat")
     @DeleteMapping("/admin/chatList/{id}")
     public String deleteChat(@PathVariable Long id) {
         chatService.deleteById(id);
@@ -62,6 +68,7 @@ public class AdminApiController {
         return "채팅 삭제 완료";
     }
 
+    @ApiOperation("Delete Chat Checked")
     @DeleteMapping("/admin/chatList")
     public String deleteChatChecked(@RequestParam(value = "idList", required = false) List<Long> idList) {
 
@@ -71,6 +78,7 @@ public class AdminApiController {
         return "선택된 채팅 삭제 완료";
     }
 
+    @ApiOperation("Delete User")
     @DeleteMapping("/admin/userList/{id}")
     public String deleteUser(@PathVariable Long id) {
         userService.deleteById(id);
@@ -78,6 +86,7 @@ public class AdminApiController {
         return "회원 삭제 완료";
     }
 
+    @ApiOperation("Read User")
     @DeleteMapping("/admin/userList")
     public String deleteChecked(@RequestParam(value = "idList", required = false) List<Long> idList) {
 

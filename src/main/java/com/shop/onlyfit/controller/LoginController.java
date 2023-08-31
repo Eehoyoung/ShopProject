@@ -8,6 +8,7 @@ import com.shop.onlyfit.service.KakaoAuthService;
 import com.shop.onlyfit.service.MileageServiceImpl;
 import com.shop.onlyfit.service.TokenService;
 import com.shop.onlyfit.service.UserServiceImpl;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -97,6 +98,7 @@ public class LoginController {
         return "redirect:/main/index";
     }
 
+    @ApiOperation("kakao Login")
     @GetMapping("/auth/kakao/login_proc")
     public String kakaoLogin(@RequestParam String code,
                              HttpServletResponse response) {
@@ -115,7 +117,7 @@ public class LoginController {
                 return "redirect:/main/index";
             }
 
-            return "redirect:/main/profile";
+            return "redirect:/main/index";
         } catch (Exception e) {
             return "main/restrict";
         }

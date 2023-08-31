@@ -7,13 +7,16 @@ import com.shop.onlyfit.dto.FindIdReq;
 import com.shop.onlyfit.dto.Login;
 import com.shop.onlyfit.service.TokenService;
 import com.shop.onlyfit.service.UserServiceImpl;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,6 +28,7 @@ public class LoginApiController {
     private final JwtTokenUtil jwtTokenUtil;
     private final TokenService tokenService;
 
+    @ApiOperation("Login")
     @PostMapping("/main/login")
     public ResponseEntity<?> login(@RequestBody Login login, HttpServletResponse response) throws Exception {
 
@@ -41,12 +45,7 @@ public class LoginApiController {
         return ResponseEntity.ok(jwtCookie);
     }
 
-
-    @GetMapping("/login-user")
-    public String getUser(Principal principal) {
-        return principal.getName();
-    }
-
+    @ApiOperation("Find LoginId")
     @PostMapping("/findId")
     public ResponseEntity<?> findId(@RequestBody FindIdReq findIdReq) {
         String loginId = userService.findLoginId(findIdReq.getName(), findIdReq.getPhoneNum());
@@ -57,6 +56,7 @@ public class LoginApiController {
         }
     }
 
+    @ApiOperation("Reset Password")
     @PostMapping("/password-reset")
     public ResponseEntity<Map<String, Object>> passwordReset(@RequestBody Map<String, String> requestData) {
         String userId = requestData.get("userId");
@@ -72,6 +72,7 @@ public class LoginApiController {
         return ResponseEntity.ok(response);
     }
 
+    @ApiOperation("LoginId DoubleCheck")
     @PostMapping("/main/join/doublecheck")
     public String idDoubleCheckPage(@RequestParam(value = "userID") String userId) {
         if (userService.checkId(userId)) {
@@ -81,6 +82,7 @@ public class LoginApiController {
         }
     }
 
+    @ApiOperation("MarketName Double Check")
     @PostMapping("/main/join/seller/doublecheck")
     public String MarketNameDoubleCheckPage(@RequestParam(value = "name") String name) {
         if (userService.checkName(name)) {

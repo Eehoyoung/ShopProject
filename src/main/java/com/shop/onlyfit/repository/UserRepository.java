@@ -49,4 +49,7 @@ public interface UserRepository extends JpaRepository<User, Long>, UserRepositor
 
     @Query("select u.loginId from User u where u.id = (select cr.sender.id from ChatRoom cr where cr.roomId = :roomId)")
     String findLoginIdByRoom(@Param("roomId") Long roomId);
+
+    @Query("select u.userGrade from User u where u.loginId = :loginId")
+    String findRoleByloginId(@Param("loginId") String loginId);
 }

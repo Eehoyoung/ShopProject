@@ -10,6 +10,7 @@ import com.shop.onlyfit.dto.item.ItemPageDto;
 import com.shop.onlyfit.dto.user.UserDto;
 import com.shop.onlyfit.dto.user.UserPageDto;
 import com.shop.onlyfit.service.*;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
@@ -45,7 +46,7 @@ public class AdminController {
         model.addAttribute("itemName", searchItem.getItem_name());
     }
 
-    static void getOrderboard(Model model, SearchOrder searchOrder, OrderPageDto orderPageDto) {
+    static void getOrderBoard(Model model, SearchOrder searchOrder, OrderPageDto orderPageDto) {
         Page<OrderDto> orderBoards = orderPageDto.getOrderBoards();
         int homeStartPage = orderPageDto.getHomeStartPage();
         int homeEndPage = orderPageDto.getHomeEndPage();
@@ -62,11 +63,13 @@ public class AdminController {
         model.addAttribute("oModeStatus", searchOrder.getOmode());
     }
 
+    @ApiOperation("Update admin password")
     @GetMapping("/admin/changepassword")
     public String adminChangePassword() {
         return "admin/admin_changePassword";
     }
 
+    @ApiOperation("Load admin main page")
     @GetMapping("/admin/main")
     public String getUserMainPage(Model model, @PageableDefault(size = 4) Pageable pageable) {
         Page<User> userBoards = adminService.findAllUserByOrderByCreateAt(pageable);
@@ -84,6 +87,7 @@ public class AdminController {
         return "admin/admin_main";
     }
 
+    @ApiOperation("Load UserList")
     @GetMapping("/admin/userList")
     public String pageList(Model model, @PageableDefault(size = 4) Pageable pageable, SearchUser searchUser) {
         UserPageDto userPageDto = new UserPageDto();
@@ -107,6 +111,7 @@ public class AdminController {
         return "admin/admin_userlist";
     }
 
+    @ApiOperation("Load ChatList")
     @GetMapping("/admin/chatList")
     public String chatList(Model model, @PageableDefault(size = 4) Pageable pageable, SearchChat searchChat) {
         ChatPageDto chatPageDto = new ChatPageDto();
@@ -130,6 +135,7 @@ public class AdminController {
         return "admin/admin_chatlist";
     }
 
+    @ApiOperation("Load one user")
     @GetMapping("/admin/userList/user/{id}")
     public String pageUser(@PathVariable Long id, Model model) {
         model.addAttribute("user", userService.findUserById(id));
@@ -137,6 +143,7 @@ public class AdminController {
         return "admin/admin_user";
     }
 
+    @ApiOperation(" Load  itemList")
     @GetMapping("/admin/itemList")
     public String itemListPage(Model model, @PageableDefault(size = 5) Pageable pageable, SearchItem searchItem) {
         ItemPageDto itemPageDto = new ItemPageDto();
@@ -150,6 +157,7 @@ public class AdminController {
         return "admin/admin_Goodslist";
     }
 
+    @ApiOperation("Load orderList")
     @GetMapping("/admin/orderList")
     public String getOrderPage(Model model, @PageableDefault(size = 4) Pageable pageable, SearchOrder searchOrder) {
 
@@ -161,7 +169,7 @@ public class AdminController {
             orderPageDto = orderService.findAllOrderByConditionByPaging(searchOrder, pageable);
         }
 
-        getOrderboard(model, searchOrder, orderPageDto);
+        getOrderBoard(model, searchOrder, orderPageDto);
 
         return "admin/admin_order";
 

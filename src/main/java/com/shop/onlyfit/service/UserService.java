@@ -61,4 +61,5 @@ public interface UserService {
 
     String findLoginIdByRoomId(String roomId);
 
+    String getUserRole(String name);
 }

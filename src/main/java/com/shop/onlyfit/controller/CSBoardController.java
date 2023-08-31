@@ -5,6 +5,7 @@ import com.shop.onlyfit.domain.User;
 import com.shop.onlyfit.domain.type.UserGrade;
 import com.shop.onlyfit.service.CSBoardServiceImpl;
 import com.shop.onlyfit.service.UserServiceImpl;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +29,7 @@ public class CSBoardController {
     private final CSBoardServiceImpl csBoardService;
     private final UserServiceImpl userService;
 
+    @ApiOperation("Load CS Page")
     @GetMapping("/main/cs")
     public String intoCustomerService(@AuthenticationPrincipal UserDetails userDetails,
                                       @PageableDefault(size = 10, direction = Sort.Direction.DESC, page = 0, sort = "id") Pageable pageable, @RequestParam(required = false, defaultValue = "") String q,
@@ -50,11 +52,13 @@ public class CSBoardController {
         }
     }
 
+    @ApiOperation("Get Write Page")
     @GetMapping("/main/cs-write")
     public String writeCustomerBoard() {
         return "/main/custom_board_write";
     }
 
+    @ApiOperation("Get Update Page")
     @GetMapping("/main/cs-update/{id}")
     public String updateCustomerBoard(@PathVariable int id, Model model) {
         CustomServiceBoard csBoard = csBoardService.findCSboardByid(id);
@@ -62,6 +66,7 @@ public class CSBoardController {
         return "/main/custom_board_update";
     }
 
+    @ApiOperation("Get Detail")
     @GetMapping("/main/cs/detail/{id}")
     public String showDetail(@PathVariable int id, @AuthenticationPrincipal UserDetails userDetails,
                              Model model) {
