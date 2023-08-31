@@ -7,6 +7,7 @@ import com.shop.onlyfit.domain.UserAddress;
 import com.shop.onlyfit.domain.type.LoginType;
 import com.shop.onlyfit.domain.type.UserGrade;
 import com.shop.onlyfit.dto.MarketInfoDto;
+import com.shop.onlyfit.dto.MessageDto;
 import com.shop.onlyfit.dto.MyPageDto;
 import com.shop.onlyfit.dto.ProfileDto;
 import com.shop.onlyfit.dto.user.UserDto;
@@ -14,10 +15,13 @@ import com.shop.onlyfit.dto.user.UserInfoDto;
 import com.shop.onlyfit.dto.user.UserPageDto;
 import com.shop.onlyfit.exception.LoginIdNotFoundException;
 import com.shop.onlyfit.repository.MarketRepository;
+import com.shop.onlyfit.repository.RoomRepository;
 import com.shop.onlyfit.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -38,6 +42,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository userRepository;
     private final MarketRepository marketRepository;
     private final BCryptPasswordEncoder encoder;
+    private final RoomRepository roomRepository;
+    @Qualifier("chatRedisTemplate")
+    private final RedisTemplate<String, MessageDto> chatRedisTemplate;
 
     public String getUserName(String loginId) {
         return userRepository.findUserNameByLoginId(loginId);
@@ -190,6 +197,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     @Transactional
     public void deleteUserByLoginId(String loginId) {
+        Long roomId = roomRepository.findRoomIdByLoginId(loginId);
+        chatRedisTemplate.delete("chatroom:" + roomId);
         userRepository.deleteByLoginId(loginId);
     }
 
@@ -333,4 +342,5 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public String findLoginIdByRoomId(String roomId) {
         return userRepository.findLoginIdByRoom(Long.parseLong(roomId));
     }
+
 }

@@ -16,5 +16,4 @@ public class OAuthToken {
     private String refreshTokenExpiresIn;
     private String id_token;
     private String redirect_uri;
-
 }

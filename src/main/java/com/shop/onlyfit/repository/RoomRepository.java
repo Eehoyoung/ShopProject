@@ -10,4 +10,6 @@ public interface RoomRepository extends JpaRepository<ChatRoom, Long>, RoomRepos
     Long findRoomIdByUserId(@Param("userId") Long userId);
 
 
+    @Query("select cr.roomId from ChatRoom cr where cr.sender.loginId = :loginId")
+    Long findRoomIdByLoginId(@Param("loginId") String loginId);
 }

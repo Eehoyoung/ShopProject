@@ -2,10 +2,12 @@ package com.shop.onlyfit.service;
 
 import com.shop.onlyfit.auth.KakaoProfile;
 import com.shop.onlyfit.auth.OAuthToken;
+import com.shop.onlyfit.auth.jwt.UnConnected;
 import com.shop.onlyfit.domain.User;
 import com.shop.onlyfit.domain.type.LoginType;
 import com.shop.onlyfit.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,9 @@ public class KakaoAuthService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder encoder;
+
+    @Value("${kakao.admin}")
+    String admin;
 
 
     public String getAccessToken(String code, String redirectUri, String clientId) {
@@ -92,5 +97,20 @@ public class KakaoAuthService {
         newUser.setName("kakao_" + kakaoProfile.getProperties().getNickname());
 
         return userRepository.save(newUser);
+    }
+
+    public UnConnected kakaoUnconnected(Long tId) {
+
+        String targetUrl = "https://kapi.kakao.com/v1/user/unlink";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        headers.set("Authorization", "KakaoAK " + admin);
+        MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+        map.add("target_id_type", "user_id");
+        map.add("target_id", tId);
+        RestTemplate restTemplate = new RestTemplate();
+        HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(map, headers);
+        ResponseEntity<UnConnected> response = restTemplate.postForEntity(targetUrl, request, UnConnected.class);
+        return response.getBody();
     }
 }

@@ -229,7 +229,8 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
 
     @Override
     public ItemDto findAllItemInCart(Long itemId) {
-        ItemDto results = queryFactory
+
+        return queryFactory
                 .select(new QItemDto(
                         QItem.item.itemIdx,
                         QItem.item.imgUrl,
@@ -244,8 +245,6 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
                         QItem.item.id.eq(itemId)
                 )
                 .fetchOne();
-
-        return results;
     }
 
     @Override
@@ -266,9 +265,7 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
                 .limit(9L)
                 .fetchResults();
 
-        List<WeeklyBestDto> content = results.getResults();
-
-        return content;
+        return results.getResults();
     }
 
     @Override

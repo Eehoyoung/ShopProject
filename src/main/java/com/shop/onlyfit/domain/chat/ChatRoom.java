@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Getter
@@ -27,6 +28,9 @@ public class ChatRoom extends Auditable implements Serializable {
     @ManyToOne
     @JoinColumn(name = "receiver_id")
     private User receiver;
+
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ChatMessage> chatMessages;
 
     public void setSender(User sender) {
         this.sender = sender;

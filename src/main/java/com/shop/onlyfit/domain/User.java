@@ -1,5 +1,6 @@
 package com.shop.onlyfit.domain;
 
+import com.shop.onlyfit.domain.chat.ChatRoom;
 import com.shop.onlyfit.domain.type.LoginType;
 import com.shop.onlyfit.domain.type.UserGrade;
 import lombok.Builder;
@@ -67,6 +68,9 @@ public class User extends BaseTimeEntity {
 
     @OneToOne(mappedBy = "seller", cascade = CascadeType.ALL)
     private Market market;
+
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
+    private List<ChatRoom> chatRoom;
 
     @Enumerated(EnumType.STRING)
     private LoginType loginType;

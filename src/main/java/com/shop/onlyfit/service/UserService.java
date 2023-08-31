@@ -60,4 +60,5 @@ public interface UserService {
     User getUserById(Long senderId);
 
     String findLoginIdByRoomId(String roomId);
+
 }

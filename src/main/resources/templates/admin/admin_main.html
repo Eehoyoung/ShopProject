@@ -82,7 +82,7 @@
                 </thead>
                 <tbody>
                 <tr th:each="order : ${orderList}">
-                    <td th:text="${order.name}">채창완</td>
+                    <td th:text="${order.name}">이호영</td>
                     <td th:text="${order.itemName}">홀릭 카고 조거팬츠</td>
                     <td th:text="${#numbers.formatInteger(order.orderPrice, 0, 'COMMA')} + '원'">15,000원</td>
                     <td th:if="${order.orderStatus.toString().equals('PAYWAITING')}">입금대기</td>

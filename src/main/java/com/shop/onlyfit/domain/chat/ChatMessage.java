@@ -30,7 +30,7 @@ public class ChatMessage {
     @JoinColumn(name = "sender_id")
     private User sender;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "room_id")
     private ChatRoom chatRoom;
 
