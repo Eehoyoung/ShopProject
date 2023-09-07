@@ -24,7 +24,7 @@ public interface UserService {
 
     User findByLoginId(String loginId);
 
-    Optional<User> loadUserByLoginId(String loginId);
+    Optional<User> loadUserByLoginId(String loginId, String password);
 
     MyPageDto showMySimpleInfo(String loginId);
 

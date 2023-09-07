@@ -24,6 +24,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull FilterChain filterChain) throws ServletException, IOException {
+        System.out.println("JWT필터 진입");
+
         String servletPath = request.getServletPath();
 
         if (isSwaggerPath(servletPath)) {

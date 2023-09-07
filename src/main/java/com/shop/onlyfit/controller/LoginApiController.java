@@ -31,8 +31,8 @@ public class LoginApiController {
     @ApiOperation("Login")
     @PostMapping("/main/login")
     public ResponseEntity<?> login(@RequestBody Login login, HttpServletResponse response) throws Exception {
-
-        User authenticatedUser = userService.loadUserByLoginId(login.getLoginId()).orElseThrow(
+        System.out.println("비번은?" + login.getPassword());
+        User authenticatedUser = userService.loadUserByLoginId(login.getLoginId(), login.getPassword()).orElseThrow(
                 () -> new RuntimeException("해당 유저를 찾을 수 없습니다.")
         );
 

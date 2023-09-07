@@ -56,7 +56,6 @@ public class CartApiController {
     public String deleteAllItemsInCartPage(Principal principal) {
         User user = userService.findUserByLoginId(principal.getName());
         List<Cart> cartList = cartService.findAllCartByUserId(user.getId());
-
         for (Cart cart : cartList) {
             cartService.deleteCartById(cart.getId());
         }

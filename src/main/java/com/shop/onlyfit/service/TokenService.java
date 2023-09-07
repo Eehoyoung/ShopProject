@@ -6,6 +6,7 @@ import com.shop.onlyfit.auth.jwt.JwtProperties;
 import com.shop.onlyfit.auth.jwt.JwtTokenProvider;
 import com.shop.onlyfit.domain.User;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -68,7 +69,7 @@ public class TokenService {
         }
     }
 
-    public Cookie createJwtCookie(User authenticatedUser, String jwtToken) {
+    public Cookie createJwtCookie(@NotNull User authenticatedUser, String jwtToken) {
         UserDetails userDetails = this.userService.loadUserByUsername(authenticatedUser.getLoginId());
         Authentication auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(auth);

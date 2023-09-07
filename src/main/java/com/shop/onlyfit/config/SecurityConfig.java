@@ -2,7 +2,6 @@ package com.shop.onlyfit.config;
 
 import com.shop.onlyfit.auth.jwt.JwtAuthenticationEntryPoint;
 import com.shop.onlyfit.auth.jwt.JwtRequestFilter;
-import com.shop.onlyfit.auth.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +23,6 @@ public class SecurityConfig {
 
     private final JwtRequestFilter jwtRequestFilter;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-    private final JwtTokenProvider jwtTokenProvider; // JwtTokenProvider를 주입하도록 수정
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -53,7 +51,6 @@ public class SecurityConfig {
                 .authenticated()
                 .antMatchers("/main/index", "/main/category/**", "/main/product/**", "/auth/**", "/ws/*", "/pub/chat/**", "/sub/chat/**")
                 .permitAll()
-                // update this line to permit all for /ws/*, /pub/chat and /sub/chat/*
                 .and()
                 .exceptionHandling().accessDeniedPage("/main/restrict")
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint) // JWT 인증 에러 핸들링

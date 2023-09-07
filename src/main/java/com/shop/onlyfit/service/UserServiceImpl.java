@@ -98,8 +98,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Transactional
-    public Optional<User> loadUserByLoginId(String loginId) {
-        return userRepository.findByLoginId(loginId);
+    public Optional<User> loadUserByLoginId(String loginId, String password) {
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        Optional<User> user = userRepository.findByLoginId(loginId);
+        if (user.isPresent() && bCryptPasswordEncoder.matches(password, user.get().getPassword())) {
+            return user;
+        }
+        return Optional.empty();
     }
 
     @Override

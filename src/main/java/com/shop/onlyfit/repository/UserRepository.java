@@ -52,4 +52,6 @@ public interface UserRepository extends JpaRepository<User, Long>, UserRepositor
 
     @Query("select u.userGrade from User u where u.loginId = :loginId")
     String findRoleByloginId(@Param("loginId") String loginId);
+
+    String findPasswordByLoginId(String loginId);
 }
