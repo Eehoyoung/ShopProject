@@ -1,6 +1,5 @@
 package com.shop.onlyfit.repository;
 
-import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.shop.onlyfit.domain.SearchChat;
@@ -10,11 +9,14 @@ import com.shop.onlyfit.dto.QChatDslDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Repository;
 import org.thymeleaf.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Objects;
 
+@Repository
 public class RoomRepositoryImpl implements RoomRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
@@ -25,7 +27,7 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
 
     @Override
     public Page<ChatDslDto> searchAllChat(Pageable pageable) {
-        QueryResults<ChatDslDto> results = queryFactory
+        List<ChatDslDto> results = queryFactory
                 .select(new QChatDslDto(
                         QChatRoom.chatRoom.roomId,
                         QChatRoom.chatRoom.sender,
@@ -36,18 +38,19 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
                 .orderBy(QChatRoom.chatRoom.modifiedAt.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .fetchResults();
+                .fetch();
 
-        List<ChatDslDto> content = results.getResults();
-        long total = results.getTotal();
+        long total = queryFactory
+                .selectFrom(QChatRoom.chatRoom)
+                .fetch().size();
 
-        return new PageImpl<>(content, pageable, total);
+        return new PageImpl<>(results, pageable, total);
     }
 
     @Override
     public Page<ChatDslDto> searchByConditionAllChat(SearchChat searchChat, Pageable pageable) {
-        QueryResults<ChatDslDto> results = null;
-
+        List<ChatDslDto> results = null;
+        long total = 0;
         if (searchChat.getSearchCondition().equals("userid")) {
             results = queryFactory
                     .select(new QChatDslDto(
@@ -61,7 +64,13 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
                     .orderBy(QChatRoom.chatRoom.modifiedAt.desc())
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
-                    .fetchResults();
+                    .fetch();
+
+            total = queryFactory
+                    .selectFrom(QChatRoom.chatRoom)
+                    .where(loginIdEq(searchChat.getSearchCondition()))
+                    .fetch().size();
+
         } else if (searchChat.getSearchCondition().equals("username")) {
             results = queryFactory
                     .select(new QChatDslDto(
@@ -75,12 +84,15 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
                     .orderBy(QChatRoom.chatRoom.modifiedAt.desc())
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
-                    .fetchResults();
-        }
-        List<ChatDslDto> content = results.getResults();
-        long total = results.getTotal();
+                    .fetch();
 
-        return new PageImpl<>(content, pageable, total);
+            total = queryFactory
+                    .selectFrom(QChatRoom.chatRoom)
+                    .where(nameEq(searchChat.getSearchCondition()))
+                    .fetch().size();
+        }
+
+        return new PageImpl<>(Objects.requireNonNull(results), pageable, total);
     }
 
     private BooleanExpression loginIdEq(String loginIdCondition) {

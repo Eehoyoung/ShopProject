@@ -1,6 +1,5 @@
 package com.shop.onlyfit.repository;
 
-import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -15,12 +14,13 @@ import com.shop.onlyfit.dto.item.QItemDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Repository;
 import org.thymeleaf.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
-
+@Repository
 public class ItemRepositoryImpl implements ItemRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
@@ -41,7 +41,7 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
 
     @Override
     public Page<ItemDto> searchAllItem(Pageable pageable) {
-        QueryResults<ItemDto> results = queryFactory
+        List<ItemDto> results = queryFactory
                 .select(new QItemDto(
                         QItem.item.id,
                         QItem.item.itemName,
@@ -58,19 +58,23 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
                 .orderBy(QItem.item.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .fetchResults();
+                .fetch();
 
-        List<ItemDto> content = results.getResults();
-        long total = results.getTotal();
+        long total = queryFactory // count 쿼리
+                .selectFrom(QItem.item)
+                .fetch().size();
 
-        return new PageImpl<>(content, pageable, total);
+
+        return new PageImpl<>(results, pageable, total);
     }
 
     @Override
     public Page<ItemDto> searchAllItemByCondition(SearchItem search, Pageable pageable) {
 
+        List<ItemDto> results;
+        long total;// count 쿼리
         if (search.getCmode().equals("whole")) {
-            QueryResults results = queryFactory
+            results = queryFactory
                     .select(new QItemDto(
                             QItem.item.id,
                             QItem.item.itemName,
@@ -87,14 +91,15 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
                     .orderBy(QItem.item.id.desc())
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
-                    .fetchResults();
+                    .fetch();
 
-            List<ItemDto> content = results.getResults();
-            long total = results.getTotal();
+            total = queryFactory // count 쿼리
+                    .selectFrom(QItem.item)
+                    .where(QItem.item.rep.eq(true), saleStatusEq(search.getSalestatus()), itemNameEq(search.getItem_name()))
+                    .fetch().size();
 
-            return new PageImpl<>(content, pageable, total);
         } else {
-            QueryResults results = queryFactory
+            results = queryFactory
                     .select(new QItemDto(
                             QItem.item.id,
                             QItem.item.itemName,
@@ -110,20 +115,24 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
                     .where(QItem.item.rep.eq(true), saleStatusEq(search.getSalestatus()), cmodeEq(search.getCmode()), itemNameEq(search.getItem_name()))
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
-                    .fetchResults();
+                    .fetch();
 
-            List<ItemDto> content = results.getResults();
-            long total = results.getTotal();
+            total = queryFactory // count 쿼리
+                    .selectFrom(QItem.item)
+                    .where(QItem.item.rep.eq(true), saleStatusEq(search.getSalestatus()), cmodeEq(search.getCmode()), itemNameEq(search.getItem_name()))
+                    .fetch().size();
 
-            return new PageImpl<>(content, pageable, total);
         }
+        return new PageImpl<>(results, pageable, total);
     }
 
     @Override
     public Page<ItemDto> searchAllItemByConditionMaket(String loginId, SearchItem search, Pageable pageable) {
 
+        List<ItemDto> results;
+        long total;// count 쿼리
         if (search.getCmode().equals("whole")) {
-            QueryResults results = queryFactory
+            results = queryFactory
                     .select(new QItemDto(
                             QItem.item.id,
                             QItem.item.itemName,
@@ -140,14 +149,15 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
                     .orderBy(QItem.item.id.desc())
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
-                    .fetchResults();
+                    .fetch();
 
-            List<ItemDto> content = results.getResults();
-            long total = results.getTotal();
+            total = queryFactory // count 쿼리
+                    .selectFrom(QItem.item)
+                    .where(QItem.item.market.seller.loginId.eq(loginId), QItem.item.rep.eq(true), saleStatusEq(search.getSalestatus()), itemNameEq(search.getItem_name()))
+                    .fetch().size();
 
-            return new PageImpl<>(content, pageable, total);
         } else {
-            QueryResults results = queryFactory
+            results = queryFactory
                     .select(new QItemDto(
                             QItem.item.id,
                             QItem.item.itemName,
@@ -163,18 +173,20 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
                     .where(QItem.item.market.seller.loginId.eq(loginId), QItem.item.rep.eq(true), saleStatusEq(search.getSalestatus()), cmodeEq(search.getCmode()), itemNameEq(search.getItem_name()))
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
-                    .fetchResults();
+                    .fetch();
 
-            List<ItemDto> content = results.getResults();
-            long total = results.getTotal();
+            total = queryFactory // count 쿼리
+                    .selectFrom(QItem.item)
+                    .where(QItem.item.market.seller.loginId.eq(loginId), QItem.item.rep.eq(true), saleStatusEq(search.getSalestatus()), cmodeEq(search.getCmode()), itemNameEq(search.getItem_name()))
+                    .fetch().size();
 
-            return new PageImpl<>(content, pageable, total);
         }
+        return new PageImpl<>(results, pageable, total);
     }
 
     @Override
     public Page<ItemDto> findAllItem(Pageable pageable, String firstCategory, String secondCategory) {
-        QueryResults results = queryFactory
+        List<ItemDto> results = queryFactory
                 .selectDistinct(new QItemDto(
                         QItem.item.itemIdx,
                         QItem.item.itemName,
@@ -192,17 +204,21 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .fetchResults();
+                .fetch();
 
-        List<ItemDto> content = results.getResults();
-        long total = results.getTotal();
+        long total = queryFactory // count 쿼리
+                .selectFrom(QItem.item)
+                .where(QItem.item.rep.eq(true),
+                        QItem.item.firstCategory.eq(firstCategory),
+                        QItem.item.secondCategory.eq(secondCategory)
+                ).fetch().size();
 
-        return new PageImpl<>(content, pageable, total);
+        return new PageImpl<>(results, pageable, total);
     }
 
     @Override
     public Page<ItemDto> findAllItemByMarketId(Pageable pageable, Long marketId) {
-        QueryResults<ItemDto> results = queryFactory
+        List<ItemDto> results = queryFactory
                 .select(new QItemDto(
                         QItem.item.id,
                         QItem.item.itemName,
@@ -219,12 +235,14 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
                 .orderBy(QItem.item.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .fetchResults();
+                .fetch();
 
-        List<ItemDto> content = results.getResults();
-        long total = results.getTotal();
+        long total = queryFactory // count 쿼리
+                .selectFrom(QItem.item)
+                .where(QItem.item.rep.eq(true), QItem.item.market.marketId.eq(marketId))
+                .fetch().size();
 
-        return new PageImpl<>(content, pageable, total);
+        return new PageImpl<>(results, pageable, total);
     }
 
     @Override
@@ -249,7 +267,8 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
 
     @Override
     public List<WeeklyBestDto> findWeeklyBestItem(String firstCategory, String secondCategory, boolean rep) {
-        QueryResults<WeeklyBestDto> results = queryFactory
+
+        return queryFactory
                 .selectDistinct(new QWeeklyBestDto(
                         QItem.item.itemIdx,
                         QItem.item.itemName,
@@ -263,14 +282,13 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
                         QItem.item.secondCategory.eq(secondCategory)
                 )
                 .limit(9L)
-                .fetchResults();
-
-        return results.getResults();
+                .fetch();
     }
 
     @Override
     public List<WeeklyBestDto> findNewArrivalItem(String firstCategory, String secondCategory, boolean rep) {
-        QueryResults<WeeklyBestDto> results = queryFactory
+
+        return queryFactory
                 .selectDistinct(new QWeeklyBestDto(
                         QItem.item.itemIdx,
                         QItem.item.itemName,
@@ -283,16 +301,12 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
                         QItem.item.secondCategory.eq(secondCategory)
                 )
                 .limit(9L)
-                .fetchResults();
-
-        List<WeeklyBestDto> content = results.getResults();
-
-        return content;
+                .fetch();
     }
 
     @Override
     public Page<ItemDto> searchAllItemByloginId(String loginId, Pageable pageable) {
-        QueryResults<ItemDto> results = queryFactory
+        List<ItemDto> results = queryFactory
                 .select(new QItemDto(
                         QItem.item.id,
                         QItem.item.itemName,
@@ -309,16 +323,19 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
                 .orderBy(QItem.item.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .fetchResults();
-        List<ItemDto> content = results.getResults();
-        long total = results.getTotal();
+                .fetch();
 
-        return new PageImpl<>(content, pageable, total);
+        long total = queryFactory // count 쿼리
+                .selectFrom(QItem.item)
+                .where(QItem.item.market.seller.loginId.eq(loginId))
+                .fetch().size();
+
+        return new PageImpl<>(results, pageable, total);
     }
 
     @Override
     public Page<ItemDto> searchAllItemByMarketId(Long marketId, Pageable pageable) {
-        QueryResults<ItemDto> results = queryFactory
+        List<ItemDto> results = queryFactory
                 .select(new QItemDto(
                         QItem.item.id,
                         QItem.item.itemName,
@@ -335,11 +352,14 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
                 .orderBy(QItem.item.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .fetchResults();
-        List<ItemDto> content = results.getResults();
-        long total = results.getTotal();
+                .fetch();
 
-        return new PageImpl<>(content, pageable, total);
+        long total = queryFactory // count 쿼리
+                .selectFrom(QItem.item)
+                .where(QItem.item.market.marketId.eq(marketId))
+                .fetch().size();
+
+        return new PageImpl<>(results, pageable, total);
     }
 
 
